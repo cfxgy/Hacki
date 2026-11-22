@@ -1,0 +1,132 @@
+name: Build Android APK (Cloud)
+
+# Manual-only build. Flutter and the Android SDK are installed on the runner,
+# so no local Android Studio/Flutter setup is required.
+on:
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: "APK build type"
+        required: true
+        default: release
+        type: choice
+        options:
+          - release
+          - debug
+      split_per_abi:
+        description: "Build one APK per ABI instead of a universal APK"
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-apk-cloud-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build ${{ inputs.build_type }} APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Set up Java
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: gradle
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK packages
+        run: |
+          # AGP 9.3 uses build-tools 36.0.0 and an API 37 platform named
+          # android-37.0 (API 37 ships minor-versioned platform packages).
+          set +o pipefail
+          yes | sdkmanager --licenses > /dev/null
+          sdkmanager --install \
+            "platform-tools" \
+            "platforms;android-37.0" \
+            "build-tools;36.0.0" \
+            "ndk;28.2.13676358"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.50.1"
+          channel: stable
+          cache: true
+
+      - name: Show toolchain versions
+        run: |
+          flutter --version
+          flutter doctor -v
+
+      - name: Resolve dependencies
+        run: flutter pub get
+
+      # Release builds need a signing config. The real release workflow uses
+      # repository secrets; this manual workflow creates a throwaway key so an
+      # installable APK can be produced without any repository secrets.
+      - name: Generate ephemeral signing key
+        if: inputs.build_type == 'release'
+        working-directory: android
+        env:
+          KEYSTORE_PASSWORD: hacki-ci-${{ github.run_id }}
+        run: |
+          keytool -genkeypair -v \
+            -keystore app/ci-release.jks \
+            -storetype JKS \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 10000 \
+            -alias ci-release \
+            -storepass "${KEYSTORE_PASSWORD}" \
+            -keypass "${KEYSTORE_PASSWORD}" \
+            -dname "CN=Hacki CI, OU=CI, O=Hacki, L=Unknown, ST=Unknown, C=US"
+          cat > key.properties <<EOF
+          storePassword=${KEYSTORE_PASSWORD}
+          keyPassword=${KEYSTORE_PASSWORD}
+          keyAlias=ci-release
+          storeFile=ci-release.jks
+          EOF
+
+      - name: Build APK
+        env:
+          BUILD_TYPE: ${{ inputs.build_type }}
+          SPLIT_PER_ABI: ${{ inputs.split_per_abi }}
+          HACKI_BACKEND_URL: ${{ vars.HACKI_BACKEND_URL }}
+          HACKI_BACKEND_API_KEY: ${{ secrets.HACKI_BACKEND_API_KEY }}
+        run: |
+          set -euo pipefail
+          args=(
+            "--${BUILD_TYPE}"
+            "--dart-define=HACKI_BACKEND_URL=${HACKI_BACKEND_URL}"
+            "--dart-define=HACKI_BACKEND_API_KEY=${HACKI_BACKEND_API_KEY}"
+          )
+          if [[ "${SPLIT_PER_ABI}" == "true" ]]; then
+            args+=("--split-per-abi")
+          fi
+          flutter build apk "${args[@]}"
+
+      - name: List built APKs
+        run: ls -lh build/app/outputs/flutter-apk/*.apk
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: hacki-${{ inputs.build_type }}-apk-${{ github.run_number }}
+          path: build/app/outputs/flutter-apk/*.apk
+          if-no-files-found: error
+          retention-days: 30
