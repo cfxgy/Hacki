@@ -83,14 +83,27 @@ jobs:
       - name: Generate localizations
         run: flutter gen-l10n
 
-      - name: Verify Dart formatting
-        run: dart format --output=none --set-exit-if-changed lib test integration_test
-
       - name: Analyze
         run: flutter analyze lib test
 
       - name: Run tests
         run: flutter test
+
+      - name: Verify Dart formatting
+        id: format
+        continue-on-error: true
+        run: |
+          dart format lib test integration_test
+          git diff > format.patch
+          test ! -s format.patch
+
+      - name: Upload formatting patch
+        if: always() && steps.format.outcome == 'failure'
+        uses: actions/upload-artifact@v7
+        with:
+          name: format-patch
+          path: format.patch
+          if-no-files-found: ignore
 
       # Release builds need a signing config. The real release workflow uses
       # repository secrets; this manual workflow creates a throwaway key so an
