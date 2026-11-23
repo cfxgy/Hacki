@@ -7,7 +7,8 @@ import 'dart:collection';
 class TranslationCache {
   static const int maxEntries = 300;
 
-  final LinkedHashMap<String, String> _entries = LinkedHashMap<String, String>();
+  final LinkedHashMap<String, String> _entries =
+      LinkedHashMap<String, String>();
 
   String? get(String key) {
     final String? value = _entries.remove(key);

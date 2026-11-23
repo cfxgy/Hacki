@@ -51,7 +51,8 @@ class TranslationRepository {
     return Future<void>.value();
   }
 
-  Future<bool> hasAzureKey() async => await _readKey(_azureKeyStorageKey) != null;
+  Future<bool> hasAzureKey() async =>
+      await _readKey(_azureKeyStorageKey) != null;
 
   Future<bool> hasOpenAiKey() async =>
       await _readKey(_openAiKeyStorageKey) != null;

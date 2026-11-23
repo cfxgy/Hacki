@@ -67,6 +67,7 @@ class AzureTranslationConfig extends Equatable {
     'region': region,
   };
 
+  // ignore: sort_constructors_first
   factory AzureTranslationConfig.fromJson(Map<String, dynamic> json) =>
       AzureTranslationConfig(
         enabled: json['enabled'] as bool? ?? false,
@@ -107,6 +108,7 @@ class OpenAiTranslationConfig extends Equatable {
     'model': model,
   };
 
+  // ignore: sort_constructors_first
   factory OpenAiTranslationConfig.fromJson(Map<String, dynamic> json) =>
       OpenAiTranslationConfig(
         enabled: json['enabled'] as bool? ?? false,
@@ -172,6 +174,7 @@ class TranslationSettings extends Equatable {
     'openAi': openAi.toJson(),
   };
 
+  // ignore: sort_constructors_first
   factory TranslationSettings.fromJson(Map<String, dynamic> json) {
     final String provider = json['defaultProvider'] as String? ?? 'azure';
     return TranslationSettings(
