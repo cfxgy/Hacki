@@ -393,6 +393,7 @@ class CommentTile extends StatelessWidget {
                                                       ).textScaler,
                                                       onTap: () {
                                                         if (isCollapsable) {
+                                                          // ignore: lines_longer_than_80_chars
                                                           HapticFeedbackUtils.selection();
                                                           _onTextTapped(
                                                             context,
