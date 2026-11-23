@@ -37,7 +37,7 @@ class User extends Equatable {
     final String date = formatter.format(
       DateTime.fromMillisecondsSinceEpoch(created * 1000),
     );
-    return L10n.current.userKarmaCreated(L10n.formatNumber(karma), date);
+    return L10n.current.userKarmaCreated('$karma', date);
   }
 
   @override

@@ -13,6 +13,8 @@ abstract final class L10n {
 
   static AppLocalizations current = AppLocalizationsEn();
 
+  static AppLocalizations get active => current;
+
   static set active(AppLocalizations localizations) {
     current = localizations;
   }

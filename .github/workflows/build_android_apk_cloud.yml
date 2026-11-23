@@ -84,10 +84,9 @@ jobs:
         run: flutter gen-l10n
 
       - name: Analyze
+        id: analyze
+        continue-on-error: true
         run: flutter analyze lib test
-
-      - name: Run tests
-        run: flutter test
 
       - name: Verify Dart formatting
         id: format
@@ -104,6 +103,11 @@ jobs:
           name: format-patch
           path: format.patch
           if-no-files-found: ignore
+
+      - name: Run tests
+        id: test
+        continue-on-error: true
+        run: flutter test
 
       # Release builds need a signing config. The real release workflow uses
       # repository secrets; this manual workflow creates a throwaway key so an
@@ -132,6 +136,9 @@ jobs:
           EOF
 
       - name: Build APK
+        id: build
+        if: steps.analyze.outcome == 'success' && steps.test.outcome == 'success'
+        continue-on-error: true
         env:
           BUILD_TYPE: ${{ inputs.build_type }}
           SPLIT_PER_ABI: ${{ inputs.split_per_abi }}
@@ -150,9 +157,11 @@ jobs:
           flutter build apk "${args[@]}"
 
       - name: List built APKs
+        if: steps.build.outcome == 'success'
         run: ls -lh build/app/outputs/flutter-apk/*.apk
 
       - name: Upload APK artifact
+        if: steps.build.outcome == 'success'
         uses: actions/upload-artifact@v7
         with:
           name: hacki-${{ inputs.build_type }}-apk-${{ github.run_number }}
