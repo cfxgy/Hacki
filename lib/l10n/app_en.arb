@@ -611,5 +611,60 @@
   "searchTagComment": "Comment",
   "searchTagFrontPage": "Front page",
   "searchTagAskHn": "Ask HN",
-  "searchTagShowHn": "Show HN"
+  "searchTagShowHn": "Show HN",
+  "translationSettings": "Translation",
+  "translationSettingsSubtitle": "Cloud translation providers and languages",
+  "translationDataDisclosure": "Translated text is sent to the provider you select. Hacki does not send text until you start a translation, and API keys are stored only in the device's secure storage.",
+  "translationLanguages": "Languages",
+  "translationSourceLanguage": "Source language",
+  "translationTargetLanguage": "Target language",
+  "translationAutoDetect": "Auto detect",
+  "translationEnglish": "English",
+  "translationSimplifiedChinese": "Simplified Chinese",
+  "translationDefaultProvider": "Default provider",
+  "translationAzureName": "Azure Translator",
+  "translationOpenAiName": "OpenAI-compatible AI",
+  "translationAzureDescription": "Microsoft Azure Translator using your own API key and region.",
+  "translationOpenAiDescription": "Any service that implements the Chat Completions API.",
+  "translationKeyStored": "API key stored securely",
+  "translationKeyMissing": "API key not configured",
+  "translationKeyStoredHint": "Stored securely — leave blank to keep it",
+  "translationKeyEnterHint": "Enter API key",
+  "translationAzureRegion": "Azure region",
+  "translationApiKey": "API key",
+  "translationBaseUrl": "Base URL",
+  "translationModel": "Model",
+  "translationTestConnection": "Test connection",
+  "translationTesting": "Testing…",
+  "translationConnectionSuccess": "Connection successful: {result}",
+  "@translationConnectionSuccess": {
+    "placeholders": {
+      "result": {
+        "type": "String"
+      }
+    }
+  },
+  "translationSettingsSaved": "Translation settings saved.",
+  "translationClearKey": "Clear key",
+  "translationErrorConfiguration": "The translation provider is not configured or enabled.",
+  "translationErrorAuthentication": "The provider rejected the API key.",
+  "translationErrorPermission": "The provider denied access to this service.",
+  "translationErrorRateLimited": "The provider is rate limiting requests. Try again later.",
+  "translationErrorNetwork": "Could not reach the translation provider.",
+  "translationErrorServer": "The translation provider returned a server error.",
+  "translationErrorParsing": "The translation provider returned an unexpected response.",
+  "translationErrorContent": "The provider rejected this text.",
+  "translationErrorUnknown": "Translation failed. Please check the provider settings.",
+  "translationTranslate": "Translate",
+  "translationShowOriginal": "Show original",
+  "translationDataSharingTitle": "Send text to provider?",
+  "translationDataSharingBody": "The selected text will be sent to {provider}. Do you want to continue?",
+  "@translationDataSharingBody": {
+    "placeholders": {
+      "provider": {
+        "type": "String"
+      }
+    }
+  },
+  "translationContinue": "Continue"
 }

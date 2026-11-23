@@ -21,5 +21,7 @@ export 'tab/tab_cubit.dart';
 export 'thread_navigation_button/thread_navigation_button_cubit.dart';
 export 'time_machine/time_machine_cubit.dart';
 export 'tips/tips_cubit.dart';
+export 'translation/translation_cubit.dart';
+export 'translation/translation_state.dart';
 export 'user/user_cubit.dart';
 export 'vote/vote_cubit.dart';

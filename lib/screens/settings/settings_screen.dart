@@ -25,6 +25,7 @@ import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/repositories/repositories.dart';
 import 'package:hacki/screens/home/home_screen.dart';
+import 'package:hacki/screens/settings/translation_settings_screen.dart';
 import 'package:hacki/screens/settings/widgets/widgets.dart';
 import 'package:hacki/screens/widgets/widgets.dart';
 import 'package:hacki/styles/styles.dart';
@@ -100,6 +101,16 @@ class _SettingsViewState extends State<SettingsView>
                 title: Text(L10n.current.language),
                 subtitle: Text(_languageName(preferenceState.language)),
                 onTap: showLanguageDialog,
+              ),
+              ListTile(
+                leading: const Icon(Icons.translate),
+                title: Text(L10n.current.translationSettings),
+                subtitle: Text(L10n.current.translationSettingsSubtitle),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => const TranslationSettingsScreen(),
+                  ),
+                ),
               ),
               const EnterOfflineModeListTile(),
               const OfflineListTile(),

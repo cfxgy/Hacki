@@ -22,4 +22,5 @@ export 'slide_action.dart';
 export 'status.dart';
 export 'story_marking_mode.dart';
 export 'story_type.dart';
+export 'translation/translation_models.dart';
 export 'user.dart';

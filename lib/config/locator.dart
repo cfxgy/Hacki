@@ -25,6 +25,11 @@ Future<void> setUpLocator() async {
       ),
     )
     ..registerSingleton<PreferenceRepository>(PreferenceRepository())
+    ..registerSingleton<TranslationRepository>(
+      TranslationRepository(
+        preferenceRepository: locator.get<PreferenceRepository>(),
+      ),
+    )
     ..registerSingleton<NetworkProxyService>(NetworkProxyService());
 
   // The proxy has to be in place before anything below makes a request.

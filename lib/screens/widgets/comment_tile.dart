@@ -11,6 +11,7 @@ import 'package:hacki/extensions/extensions.dart';
 import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/item/widgets/lazy_fetch_load_button.dart';
+import 'package:hacki/screens/widgets/translation_widgets.dart';
 import 'package:hacki/screens/widgets/widgets.dart';
 import 'package:hacki/styles/styles.dart';
 import 'package:hacki/utils/utils.dart';
@@ -266,6 +267,10 @@ class CommentTile extends StatelessWidget {
                                   ),
                                   textScaler: MediaQuery.of(context).textScaler,
                                 ),
+                                TranslationToggleButton(
+                                  translationKey: 'comment_${comment.id}',
+                                  text: HtmlUtils.parseHtml(comment.text),
+                                ),
                               ],
                             ),
                           ),
@@ -368,26 +373,51 @@ class CommentTile extends StatelessWidget {
                                             .contains(comment.by)) {
                                           return const CenteredText.blocked();
                                         } else {
-                                          return ItemText(
-                                            key: ValueKey<int>(comment.id),
-                                            item: comment,
-                                            selectable: isSelectable,
-                                            textScaler: MediaQuery.of(
-                                              context,
-                                            ).textScaler,
-                                            onTap: () {
-                                              if (isCollapsable) {
-                                                HapticFeedbackUtils.selection();
-                                                _onTextTapped(context);
-                                              } else {
-                                                onTap?.call();
+                                          return TranslationAwareText(
+                                            translationKey:
+                                                'comment_${comment.id}',
+                                            originalText: comment.text,
+                                            builder: (
+                                              BuildContext context,
+                                              String text,
+                                            ) {
+                                              if (text == comment.text) {
+                                                return ItemText(
+                                                  key: ValueKey<int>(
+                                                    comment.id,
+                                                  ),
+                                                  item: comment,
+                                                  selectable: isSelectable,
+                                                  textScaler: MediaQuery.of(
+                                                    context,
+                                                  ).textScaler,
+                                                  onTap: () {
+                                                    if (isCollapsable) {
+                                                      HapticFeedbackUtils
+                                                          .selection();
+                                                      _onTextTapped(context);
+                                                    } else {
+                                                      onTap?.call();
+                                                    }
+                                                  },
+                                                );
                                               }
+                                              return Text(
+                                                text,
+                                                style: TextStyle(
+                                                  fontSize: prefState
+                                                      .fontSize
+                                                      .fontSize,
+                                                ),
+                                                textScaler: MediaQuery.of(
+                                                  context,
+                                                ).textScaler,
+                                              );
                                             },
                                           );
-                                        }
-                                      }(),
+                                        }(),
+                                      ),
                                     ),
-                                  ),
                                 ),
                               ),
                             ],

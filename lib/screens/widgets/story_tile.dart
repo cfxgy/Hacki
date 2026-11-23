@@ -51,6 +51,25 @@ class StoryTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (story.hidden) return const SizedBox.shrink();
+    final TranslationCubit? cubit = context.tryRead<TranslationCubit>();
+    if (cubit == null) return _buildContent(context, story.title);
+    return BlocBuilder<TranslationCubit, TranslationState>(
+      buildWhen: (TranslationState previous, TranslationState current) {
+        final TranslationEntry? a = previous.entryFor('story_${story.id}');
+        final TranslationEntry? b = current.entryFor('story_${story.id}');
+        return a?.translated != b?.translated ||
+            a?.showOriginal != b?.showOriginal ||
+            a?.status != b?.status;
+      },
+      builder: (BuildContext context, TranslationState state) => _buildContent(
+        context,
+        state.displayText('story_${story.id}', story.title),
+      ),
+    );
+  }
+
+  Widget _buildContent(BuildContext context, String title) {
+    if (story.hidden) return const SizedBox.shrink();
     if (shouldShowWebPreview) {
       final double height = context.storyTileHeight;
       return Semantics(
@@ -86,7 +105,7 @@ class StoryTile extends StatelessWidget {
                                         ),
                                   ),
                                 TextSpan(
-                                  text: story.title,
+                                  text: title,
                                   style: Theme.of(context).textTheme.titleMedium
                                       ?.copyWith(
                                         color: hasRead
@@ -108,6 +127,10 @@ class StoryTile extends StatelessWidget {
                                   ),
                               ],
                             ),
+                          ),
+                          TranslationToggleButton(
+                            translationKey: 'story_${story.id}',
+                            text: story.title,
                           ),
                           if (shouldShowMetadata)
                             Text(
@@ -147,7 +170,7 @@ class StoryTile extends StatelessWidget {
                 borderRadius: Dimens.zero,
                 removeElevation: true,
                 bodyMaxLines: context.storyTileMaxLines,
-                errorTitle: story.title,
+                errorTitle: title,
                 hasRead: hasRead,
                 shouldShowMetadata: shouldShowMetadata,
                 shouldShowMultimedia: shouldShowPreviewImage,
@@ -217,7 +240,7 @@ class StoryTile extends StatelessWidget {
                                             ),
                                       ),
                                     TextSpan(
-                                      text: story.title,
+                                      text: title,
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleMedium
@@ -246,6 +269,10 @@ class StoryTile extends StatelessWidget {
                                 ),
                                 textScaler: MediaQuery.of(context).textScaler,
                               ),
+                            ),
+                            TranslationToggleButton(
+                              translationKey: 'story_${story.id}',
+                              text: story.title,
                             ),
                           ],
                         ),
