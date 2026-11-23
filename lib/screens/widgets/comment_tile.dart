@@ -376,6 +376,9 @@ class CommentTile extends StatelessWidget {
                                             translationKey:
                                                 'comment_${comment.id}',
                                             originalText: comment.text,
+                                            requestText: HtmlUtils.parseHtml(
+                                              comment.text,
+                                            ),
                                             autoTranslate: true,
                                             builder:
                                                 (

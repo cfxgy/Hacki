@@ -18,11 +18,6 @@ on:
         required: true
         default: false
         type: boolean
-      diagnostic:
-        description: "Report check failures without failing the workflow"
-        required: true
-        default: false
-        type: boolean
 
 permissions:
   contents: read
@@ -89,33 +84,12 @@ jobs:
         run: flutter gen-l10n
 
       - name: Analyze
-        id: analyze
-        continue-on-error: ${{ inputs.diagnostic }}
         run: flutter analyze lib test
 
       - name: Verify Dart formatting
-        id: format
-        continue-on-error: ${{ inputs.diagnostic }}
-        run: |
-          if [[ "${{ inputs.diagnostic }}" == "true" ]]; then
-            dart format lib test integration_test
-            git diff > format.patch
-            test ! -s format.patch
-          else
-            dart format --output=none --set-exit-if-changed lib test integration_test
-          fi
-
-      - name: Upload formatting patch
-        if: always() && inputs.diagnostic && steps.format.outcome == 'failure'
-        uses: actions/upload-artifact@v7
-        with:
-          name: format-patch
-          path: format.patch
-          if-no-files-found: ignore
+        run: dart format --output=none --set-exit-if-changed lib test integration_test
 
       - name: Run tests
-        id: test
-        continue-on-error: ${{ inputs.diagnostic }}
         run: flutter test
 
       # Release builds use the repository's stable keystore when configured.
@@ -147,9 +121,6 @@ jobs:
           fi
 
       - name: Build APKs
-        id: build
-        if: inputs.build_type != 'release' || steps.analyze.outcome == 'success' && steps.test.outcome == 'success'
-        continue-on-error: ${{ inputs.diagnostic }}
         env:
           BUILD_TYPE: ${{ inputs.build_type }}
           SPLIT_PER_ABI: ${{ inputs.split_per_abi }}
@@ -191,7 +162,6 @@ jobs:
           ls -lh build/dist
 
       - name: Upload APK artifact
-        if: steps.build.outcome == 'success'
         uses: actions/upload-artifact@v7
         with:
           name: hacki-${{ inputs.build_type }}-apk-${{ github.run_number }}

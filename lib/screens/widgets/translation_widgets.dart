@@ -35,12 +35,14 @@ class TranslationAwareText extends StatelessWidget {
     required this.translationKey,
     required this.originalText,
     required this.builder,
+    this.requestText,
     this.autoTranslate = false,
     super.key,
   });
 
   final String translationKey;
   final String originalText;
+  final String? requestText;
   final Widget Function(BuildContext context, String text) builder;
   final bool autoTranslate;
 
@@ -65,8 +67,9 @@ class TranslationAwareText extends StatelessWidget {
       children: <Widget>[
         AutoTranslationRequest(
           translationKey: translationKey,
-          text: originalText,
+          text: requestText ?? originalText,
         ),
+        TranslationErrorHint(translationKey: translationKey),
         child,
       ],
     );
@@ -120,16 +123,63 @@ class _AutoTranslationRequestState extends State<AutoTranslationRequest> {
         if (state.canAutoTranslate &&
             needsTranslation &&
             _scheduledText != widget.text) {
-          _scheduledText = widget.text;
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!mounted) return;
-            cubit.queueAutoTranslate(
+            final bool queued = cubit.queueAutoTranslate(
               key: widget.translationKey,
               text: widget.text,
             );
+            if (queued && mounted) _scheduledText = widget.text;
           });
         }
         return const SizedBox.shrink();
+      },
+    );
+  }
+}
+
+class TranslationErrorHint extends StatelessWidget {
+  const TranslationErrorHint({required this.translationKey, super.key});
+
+  final String translationKey;
+
+  @override
+  Widget build(BuildContext context) {
+    final TranslationCubit? cubit = context.tryRead<TranslationCubit>();
+    if (cubit == null) return const SizedBox.shrink();
+    return BlocBuilder<TranslationCubit, TranslationState>(
+      buildWhen: (TranslationState previous, TranslationState current) =>
+          previous.entryFor(translationKey)?.status !=
+          current.entryFor(translationKey)?.status ||
+          previous.entryFor(translationKey)?.errorType !=
+              current.entryFor(translationKey)?.errorType,
+      builder: (BuildContext context, TranslationState state) {
+        final TranslationEntry? entry = state.entryFor(translationKey);
+        if (entry?.status != TranslationEntryStatus.failure) {
+          return const SizedBox.shrink();
+        }
+        return Padding(
+          padding: const EdgeInsets.only(bottom: Dimens.pt4),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const Icon(
+                Icons.error_outline,
+                size: Dimens.pt14,
+                color: Palette.red,
+              ),
+              const SizedBox(width: Dimens.pt4),
+              Flexible(
+                child: Text(
+                  translationErrorMessage(
+                    entry?.errorType ?? TranslationErrorType.unknown,
+                  ),
+                  style: const TextStyle(fontSize: TextDimens.pt12),
+                ),
+              ),
+            ],
+          ),
+        );
       },
     );
   }

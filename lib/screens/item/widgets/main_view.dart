@@ -750,6 +750,9 @@ class _ParentItemSection extends StatelessWidget {
                                       child: TranslationAwareText(
                                         translationKey: 'story_body_${item.id}',
                                         originalText: item.text,
+                                        requestText: HtmlUtils.parseHtml(
+                                          item.text,
+                                        ),
                                         autoTranslate: true,
                                         builder:
                                             (

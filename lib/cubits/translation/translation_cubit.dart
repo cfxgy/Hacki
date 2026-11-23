@@ -90,18 +90,18 @@ class TranslationCubit extends Cubit<TranslationState> {
 
   /// Enqueues an automatic translation. The queue is bounded and only two
   /// requests run at a time so opening a large thread cannot flood a provider.
-  void queueAutoTranslate({required String key, required String text}) {
+  bool queueAutoTranslate({required String key, required String text}) {
     final String trimmed = text.trim();
-    if (trimmed.isEmpty || !state.canAutoTranslate) return;
+    if (trimmed.isEmpty || !state.canAutoTranslate) return false;
     final TranslationEntry? existing = state.entries[key];
     if (existing != null &&
         (existing.status == TranslationEntryStatus.success ||
             existing.status == TranslationEntryStatus.loading ||
             existing.status == TranslationEntryStatus.queued ||
             existing.status == TranslationEntryStatus.failure)) {
-      return;
+      return false;
     }
-    if (_pendingKeys.contains(key) || _queue.length >= _maxQueue) return;
+    if (_pendingKeys.contains(key) || _queue.length >= _maxQueue) return false;
 
     _pendingKeys.add(key);
     final Map<String, TranslationEntry> entries =
@@ -114,6 +114,7 @@ class TranslationCubit extends Cubit<TranslationState> {
     emit(state.copyWith(entries: entries));
     _queue.add(_TranslationJob(key: key, text: trimmed));
     _drainQueue();
+    return true;
   }
 
   Future<TranslationResult> translate({
