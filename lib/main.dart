@@ -152,9 +152,9 @@ class HackiApp extends StatelessWidget {
         ),
         BlocProvider<TranslationCubit>(
           lazy: false,
-          create: (BuildContext context) => TranslationCubit(
-            repository: locator.get<TranslationRepository>(),
-          )..init(),
+          create: (BuildContext context) =>
+              TranslationCubit(repository: locator.get<TranslationRepository>())
+                ..init(),
         ),
         BlocProvider<FilterCubit>(
           lazy: false,

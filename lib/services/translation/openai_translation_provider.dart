@@ -56,8 +56,8 @@ class OpenAiTranslationProvider implements TranslationProvider {
       );
     }
 
-    final String source = request.sourceLanguage ==
-            TranslationSettings.sourceAuto
+    final String source =
+        request.sourceLanguage == TranslationSettings.sourceAuto
         ? 'the detected source language'
         : _languageName(request.sourceLanguage);
     final String target = _languageName(request.targetLanguage);
@@ -97,18 +97,18 @@ class OpenAiTranslationProvider implements TranslationProvider {
       if (choices.isEmpty) {
         throw const TranslationException(TranslationErrorType.parsing);
       }
-      final Map<String, dynamic> choice =
-          choices.first as Map<String, dynamic>;
+      final Map<String, dynamic> choice = choices.first as Map<String, dynamic>;
       final Map<String, dynamic>? message =
           choice['message'] as Map<String, dynamic>?;
       final dynamic content = message?['content'];
       final String text = switch (content) {
         String value => value.trim(),
-        List<dynamic> parts => parts
-            .whereType<Map<String, dynamic>>()
-            .map((Map<String, dynamic> part) => part['text'] as String? ?? '')
-            .join()
-            .trim(),
+        List<dynamic> parts =>
+          parts
+              .whereType<Map<String, dynamic>>()
+              .map((Map<String, dynamic> part) => part['text'] as String? ?? '')
+              .join()
+              .trim(),
         _ => '',
       };
       if (text.isEmpty) {

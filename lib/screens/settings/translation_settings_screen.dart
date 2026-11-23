@@ -48,9 +48,7 @@ class _TranslationSettingsScreenState extends State<TranslationSettingsScreen> {
     final TranslationSettings settings = cubit.state.settings;
     final String region = _azureRegion.text.trim();
     await cubit.saveSettings(
-      settings.copyWith(
-        azure: settings.azure.copyWith(region: region),
-      ),
+      settings.copyWith(azure: settings.azure.copyWith(region: region)),
     );
     final String key = _azureKey.text.trim();
     if (key.isNotEmpty) {
@@ -328,9 +326,9 @@ class _TranslationSettingsScreenState extends State<TranslationSettingsScreen> {
     padding: const EdgeInsets.only(top: Dimens.pt8, bottom: Dimens.pt4),
     child: Text(
       title,
-      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-        fontWeight: FontWeight.bold,
-      ),
+      style: Theme.of(
+        context,
+      ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
     ),
   );
 
@@ -393,10 +391,7 @@ class _TranslationSettingsScreenState extends State<TranslationSettingsScreen> {
               : L10n.current.translationTestConnection,
         ),
       ),
-      FilledButton(
-        onPressed: onSave,
-        child: Text(L10n.current.save),
-      ),
+      FilledButton(onPressed: onSave, child: Text(L10n.current.save)),
       if (showClear)
         TextButton(
           onPressed: onClear,

@@ -253,9 +253,8 @@ class TranslationRepository {
     }
   }
 
-  String _ackKey(TranslationProviderType provider) =>
-      switch (provider) {
-        TranslationProviderType.azure => _azureAckKey,
-        TranslationProviderType.openAi => _openAiAckKey,
-      };
+  String _ackKey(TranslationProviderType provider) => switch (provider) {
+    TranslationProviderType.azure => _azureAckKey,
+    TranslationProviderType.openAi => _openAiAckKey,
+  };
 }

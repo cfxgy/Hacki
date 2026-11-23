@@ -63,21 +63,17 @@ class TranslationCubit extends Cubit<TranslationState> {
     emit(state.copyWith(hasOpenAiKey: false));
   }
 
-  Future<void> acknowledgeDataSharing(
-    TranslationProviderType provider,
-  ) async {
+  Future<void> acknowledgeDataSharing(TranslationProviderType provider) async {
     await _repository.acknowledgeDataSharing(provider);
     if (isClosed) return;
-    emit(
-      switch (provider) {
-        TranslationProviderType.azure => state.copyWith(
-          azureDataSharingAcknowledged: true,
-        ),
-        TranslationProviderType.openAi => state.copyWith(
-          openAiDataSharingAcknowledged: true,
-        ),
-      },
-    );
+    emit(switch (provider) {
+      TranslationProviderType.azure => state.copyWith(
+        azureDataSharingAcknowledged: true,
+      ),
+      TranslationProviderType.openAi => state.copyWith(
+        openAiDataSharingAcknowledged: true,
+      ),
+    });
   }
 
   Future<TranslationResult> translate({
@@ -166,9 +162,5 @@ class TranslationCubit extends Cubit<TranslationState> {
     required String baseUrl,
     required String model,
     String? apiKey,
-  }) => _repository.testOpenAi(
-    baseUrl: baseUrl,
-    model: model,
-    apiKey: apiKey,
-  );
+  }) => _repository.testOpenAi(baseUrl: baseUrl, model: model, apiKey: apiKey);
 }

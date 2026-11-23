@@ -146,11 +146,10 @@ class TranslationSettings extends Equatable {
     TranslationProviderType.openAi => openAi.enabled,
   };
 
-  bool hasConfiguration(TranslationProviderType provider) =>
-      switch (provider) {
-        TranslationProviderType.azure => azure.isConfigured,
-        TranslationProviderType.openAi => openAi.isConfigured,
-      };
+  bool hasConfiguration(TranslationProviderType provider) => switch (provider) {
+    TranslationProviderType.azure => azure.isConfigured,
+    TranslationProviderType.openAi => openAi.isConfigured,
+  };
 
   TranslationSettings copyWith({
     TranslationProviderType? defaultProvider,

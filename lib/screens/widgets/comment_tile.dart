@@ -376,48 +376,50 @@ class CommentTile extends StatelessWidget {
                                             translationKey:
                                                 'comment_${comment.id}',
                                             originalText: comment.text,
-                                            builder: (
-                                              BuildContext context,
-                                              String text,
-                                            ) {
-                                              if (text == comment.text) {
-                                                return ItemText(
-                                                  key: ValueKey<int>(
-                                                    comment.id,
-                                                  ),
-                                                  item: comment,
-                                                  selectable: isSelectable,
-                                                  textScaler: MediaQuery.of(
-                                                    context,
-                                                  ).textScaler,
-                                                  onTap: () {
-                                                    if (isCollapsable) {
-                                                      HapticFeedbackUtils
-                                                          .selection();
-                                                      _onTextTapped(context);
-                                                    } else {
-                                                      onTap?.call();
-                                                    }
-                                                  },
-                                                );
-                                              }
-                                              return Text(
-                                                text,
-                                                style: TextStyle(
-                                                  fontSize: prefState
-                                                      .fontSize
-                                                      .fontSize,
-                                                ),
-                                                textScaler: MediaQuery.of(
-                                                  context,
-                                                ).textScaler,
-                                              );
-                                            },
+                                            builder:
+                                                (
+                                                  BuildContext context,
+                                                  String text,
+                                                ) {
+                                                  if (text == comment.text) {
+                                                    return ItemText(
+                                                      key: ValueKey<int>(
+                                                        comment.id,
+                                                      ),
+                                                      item: comment,
+                                                      selectable: isSelectable,
+                                                      textScaler: MediaQuery.of(
+                                                        context,
+                                                      ).textScaler,
+                                                      onTap: () {
+                                                        if (isCollapsable) {
+                                                          HapticFeedbackUtils.selection();
+                                                          _onTextTapped(
+                                                            context,
+                                                          );
+                                                        } else {
+                                                          onTap?.call();
+                                                        }
+                                                      },
+                                                    );
+                                                  }
+                                                  return Text(
+                                                    text,
+                                                    style: TextStyle(
+                                                      fontSize: prefState
+                                                          .fontSize
+                                                          .fontSize,
+                                                    ),
+                                                    textScaler: MediaQuery.of(
+                                                      context,
+                                                    ).textScaler,
+                                                  );
+                                                },
                                           );
                                         }
-                                        }(),
-                                      ),
+                                      }(),
                                     ),
+                                  ),
                                 ),
                               ),
                             ],

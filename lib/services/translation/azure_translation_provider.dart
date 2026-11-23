@@ -80,8 +80,7 @@ class AzureTranslationProvider implements TranslationProvider {
       return TranslationResult(
         text: text,
         provider: TranslationProviderType.azure,
-        detectedSourceLanguage:
-            detected?['language'] as String? ?? '',
+        detectedSourceLanguage: detected?['language'] as String? ?? '',
       );
     } catch (error) {
       throw mapTranslationHttpError(error);
