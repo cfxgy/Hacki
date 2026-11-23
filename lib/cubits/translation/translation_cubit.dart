@@ -280,7 +280,6 @@ class TranslationCubit extends Cubit<TranslationState> {
         Map<String, TranslationEntry>.of(state.entries);
     entries[key] = TranslationEntry(
       original: text,
-      showOriginal: true,
       status: TranslationEntryStatus.failure,
       errorType: errorType,
     );

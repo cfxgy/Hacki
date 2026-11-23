@@ -379,8 +379,11 @@ class _TranslationStartupPromptState extends State<TranslationStartupPrompt> {
           return const SizedBox.shrink();
         }
         final TranslationProviderType provider = state.settings.defaultProvider;
-        final String signature =
-            '${provider.name}:${state.isDefaultProviderConfigured}:${state.isAcknowledged(provider)}';
+        final String signature = <String>[
+          provider.name,
+          '${state.isDefaultProviderConfigured}',
+          '${state.isAcknowledged(provider)}',
+        ].join(':');
         if (_promptedSignature == signature || _dialogOpen) {
           return const SizedBox.shrink();
         }
@@ -421,7 +424,7 @@ class _TranslationStartupPromptState extends State<TranslationStartupPrompt> {
               ),
             );
             _dialogOpen = false;
-            if (accepted == true) {
+            if (accepted ?? false) {
               await cubit.acknowledgeDataSharing(provider);
             }
           });
