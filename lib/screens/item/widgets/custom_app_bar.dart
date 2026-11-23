@@ -6,6 +6,7 @@ import 'package:hacki/cubits/cubits.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/item/widgets/widgets.dart';
 import 'package:hacki/screens/widgets/tips/item_screen_tips.dart';
+import 'package:hacki/screens/widgets/translation_widgets.dart';
 import 'package:hacki/styles/styles.dart';
 import 'package:hacki/utils/utils.dart';
 import 'package:material_ui/material_ui.dart';
@@ -48,6 +49,7 @@ class CustomAppBar extends AppBar {
              ),
              const Spacer(),
            ],
+           TranslationPageActions(itemId: item.id),
            BlocBuilder<TipsCubit, TipsState>(
              builder: (BuildContext context, TipsState state) {
                if (state.isTipsCompleted(Tips.itemScreen)) {

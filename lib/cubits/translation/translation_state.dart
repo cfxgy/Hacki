@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:hacki/models/translation/translation_models.dart';
 
-enum TranslationEntryStatus { idle, loading, success, failure }
+enum TranslationEntryStatus { idle, queued, loading, success, failure }
 
 class TranslationEntry extends Equatable {
   const TranslationEntry({
@@ -52,6 +52,7 @@ class TranslationState extends Equatable {
     this.hasAzureKey = false,
     this.hasOpenAiKey = false,
     this.entries = const <String, TranslationEntry>{},
+    this.originalPreferences = const <String, bool>{},
     this.azureDataSharingAcknowledged = false,
     this.openAiDataSharingAcknowledged = false,
   });
@@ -61,6 +62,7 @@ class TranslationState extends Equatable {
   final bool hasAzureKey;
   final bool hasOpenAiKey;
   final Map<String, TranslationEntry> entries;
+  final Map<String, bool> originalPreferences;
   final bool azureDataSharingAcknowledged;
   final bool openAiDataSharingAcknowledged;
 
@@ -84,12 +86,29 @@ class TranslationState extends Equatable {
     TranslationProviderType.openAi => openAiDataSharingAcknowledged,
   };
 
+  bool get isDefaultProviderConfigured {
+    final TranslationProviderType provider = settings.defaultProvider;
+    if (!settings.isEnabled(provider)) return false;
+    return switch (provider) {
+      TranslationProviderType.azure =>
+        settings.azure.isConfigured && hasAzureKey,
+      TranslationProviderType.openAi =>
+        settings.openAi.isConfigured && hasOpenAiKey,
+    };
+  }
+
+  bool get canAutoTranslate =>
+      settings.autoTranslate &&
+      isDefaultProviderConfigured &&
+      isAcknowledged(settings.defaultProvider);
+
   TranslationState copyWith({
     TranslationSettings? settings,
     bool? isLoadingSettings,
     bool? hasAzureKey,
     bool? hasOpenAiKey,
     Map<String, TranslationEntry>? entries,
+    Map<String, bool>? originalPreferences,
     bool? azureDataSharingAcknowledged,
     bool? openAiDataSharingAcknowledged,
   }) => TranslationState(
@@ -98,6 +117,7 @@ class TranslationState extends Equatable {
     hasAzureKey: hasAzureKey ?? this.hasAzureKey,
     hasOpenAiKey: hasOpenAiKey ?? this.hasOpenAiKey,
     entries: entries ?? this.entries,
+    originalPreferences: originalPreferences ?? this.originalPreferences,
     azureDataSharingAcknowledged:
         azureDataSharingAcknowledged ?? this.azureDataSharingAcknowledged,
     openAiDataSharingAcknowledged:
@@ -111,6 +131,7 @@ class TranslationState extends Equatable {
     hasAzureKey,
     hasOpenAiKey,
     entries,
+    originalPreferences,
     azureDataSharingAcknowledged,
     openAiDataSharingAcknowledged,
   ];

@@ -516,5 +516,12 @@
   "translationShowOriginal": "显示原文",
   "translationDataSharingTitle": "发送文本到翻译服务？",
   "translationDataSharingBody": "选中的文本将发送给 {provider}。是否继续？",
-  "translationContinue": "继续"
+  "translationContinue": "继续",
+  "translationAuto": "自动翻译",
+  "translationAutoSubtitle": "自动翻译故事标题和已加载的评论。",
+  "translationConfigurePrompt": "自动翻译已开启，但尚未配置翻译服务。请在翻译设置中添加 API Key。",
+  "translationOpenSettings": "翻译设置",
+  "translationPageActions": "本页翻译操作",
+  "translationShowAllOriginal": "显示全部原文",
+  "translationRestoreAll": "恢复全部译文"
 }

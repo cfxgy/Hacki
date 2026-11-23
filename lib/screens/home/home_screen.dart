@@ -18,6 +18,7 @@ import 'package:hacki/models/models.dart';
 import 'package:hacki/repositories/repositories.dart';
 import 'package:hacki/screens/home/widgets/widgets.dart';
 import 'package:hacki/screens/screens.dart';
+import 'package:hacki/screens/settings/translation_settings_screen.dart';
 import 'package:hacki/screens/widgets/widgets.dart';
 import 'package:hacki/services/services.dart';
 import 'package:hacki/styles/styles.dart';
@@ -204,18 +205,26 @@ class _HomeScreenState extends State<HomeScreen>
       return ScreenTypeLayout.builder(
         mobile: (BuildContext context) {
           context.read<SplitViewCubit>().disableSplitView();
-          return MobileHomeScreen(homeScreen: homeScreen);
+          return _withTranslationPrompt(
+            MobileHomeScreen(homeScreen: homeScreen),
+          );
         },
         tablet: (BuildContext context) {
           context.read<SplitViewCubit>().enableSplitView();
-          return TabletHomeScreen(homeScreen: homeScreen);
+          return _withTranslationPrompt(
+            TabletHomeScreen(homeScreen: homeScreen),
+          );
         },
       );
     } else {
       context.read<SplitViewCubit>().disableSplitView();
-      return MobileHomeScreen(homeScreen: homeScreen);
+      return _withTranslationPrompt(MobileHomeScreen(homeScreen: homeScreen));
     }
   }
+
+  Widget _withTranslationPrompt(Widget child) => Stack(
+    children: <Widget>[child, const TranslationStartupPrompt()],
+  );
 
   Future<void> showFeatureDiscoveryDialog() async {
     final PreferenceRepository repo = locator.get<PreferenceRepository>();
@@ -336,4 +345,98 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   String get logIdentifier => 'HomeScreen';
+}
+class TranslationStartupPrompt extends StatefulWidget {
+  const TranslationStartupPrompt({super.key});
+
+  @override
+  State<TranslationStartupPrompt> createState() =>
+      _TranslationStartupPromptState();
+}
+
+class _TranslationStartupPromptState extends State<TranslationStartupPrompt> {
+  String? _promptedSignature;
+  bool _dialogOpen = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final TranslationCubit? cubit = context.tryRead<TranslationCubit>();
+    if (cubit == null) return const SizedBox.shrink();
+    return BlocBuilder<TranslationCubit, TranslationState>(
+      buildWhen: (TranslationState previous, TranslationState current) =>
+          previous.isLoadingSettings != current.isLoadingSettings ||
+          previous.settings.autoTranslate != current.settings.autoTranslate ||
+          previous.settings.defaultProvider !=
+              current.settings.defaultProvider ||
+          previous.hasAzureKey != current.hasAzureKey ||
+          previous.hasOpenAiKey != current.hasOpenAiKey ||
+          previous.azureDataSharingAcknowledged !=
+              current.azureDataSharingAcknowledged ||
+          previous.openAiDataSharingAcknowledged !=
+              current.openAiDataSharingAcknowledged,
+      builder: (BuildContext context, TranslationState state) {
+        if (state.isLoadingSettings || !state.settings.autoTranslate) {
+          return const SizedBox.shrink();
+        }
+        final TranslationProviderType provider = state.settings.defaultProvider;
+        final String signature =
+            '${provider.name}:${state.isDefaultProviderConfigured}:${state.isAcknowledged(provider)}';
+        if (_promptedSignature == signature || _dialogOpen) {
+          return const SizedBox.shrink();
+        }
+        _promptedSignature = signature;
+        if (!state.isDefaultProviderConfigured) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!mounted) return;
+            context.showSnackBar(
+              content: L10n.current.translationConfigurePrompt,
+              label: L10n.current.translationOpenSettings,
+              action: _openSettings,
+            );
+          });
+        } else if (!state.isAcknowledged(provider)) {
+          _dialogOpen = true;
+          WidgetsBinding.instance.addPostFrameCallback((_) async {
+            if (!mounted) return;
+            final bool? accepted = await showDialog<bool>(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) => AlertDialog(
+                title: Text(L10n.current.translationDataSharingTitle),
+                content: Text(
+                  L10n.current.translationDataSharingBody(
+                    translationProviderName(provider),
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: Text(L10n.current.cancel),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(true),
+                    child: Text(L10n.current.translationContinue),
+                  ),
+                ],
+              ),
+            );
+            _dialogOpen = false;
+            if (accepted == true) {
+              await cubit.acknowledgeDataSharing(provider);
+            }
+          });
+        }
+        return const SizedBox.shrink();
+      },
+    );
+  }
+
+  void _openSettings() {
+    if (!mounted) return;
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => const TranslationSettingsScreen(),
+      ),
+    );
+  }
 }

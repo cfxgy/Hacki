@@ -24,6 +24,7 @@ class TranslationRepository {
   static const String _openAiKeyStorageKey = 'translation.openai.apiKey';
   static const String _azureAckKey = 'translation.dataSharing.azure';
   static const String _openAiAckKey = 'translation.dataSharing.openAi';
+  static const String _showOriginalKey = 'translation.showOriginal';
 
   final PreferenceRepository _preferenceRepository;
   final FlutterSecureStorage _secureStorage;
@@ -84,6 +85,29 @@ class TranslationRepository {
 
   Future<void> acknowledgeDataSharing(TranslationProviderType provider) {
     _preferenceRepository.setBool(_ackKey(provider), true);
+    return Future<void>.value();
+  }
+
+  Future<Map<String, bool>> loadShowOriginalPreferences() async {
+    final String? raw = await _preferenceRepository.getString(_showOriginalKey);
+    if (raw == null || raw.isEmpty) return <String, bool>{};
+    try {
+      final dynamic decoded = jsonDecode(raw);
+      if (decoded is! Map<String, dynamic>) return <String, bool>{};
+      return decoded.map<String, bool>(
+        (String key, dynamic value) =>
+            MapEntry<String, bool>(key, value == true),
+      );
+    } catch (_) {
+      return <String, bool>{};
+    }
+  }
+
+  Future<void> saveShowOriginalPreferences(Map<String, bool> preferences) {
+    _preferenceRepository.setString(
+      _showOriginalKey,
+      jsonEncode(preferences),
+    );
     return Future<void>.value();
   }
 

@@ -12,6 +12,22 @@ String translationProviderName(TranslationProviderType type) => switch (type) {
   TranslationProviderType.openAi => L10n.current.translationOpenAiName,
 };
 
+String translationErrorMessage(TranslationErrorType type) => switch (type) {
+  TranslationErrorType.invalidConfiguration =>
+    L10n.current.translationErrorConfiguration,
+  TranslationErrorType.authentication =>
+    L10n.current.translationErrorAuthentication,
+  TranslationErrorType.permission => L10n.current.translationErrorPermission,
+  TranslationErrorType.rateLimited =>
+    L10n.current.translationErrorRateLimited,
+  TranslationErrorType.network => L10n.current.translationErrorNetwork,
+  TranslationErrorType.server => L10n.current.translationErrorServer,
+  TranslationErrorType.parsing => L10n.current.translationErrorParsing,
+  TranslationErrorType.contentRejected =>
+    L10n.current.translationErrorContent,
+  TranslationErrorType.unknown => L10n.current.translationErrorUnknown,
+};
+
 /// Rebuilds its child with the translated text when a translation is visible.
 ///
 /// If no [TranslationCubit] is available (for example in isolated widget
@@ -21,18 +37,20 @@ class TranslationAwareText extends StatelessWidget {
     required this.translationKey,
     required this.originalText,
     required this.builder,
+    this.autoTranslate = false,
     super.key,
   });
 
   final String translationKey;
   final String originalText;
   final Widget Function(BuildContext context, String text) builder;
+  final bool autoTranslate;
 
   @override
   Widget build(BuildContext context) {
     final TranslationCubit? cubit = context.tryRead<TranslationCubit>();
     if (cubit == null) return builder(context, originalText);
-    return BlocBuilder<TranslationCubit, TranslationState>(
+    final Widget child = BlocBuilder<TranslationCubit, TranslationState>(
       buildWhen: (TranslationState previous, TranslationState current) {
         final TranslationEntry? a = previous.entryFor(translationKey);
         final TranslationEntry? b = current.entryFor(translationKey);
@@ -42,6 +60,128 @@ class TranslationAwareText extends StatelessWidget {
       },
       builder: (BuildContext context, TranslationState state) =>
           builder(context, state.displayText(translationKey, originalText)),
+    );
+    if (!autoTranslate) return child;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        AutoTranslationRequest(
+          translationKey: translationKey,
+          text: originalText,
+        ),
+        child,
+      ],
+    );
+  }
+}
+
+/// Schedules a translation for content that is actually mounted. It does
+/// nothing unless automatic translation, provider configuration and the
+/// privacy acknowledgement are all in place.
+class AutoTranslationRequest extends StatefulWidget {
+  const AutoTranslationRequest({
+    required this.translationKey,
+    required this.text,
+    super.key,
+  });
+
+  final String translationKey;
+  final String text;
+
+  @override
+  State<AutoTranslationRequest> createState() => _AutoTranslationRequestState();
+}
+
+class _AutoTranslationRequestState extends State<AutoTranslationRequest> {
+  String? _scheduledText;
+
+  @override
+  void didUpdateWidget(AutoTranslationRequest oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.translationKey != widget.translationKey ||
+        oldWidget.text != widget.text) {
+      _scheduledText = null;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final TranslationCubit? cubit = context.tryRead<TranslationCubit>();
+    if (cubit == null) return const SizedBox.shrink();
+    return BlocBuilder<TranslationCubit, TranslationState>(
+      buildWhen: (TranslationState previous, TranslationState current) {
+        final TranslationEntry? a = previous.entryFor(widget.translationKey);
+        final TranslationEntry? b = current.entryFor(widget.translationKey);
+        return a?.status != b?.status ||
+            previous.canAutoTranslate != current.canAutoTranslate;
+      },
+      builder: (BuildContext context, TranslationState state) {
+        final TranslationEntry? entry = state.entryFor(widget.translationKey);
+        final bool needsTranslation =
+            entry == null ||
+            entry.status == TranslationEntryStatus.idle;
+        if (state.canAutoTranslate &&
+            needsTranslation &&
+            _scheduledText != widget.text) {
+          _scheduledText = widget.text;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!mounted) return;
+            cubit.queueAutoTranslate(
+              key: widget.translationKey,
+              text: widget.text,
+            );
+          });
+        }
+        return const SizedBox.shrink();
+      },
+    );
+  }
+}
+
+class TranslationPageActions extends StatelessWidget {
+  const TranslationPageActions({required this.itemId, super.key});
+
+  final int itemId;
+
+  @override
+  Widget build(BuildContext context) {
+    final TranslationCubit? cubit = context.tryRead<TranslationCubit>();
+    if (cubit == null) return const SizedBox.shrink();
+    return BlocBuilder<TranslationCubit, TranslationState>(
+      buildWhen: (TranslationState previous, TranslationState current) =>
+          previous.entries != current.entries,
+      builder: (BuildContext context, TranslationState state) {
+        final List<String> keys = state.entries.keys
+            .where(
+              (String key) =>
+                  key.startsWith('comment_') ||
+                  key == 'story_$itemId' ||
+                  key == 'story_body_$itemId',
+            )
+            .where((String key) => state.entries[key]?.hasTranslation ?? false)
+            .toList();
+        if (keys.isEmpty) return const SizedBox.shrink();
+        return PopupMenuButton<String>(
+          icon: const Icon(Icons.language),
+          tooltip: L10n.current.translationPageActions,
+          onSelected: (String action) {
+            cubit.setAll(
+              showOriginal: action == 'original',
+              keys: keys,
+            );
+          },
+          itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+            PopupMenuItem<String>(
+              value: 'original',
+              child: Text(L10n.current.translationShowAllOriginal),
+            ),
+            PopupMenuItem<String>(
+              value: 'translated',
+              child: Text(L10n.current.translationRestoreAll),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -100,7 +240,11 @@ class TranslationToggleButton extends StatelessWidget {
             minWidth: Dimens.pt32,
             minHeight: Dimens.pt32,
           ),
-          tooltip: showingTranslation
+          tooltip: entry?.status == TranslationEntryStatus.failure
+              ? translationErrorMessage(
+                  entry?.errorType ?? TranslationErrorType.unknown,
+                )
+              : showingTranslation
               ? L10n.current.translationShowOriginal
               : L10n.current.translationTranslate,
           icon: Icon(

@@ -680,37 +680,49 @@ class _ParentItemSection extends StatelessWidget {
                                   bottom: Dimens.pt12,
                                   top: Dimens.pt6,
                                 ),
-                                child: Text.rich(
-                                  TextSpan(
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                        semanticsLabel: item.title,
-                                        text: item.title,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: fontSize,
-                                          color: item.url.isNotEmpty
-                                              ? Theme.of(
-                                                  context,
-                                                ).colorScheme.primary
-                                              : null,
-                                        ),
-                                      ),
-                                      if (item.url.isNotEmpty)
+                                child: TranslationAwareText(
+                                  translationKey: 'story_${item.id}',
+                                  originalText: item.title,
+                                  autoTranslate: true,
+                                  builder:
+                                      (
+                                        BuildContext context,
+                                        String title,
+                                      ) => Text.rich(
                                         TextSpan(
-                                          text: ''' (${item.readableUrl})''',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: fontSize - 4,
-                                            color: Theme.of(
-                                              context,
-                                            ).colorScheme.primary,
-                                          ),
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                              semanticsLabel: title,
+                                              text: title,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: fontSize,
+                                                color: item.url.isNotEmpty
+                                                    ? Theme.of(
+                                                        context,
+                                                      ).colorScheme.primary
+                                                    : null,
+                                              ),
+                                            ),
+                                            if (item.url.isNotEmpty)
+                                              TextSpan(
+                                                text:
+                                                    ''' (${item.readableUrl})''',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: fontSize - 4,
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).colorScheme.primary,
+                                                ),
+                                              ),
+                                          ],
                                         ),
-                                    ],
-                                  ),
-                                  textAlign: TextAlign.center,
-                                  textScaler: MediaQuery.of(context).textScaler,
+                                        textAlign: TextAlign.center,
+                                        textScaler: MediaQuery.of(
+                                          context,
+                                        ).textScaler,
+                                      ),
                                 ),
                               ),
                             )
@@ -720,18 +732,55 @@ class _ParentItemSection extends StatelessWidget {
                             FadeIn(
                               child: SizedBox(
                                 width: double.infinity,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: Dimens.pt8,
-                                    bottom: Dimens.pt8,
-                                  ),
-                                  child: ItemText(
-                                    item: item,
-                                    textScaler: MediaQuery.of(
-                                      context,
-                                    ).textScaler,
-                                    selectable: true,
-                                  ),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: TranslationToggleButton(
+                                        translationKey:
+                                            'story_body_${item.id}',
+                                        text: HtmlUtils.parseHtml(item.text),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: Dimens.pt8,
+                                        bottom: Dimens.pt8,
+                                      ),
+                                      child: TranslationAwareText(
+                                        translationKey:
+                                            'story_body_${item.id}',
+                                        originalText: item.text,
+                                        autoTranslate: true,
+                                        builder:
+                                            (
+                                              BuildContext context,
+                                              String text,
+                                            ) {
+                                              if (text == item.text) {
+                                                return ItemText(
+                                                  item: item,
+                                                  textScaler: MediaQuery.of(
+                                                    context,
+                                                  ).textScaler,
+                                                  selectable: true,
+                                                );
+                                              }
+                                              return Text(
+                                                text,
+                                                style: TextStyle(
+                                                  fontSize: fontSize,
+                                                ),
+                                                textScaler: MediaQuery.of(
+                                                  context,
+                                                ).textScaler,
+                                              );
+                                            },
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),

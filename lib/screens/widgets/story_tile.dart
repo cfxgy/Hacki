@@ -53,18 +53,27 @@ class StoryTile extends StatelessWidget {
     if (story.hidden) return const SizedBox.shrink();
     final TranslationCubit? cubit = context.tryRead<TranslationCubit>();
     if (cubit == null) return _buildContent(context, story.title);
-    return BlocBuilder<TranslationCubit, TranslationState>(
-      buildWhen: (TranslationState previous, TranslationState current) {
-        final TranslationEntry? a = previous.entryFor('story_${story.id}');
-        final TranslationEntry? b = current.entryFor('story_${story.id}');
-        return a?.translated != b?.translated ||
-            a?.showOriginal != b?.showOriginal ||
-            a?.status != b?.status;
-      },
-      builder: (BuildContext context, TranslationState state) => _buildContent(
-        context,
-        state.displayText('story_${story.id}', story.title),
-      ),
+    return Stack(
+      children: <Widget>[
+        AutoTranslationRequest(
+          translationKey: 'story_${story.id}',
+          text: story.title,
+        ),
+        BlocBuilder<TranslationCubit, TranslationState>(
+          buildWhen: (TranslationState previous, TranslationState current) {
+            final TranslationEntry? a = previous.entryFor('story_${story.id}');
+            final TranslationEntry? b = current.entryFor('story_${story.id}');
+            return a?.translated != b?.translated ||
+                a?.showOriginal != b?.showOriginal ||
+                a?.status != b?.status;
+          },
+          builder: (BuildContext context, TranslationState state) =>
+              _buildContent(
+                context,
+                state.displayText('story_${story.id}', story.title),
+              ),
+        ),
+      ],
     );
   }
 

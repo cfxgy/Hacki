@@ -18,6 +18,11 @@ on:
         required: true
         default: false
         type: boolean
+      diagnostic:
+        description: "Report check failures without failing the workflow"
+        required: true
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -84,41 +89,67 @@ jobs:
         run: flutter gen-l10n
 
       - name: Analyze
+        id: analyze
+        continue-on-error: ${{ inputs.diagnostic }}
         run: flutter analyze lib test
 
       - name: Verify Dart formatting
-        run: dart format --output=none --set-exit-if-changed lib test integration_test
+        id: format
+        continue-on-error: ${{ inputs.diagnostic }}
+        run: |
+          if [[ "${{ inputs.diagnostic }}" == "true" ]]; then
+            dart format lib test integration_test
+            git diff > format.patch
+            test ! -s format.patch
+          else
+            dart format --output=none --set-exit-if-changed lib test integration_test
+          fi
+
+      - name: Upload formatting patch
+        if: always() && inputs.diagnostic && steps.format.outcome == 'failure'
+        uses: actions/upload-artifact@v7
+        with:
+          name: format-patch
+          path: format.patch
+          if-no-files-found: ignore
 
       - name: Run tests
+        id: test
+        continue-on-error: ${{ inputs.diagnostic }}
         run: flutter test
 
-      # Release builds need a signing config. The real release workflow uses
-      # repository secrets; this manual workflow creates a throwaway key so an
-      # installable APK can be produced without any repository secrets.
-      - name: Generate ephemeral signing key
+      # Release builds use the repository's stable keystore when configured.
+      # Without it the APK is deliberately left unsigned; we never generate a
+      # new release key per CI run.
+      - name: Configure release signing
+        id: signing
         if: inputs.build_type == 'release'
         working-directory: android
         env:
-          KEYSTORE_PASSWORD: hacki-ci-${{ github.run_id }}
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
         run: |
-          keytool -genkeypair -v \
-            -keystore app/ci-release.jks \
-            -storetype JKS \
-            -keyalg RSA \
-            -keysize 2048 \
-            -validity 10000 \
-            -alias ci-release \
-            -storepass "${KEYSTORE_PASSWORD}" \
-            -keypass "${KEYSTORE_PASSWORD}" \
-            -dname "CN=Hacki CI, OU=CI, O=Hacki, L=Unknown, ST=Unknown, C=US"
-          cat > key.properties <<EOF
-          storePassword=${KEYSTORE_PASSWORD}
-          keyPassword=${KEYSTORE_PASSWORD}
-          keyAlias=ci-release
-          storeFile=ci-release.jks
+          if [[ -n "${KEYSTORE_BASE64}" ]]; then
+            printf '%s' "${KEYSTORE_BASE64}" | base64 --decode > app/release.jks
+            cat > key.properties <<EOF
+          storePassword=${STORE_PASSWORD}
+          keyPassword=${KEY_PASSWORD}
+          keyAlias=${KEY_ALIAS}
+          storeFile=release.jks
           EOF
+            echo "signed=true" >> "${GITHUB_OUTPUT}"
+            echo "Using the stable release keystore from repository secrets."
+          else
+            echo "signed=false" >> "${GITHUB_OUTPUT}"
+            echo "No KEYSTORE_BASE64 secret found; release APK will be unsigned."
+          fi
 
-      - name: Build APK
+      - name: Build APKs
+        id: build
+        if: inputs.build_type != 'release' || steps.analyze.outcome == 'success' && steps.test.outcome == 'success'
+        continue-on-error: ${{ inputs.diagnostic }}
         env:
           BUILD_TYPE: ${{ inputs.build_type }}
           SPLIT_PER_ABI: ${{ inputs.split_per_abi }}
@@ -126,23 +157,44 @@ jobs:
           HACKI_BACKEND_API_KEY: ${{ secrets.HACKI_BACKEND_API_KEY }}
         run: |
           set -euo pipefail
-          args=(
-            "--${BUILD_TYPE}"
+          mkdir -p build/dist
+          defines=(
             "--dart-define=HACKI_BACKEND_URL=${HACKI_BACKEND_URL}"
             "--dart-define=HACKI_BACKEND_API_KEY=${HACKI_BACKEND_API_KEY}"
           )
-          if [[ "${SPLIT_PER_ABI}" == "true" ]]; then
-            args+=("--split-per-abi")
-          fi
-          flutter build apk "${args[@]}"
+          if [[ "${BUILD_TYPE}" == "release" ]]; then
+            # Universal release APK (arm64-v8a + armeabi-v7a).
+            flutter build apk --release \
+              --target-platform=android-arm,android-arm64 \
+              "${defines[@]}"
+            cp build/app/outputs/flutter-apk/app-release*.apk \
+              build/dist/hacki-release-universal.apk
 
-      - name: List built APKs
-        run: ls -lh build/app/outputs/flutter-apk/*.apk
+            # Per-ABI release APKs.
+            flutter build apk --release --split-per-abi \
+              --target-platform=android-arm,android-arm64 \
+              "${defines[@]}"
+            for apk in build/app/outputs/flutter-apk/*-release.apk; do
+              cp "${apk}" "build/dist/$(basename "${apk}")"
+            done
+          else
+            debug_args=(--debug)
+            if [[ "${SPLIT_PER_ABI}" == "true" ]]; then
+              debug_args+=(--split-per-abi)
+            fi
+            flutter build apk "${debug_args[@]}" "${defines[@]}"
+            for apk in build/app/outputs/flutter-apk/*.apk; do
+              cp "${apk}" "build/dist/$(basename "${apk}")"
+            done
+          fi
+          echo "===== APK sizes ====="
+          ls -lh build/dist
 
       - name: Upload APK artifact
+        if: steps.build.outcome == 'success'
         uses: actions/upload-artifact@v7
         with:
           name: hacki-${{ inputs.build_type }}-apk-${{ github.run_number }}
-          path: build/app/outputs/flutter-apk/*.apk
+          path: build/dist/*.apk
           if-no-files-found: error
           retention-days: 30

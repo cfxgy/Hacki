@@ -123,6 +123,7 @@ class OpenAiTranslationConfig extends Equatable {
 class TranslationSettings extends Equatable {
   const TranslationSettings({
     this.defaultProvider = TranslationProviderType.azure,
+    this.autoTranslate = true,
     this.sourceLanguage = sourceAuto,
     this.targetLanguage = targetSimplifiedChinese,
     this.azure = const AzureTranslationConfig(),
@@ -136,6 +137,7 @@ class TranslationSettings extends Equatable {
   static const String targetEnglish = 'en';
 
   final TranslationProviderType defaultProvider;
+  final bool autoTranslate;
   final String sourceLanguage;
   final String targetLanguage;
   final AzureTranslationConfig azure;
@@ -153,12 +155,14 @@ class TranslationSettings extends Equatable {
 
   TranslationSettings copyWith({
     TranslationProviderType? defaultProvider,
+    bool? autoTranslate,
     String? sourceLanguage,
     String? targetLanguage,
     AzureTranslationConfig? azure,
     OpenAiTranslationConfig? openAi,
   }) => TranslationSettings(
     defaultProvider: defaultProvider ?? this.defaultProvider,
+    autoTranslate: autoTranslate ?? this.autoTranslate,
     sourceLanguage: sourceLanguage ?? this.sourceLanguage,
     targetLanguage: targetLanguage ?? this.targetLanguage,
     azure: azure ?? this.azure,
@@ -167,6 +171,7 @@ class TranslationSettings extends Equatable {
 
   Map<String, dynamic> toJson() => <String, dynamic>{
     'defaultProvider': defaultProvider.name,
+    'autoTranslate': autoTranslate,
     'sourceLanguage': sourceLanguage,
     'targetLanguage': targetLanguage,
     'azure': azure.toJson(),
@@ -181,6 +186,7 @@ class TranslationSettings extends Equatable {
         (TranslationProviderType value) => value.name == provider,
         orElse: () => TranslationProviderType.azure,
       ),
+      autoTranslate: json['autoTranslate'] as bool? ?? true,
       sourceLanguage: json['sourceLanguage'] as String? ?? sourceAuto,
       targetLanguage:
           json['targetLanguage'] as String? ?? targetSimplifiedChinese,
@@ -196,6 +202,7 @@ class TranslationSettings extends Equatable {
   @override
   List<Object?> get props => <Object?>[
     defaultProvider,
+    autoTranslate,
     sourceLanguage,
     targetLanguage,
     azure,

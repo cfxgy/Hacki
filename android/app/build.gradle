@@ -69,7 +69,11 @@ android {
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            // Without a stable keystore the release APK stays unsigned instead
+            // of being signed with a new random key on every CI run.
+            if (keystorePropertiesFile.exists()) {
+                signingConfig signingConfigs.release
+            }
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

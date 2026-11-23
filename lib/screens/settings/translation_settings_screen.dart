@@ -156,7 +156,17 @@ class _TranslationSettingsScreenState extends State<TranslationSettingsScreen> {
             ),
             children: <Widget>[
               const _DisclosureCard(),
-              const SizedBox(height: Dimens.pt12),
+              const SizedBox(height: Dimens.pt8),
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(L10n.current.translationAuto),
+                subtitle: Text(L10n.current.translationAutoSubtitle),
+                value: state.settings.autoTranslate,
+                onChanged: (bool value) => cubit.saveSettings(
+                  state.settings.copyWith(autoTranslate: value),
+                ),
+              ),
+              const Divider(),
               _sectionTitle(context, L10n.current.translationLanguages),
               _languageDropdown(
                 label: L10n.current.translationSourceLanguage,

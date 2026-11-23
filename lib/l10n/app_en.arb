@@ -666,5 +666,12 @@
       }
     }
   },
-  "translationContinue": "Continue"
+  "translationContinue": "Continue",
+  "translationAuto": "Automatic translation",
+  "translationAutoSubtitle": "Translate story titles and loaded comments automatically.",
+  "translationConfigurePrompt": "Automatic translation is on, but no translation provider is configured. Add an API key in Translation settings.",
+  "translationOpenSettings": "Translation settings",
+  "translationPageActions": "Translation actions for this page",
+  "translationShowAllOriginal": "Show all original",
+  "translationRestoreAll": "Restore all translations"
 }
