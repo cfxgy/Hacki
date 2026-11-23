@@ -19,6 +19,7 @@ import 'package:hacki/config/router.dart';
 import 'package:hacki/cubits/cubits.dart';
 import 'package:hacki/l10n/generated/app_localizations.dart';
 import 'package:hacki/l10n/l10n.dart';
+import 'package:hacki/repositories/repositories.dart';
 import 'package:hacki/screens/widgets/widgets.dart';
 import 'package:hacki/services/fetcher.dart';
 import 'package:hacki/styles/styles.dart';

@@ -420,6 +420,7 @@ class CommentTile extends StatelessWidget {
                                     ),
                                 ),
                               ),
+                            ),
                             ],
                           ),
                           AnimatedCrossFade(
