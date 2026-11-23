@@ -83,6 +83,8 @@ class _StoriesListViewState extends State<StoriesListView>
               (previous.statusByType[widget.storyType] !=
                   current.statusByType[widget.storyType]),
           builder: (BuildContext context, StoriesState state) {
+            final int nextPage =
+                (state.currentPageByType[widget.storyType] ?? 0) + 1;
             return ItemsListView<Story>(
               shouldShowDivider: preferenceState.isDividerEnabled,
               shouldShowOfflineBanner: true,
@@ -161,11 +163,7 @@ class _StoriesListViewState extends State<StoriesListView>
                               (_) => Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
-                          child: Text(
-                            L10n.current.loadPage(
-                              '${(state.currentPageByType[widget.storyType] ?? 0) + 1}',
-                            ),
-                          ),
+                          child: Text(L10n.current.loadPage('$nextPage')),
                         ),
                       ),
                     )

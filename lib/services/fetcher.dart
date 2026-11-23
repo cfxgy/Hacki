@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:hacki/config/constants.dart';
 import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/repositories/repositories.dart';

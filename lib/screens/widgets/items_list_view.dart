@@ -208,9 +208,11 @@ class ItemsListView<T extends Item> extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             if (e.deleted)
-                              const Center(
+                              Center(
                                 child: Padding(
-                                  padding: EdgeInsets.only(top: Dimens.pt6),
+                                  padding: const EdgeInsets.only(
+                                    top: Dimens.pt6,
+                                  ),
                                   child: Text(
                                     L10n.current.deleted,
                                     style: const TextStyle(color: Palette.grey),

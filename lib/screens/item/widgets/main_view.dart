@@ -487,7 +487,7 @@ class MainView extends StatelessWidget {
                         child: Center(child: CustomCircularProgressIndicator()),
                       )
                     : state.user.about.isEmpty
-                    ? const Row(
+                    ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text(

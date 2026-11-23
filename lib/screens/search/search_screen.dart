@@ -386,7 +386,7 @@ class _SearchScreenState extends State<SearchScreen> with ItemActionMixin {
                             if (state.status == SearchStatus.loaded &&
                                 state.results.isEmpty) ...<Widget>[
                               const SizedBox(height: Dimens.pt100),
-                              const Center(
+                              Center(
                                 child: Text(
                                   L10n.current.nothingFound,
                                   style: const TextStyle(color: Palette.grey),

@@ -117,13 +117,13 @@ class MorePopupMenu extends StatelessWidget {
                                   L10n.current.aboutUser(state.user.id),
                                 ),
                                 content: state.user.about.isEmpty
-                                    ? const Row(
+                                    ? Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: <Widget>[
                                           Text(
                                             L10n.current.empty,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: Palette.grey,
                                             ),
                                           ),

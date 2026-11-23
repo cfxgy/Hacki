@@ -5,15 +5,15 @@ import 'package:intl/intl.dart';
 /// Global access point for the active [AppLocalizations].
 ///
 /// Widgets, models and services can read UI strings without threading a
-/// `BuildContext` through business logic. [HackiApp] keeps this in sync with
-/// the locale selected by MaterialApp. English is the fallback used by tests
-/// and by any code that runs before the first frame.
+/// `BuildContext` through business logic. The root app keeps this in sync
+/// with the locale selected by MaterialApp. English is the fallback used by
+/// tests and by any code that runs before the first frame.
 abstract final class L10n {
   L10n._();
 
   static AppLocalizations current = AppLocalizationsEn();
 
-  static void update(AppLocalizations localizations) {
+  static set active(AppLocalizations localizations) {
     current = localizations;
   }
 

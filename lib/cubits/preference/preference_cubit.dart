@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/widgets.dart' show Locale;
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:hacki/config/locator.dart';
 import 'package:hacki/extensions/extensions.dart';

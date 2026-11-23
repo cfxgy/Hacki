@@ -374,8 +374,8 @@ class HackiApp extends StatelessWidget {
                                     routerConfig: router,
                                     builder:
                                         (BuildContext context, Widget? child) {
-                                          L10n.update(
-                                            AppLocalizations.of(context),
+                                          L10n.active = AppLocalizations.of(
+                                            context,
                                           );
                                           final Widget content =
                                               child ?? const SizedBox.shrink();
