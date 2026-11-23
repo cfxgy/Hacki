@@ -69,10 +69,9 @@ class FloatingSkipButtons extends StatelessWidget {
                   },
                   child: FloatingActionButton(
                     enableFeedback: false,
-                    backgroundColor: Theme.of(context)
-                        .colorScheme
-                        .primaryContainer
-                        .withAlpha(200),
+                    backgroundColor: Theme.of(
+                      context,
+                    ).colorScheme.primaryContainer.withAlpha(200),
 
                     /// Randomly generated string as heroTag to
                     /// prevent default [FloatingActionButton]
@@ -121,10 +120,9 @@ class FloatingSkipButtons extends StatelessWidget {
                   },
                   child: FloatingActionButton(
                     enableFeedback: false,
-                    backgroundColor: Theme.of(context)
-                        .colorScheme
-                        .primaryContainer
-                        .withAlpha(200),
+                    backgroundColor: Theme.of(
+                      context,
+                    ).colorScheme.primaryContainer.withAlpha(200),
 
                     /// Same as above.
                     heroTag: UniqueKey().hashCode,

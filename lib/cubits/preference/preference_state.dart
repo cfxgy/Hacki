@@ -150,8 +150,9 @@ class PreferenceState extends Equatable {
 
   MaterialColor get appColor {
     return materialColors.elementAt(
-      preferences.singleWhereType<AppColorPreference>().val,
-    ) as MaterialColor;
+          preferences.singleWhereType<AppColorPreference>().val,
+        )
+        as MaterialColor;
   }
 
   HackerNewsDataSource get dataSource {

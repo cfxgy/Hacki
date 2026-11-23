@@ -55,8 +55,9 @@ class _LogsScreenState extends State<LogsScreen> {
               final String data = _logs.reduce(
                 (String lhs, String rhs) => lhs + rhs,
               );
-              Clipboard.setData(ClipboardData(text: data))
-                  .whenComplete(HapticFeedbackUtils.selection);
+              Clipboard.setData(
+                ClipboardData(text: data),
+              ).whenComplete(HapticFeedbackUtils.selection);
               context.showSnackBar(content: L10n.current.logsCopied);
             },
             icon: Icon(

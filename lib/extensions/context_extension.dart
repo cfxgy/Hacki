@@ -135,8 +135,9 @@ extension ContextExtension on BuildContext {
               Text(
                 error.toString(),
                 style: TextStyle(
-                  color: Theme.of(this).colorScheme.onErrorContainer
-                      .withAlpha(150),
+                  color: Theme.of(
+                    this,
+                  ).colorScheme.onErrorContainer.withAlpha(150),
                   fontSize: TextDimens.pt10,
                 ),
               ),

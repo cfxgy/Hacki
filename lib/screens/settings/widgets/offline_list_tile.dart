@@ -80,8 +80,9 @@ class OfflineListTile extends StatelessWidget {
                   L10n.current.lastDownloadedAt('${state.downloadDateTime}'),
                   style: TextStyle(
                     fontSize: TextDimens.pt12,
-                    color: Theme.of(context).colorScheme.onSurface
-                        .withAlpha(160),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withAlpha(160),
                   ),
                 ),
             ],

@@ -88,8 +88,9 @@ class InboxView extends StatelessWidget {
                                 top: Dimens.zero,
                                 bottom: Dimens.zero,
                                 child: LinearProgressIndicator(
-                                  color: Theme.of(context).primaryColor
-                                      .withValues(alpha: 0.1),
+                                  color: Theme.of(
+                                    context,
+                                  ).primaryColor.withValues(alpha: 0.1),
                                 ),
                               ),
                             FadeIn(
@@ -112,8 +113,9 @@ class InboxView extends StatelessWidget {
                                               e.by,
                                             ),
                                             style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .metadataColor,
+                                              color: Theme.of(
+                                                context,
+                                              ).metadataColor,
                                             ),
                                           ),
                                           const SizedBox(width: Dimens.pt12),
@@ -124,9 +126,9 @@ class InboxView extends StatelessWidget {
                                         style: TextStyle(
                                           color:
                                               unreadCommentsIds.contains(e.id)
-                                              ? Theme.of(context)
-                                                    .colorScheme
-                                                    .onSurface
+                                              ? Theme.of(
+                                                  context,
+                                                ).colorScheme.onSurface
                                               : Theme.of(context).readGrey,
                                           fontSize: TextDimens.pt16,
                                         ),

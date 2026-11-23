@@ -115,9 +115,9 @@ class _PollViewState extends State<PollView> with ItemActionMixin {
                                   const SizedBox(height: Dimens.pt4),
                                   LinearProgressIndicator(
                                     value: option.ratio,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primary,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
                                   ),
                                 ],
                               ),

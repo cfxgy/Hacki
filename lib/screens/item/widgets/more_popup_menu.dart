@@ -136,9 +136,9 @@ class MorePopupMenu extends StatelessWidget {
                                         style: TextStyle(fontSize: fontSize),
                                         linkStyle: TextStyle(
                                           fontSize: fontSize,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
                                         ),
                                         onOpen: (LinkableElement link) =>
                                             LinkUtils.launch(link.url, context),

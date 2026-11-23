@@ -176,9 +176,9 @@ class CommentTile extends StatelessWidget {
                                 Text(
                                   comment.by,
                                   style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primary,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
                                   ),
                                   textScaler: MediaQuery.of(context).textScaler,
                                 ),
@@ -192,9 +192,9 @@ class CommentTile extends StatelessWidget {
                                   Text(
                                     L10n.current.op,
                                     style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.primary,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -203,15 +203,17 @@ class CommentTile extends StatelessWidget {
                                   Text(
                                     ' #${index! + 1}',
                                     style: const TextStyle(color: Palette.grey),
-                                    textScaler: MediaQuery.of(context)
-                                        .textScaler,
+                                    textScaler: MediaQuery.of(
+                                      context,
+                                    ).textScaler,
                                   ),
                                 if (kDebugMode || isDev)
                                   Text(
                                     ' ${comment.id}',
                                     style: const TextStyle(color: Palette.grey),
-                                    textScaler: MediaQuery.of(context)
-                                        .textScaler,
+                                    textScaler: MediaQuery.of(
+                                      context,
+                                    ).textScaler,
                                   ),
                                 if (isResponse)
                                   const Padding(
@@ -239,9 +241,9 @@ class CommentTile extends StatelessWidget {
                                     child: Icon(
                                       Icons.fiber_new,
                                       size: Dimens.pt16,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primaryContainer,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.primaryContainer,
                                     ),
                                   )
                                 else if (shouldHighlightNewComments &&
@@ -309,8 +311,9 @@ class CommentTile extends StatelessWidget {
                                               child: Text(
                                                 comment.text,
                                                 style: TextStyle(
-                                                  color: Theme.of(context)
-                                                      .disabledColor,
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).disabledColor,
                                                   fontSize: prefState
                                                       .fontSize
                                                       .fontSize,
@@ -369,8 +372,9 @@ class CommentTile extends StatelessWidget {
                                             key: ValueKey<int>(comment.id),
                                             item: comment,
                                             selectable: isSelectable,
-                                            textScaler: MediaQuery.of(context)
-                                                .textScaler,
+                                            textScaler: MediaQuery.of(
+                                              context,
+                                            ).textScaler,
                                             onTap: () {
                                               if (isCollapsable) {
                                                 HapticFeedbackUtils.selection();

@@ -571,6 +571,16 @@
   "tip11": "Disabling `Mark Read Stories` in settings will clear your existing read history",
   "tip12": "What's beyond the universe?",
   "userKarmaCreated": "{karma} karma, created on {date}",
+  "@userKarmaCreated": {
+    "placeholders": {
+      "karma": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "welcomeTitle": "Welcome to Hacki!",
   "welcomeBody": "Take a quick tour to see what Hacki can do?",
   "tapStoryToViewComments": "Tap on story tile to view its comments.",

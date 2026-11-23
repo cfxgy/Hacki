@@ -116,9 +116,9 @@ class _LoginDialogState extends State<LoginDialog> with ItemActionMixin {
                                 child: Text(
                                   L10n.current.endUserAgreement,
                                   style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primary,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
                                     decoration: TextDecoration.underline,
                                     fontWeight: FontWeight.w600,
                                   ),

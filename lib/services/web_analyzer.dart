@@ -302,9 +302,9 @@ ${info.toJson()}
 
     late final bool shouldRetry;
     InfoBase? info;
-    String description = sanitizeText((res?[2] as String?) ?? story.text)
-        .removeAllEmojis()
-        .trim();
+    String description = sanitizeText(
+      (res?[2] as String?) ?? story.text,
+    ).removeAllEmojis().trim();
 
     // If description is empty, use one of the comments under the story.
     if (res == null || description.isEmpty) {
@@ -450,8 +450,9 @@ ${info.toJson()}
       } else if (stream.statusCode == HttpStatus.ok) {
         res = await Response.fromStream(stream);
         if (uri.host == 'm.tb.cn') {
-          final RegExpMatch? match = RegExp(r"var url = \'(.*)\'")
-              .firstMatch(res.body);
+          final RegExpMatch? match = RegExp(
+            r"var url = \'(.*)\'",
+          ).firstMatch(res.body);
           if (match != null) {
             final String? newUrl = match.group(1);
             if (newUrl != null) {

@@ -113,9 +113,9 @@ class TabletHomeScreen extends StatelessWidget {
                         child: SizedBox(
                           child: CustomPaint(
                             painter: SpindlePainter(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.primaryContainer,
                             ),
                             child: Center(
                               child: Padding(
@@ -124,9 +124,9 @@ class TabletHomeScreen extends StatelessWidget {
                                 ),
                                 child: FaIcon(
                                   FontAwesomeIcons.gripLinesVertical,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimaryContainer,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimaryContainer,
                                   size: TextDimens.pt18,
                                 ),
                               ),

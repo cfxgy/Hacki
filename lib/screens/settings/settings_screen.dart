@@ -1180,8 +1180,9 @@ class _SettingsViewState extends State<SettingsView>
         await router.push(Paths.qrCode.viewer, extra: allFavoritesStr);
       case ExportDestination.clipBoard:
         try {
-          await Clipboard.setData(ClipboardData(text: allFavoritesStr))
-              .whenComplete(HapticFeedbackUtils.selection);
+          await Clipboard.setData(
+            ClipboardData(text: allFavoritesStr),
+          ).whenComplete(HapticFeedbackUtils.selection);
           showSnackBar(content: L10n.current.favoriteIdsCopied);
         } catch (error, stackTrace) {
           logError(error, stackTrace: stackTrace);

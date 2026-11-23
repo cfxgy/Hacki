@@ -34,8 +34,9 @@ class SlideActionSettings extends StatelessWidget {
       );
       return;
     }
-    Navigator.of(context)
-        .push<void>(MaterialPageRoute<void>(builder: (_) => settings));
+    Navigator.of(
+      context,
+    ).push<void>(MaterialPageRoute<void>(builder: (_) => settings));
   }
 
   @override
@@ -96,9 +97,9 @@ class SlideActionSettings extends StatelessWidget {
                                   SizedBoxes.pt4,
                                   IconButton(
                                     tooltip: L10n.current.customizeItemActions,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primary,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
                                     constraints: const BoxConstraints.tightFor(
                                       width: Dimens.pt48,
                                       height: Dimens.pt48,
@@ -197,9 +198,9 @@ class _SlideActionMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final InputBorder? enabledBorder = Theme.of(context)
-        .inputDecorationTheme
-        .enabledBorder;
+    final InputBorder? enabledBorder = Theme.of(
+      context,
+    ).inputDecorationTheme.enabledBorder;
     final BorderSide borderSide = enabledBorder is UnderlineInputBorder
         ? enabledBorder.borderSide
         : BorderSide(color: Theme.of(context).dividerColor);

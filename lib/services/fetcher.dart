@@ -78,8 +78,9 @@ abstract class Fetcher {
 
             await sembastRepository.updateKidsOf(id: id, kids: kids);
 
-            final Set<int> diff = <int>{...kids}
-                .difference(<int>{...previousKids});
+            final Set<int> diff = <int>{
+              ...kids,
+            }.difference(<int>{...previousKids});
 
             if (diff.isNotEmpty) {
               for (final int newCommentId in diff) {

@@ -246,9 +246,9 @@ class ItemsListView<T extends Item> extends StatelessWidget {
                                     fontSize: TextDimens.pt16,
                                   ),
                                   linkStyle: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primary,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
                                   ),
                                   onOpen: (LinkableElement link) =>
                                       LinkUtils.launch(link.url, context),

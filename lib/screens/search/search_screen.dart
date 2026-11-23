@@ -104,9 +104,9 @@ class _SearchScreenState extends State<SearchScreen> with ItemActionMixin {
                     enablePullDown: false,
                     enablePullUp: true,
                     header: WaterDropMaterialHeader(
-                      backgroundColor: Theme.of(context)
-                          .colorScheme
-                          .primaryContainer,
+                      backgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.primaryContainer,
                       color: Theme.of(context).colorScheme.onPrimaryContainer,
                     ),
                     footer: CustomFooter(
@@ -150,9 +150,9 @@ class _SearchScreenState extends State<SearchScreen> with ItemActionMixin {
                                     .read<SearchCubit>()
                                     .textEditingController,
                                 focusNode: focusNode,
-                                cursorColor: Theme.of(context)
-                                    .colorScheme
-                                    .primary,
+                                cursorColor: Theme.of(
+                                  context,
+                                ).colorScheme.primary,
                                 autocorrect: false,
                                 decoration: InputDecoration(
                                   hintText: L10n.current.searchHackerNews,

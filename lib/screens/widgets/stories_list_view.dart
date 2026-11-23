@@ -187,12 +187,12 @@ class _StoriesListViewState extends State<StoriesListView>
                           HapticFeedbackUtils.light();
                           pinStory(story);
                         },
-                        backgroundColor: Theme.of(context)
-                            .colorScheme
-                            .primaryContainer,
-                        foregroundColor: Theme.of(context)
-                            .colorScheme
-                            .onPrimaryContainer,
+                        backgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.primaryContainer,
+                        foregroundColor: Theme.of(
+                          context,
+                        ).colorScheme.onPrimaryContainer,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
@@ -205,10 +205,9 @@ class _StoriesListViewState extends State<StoriesListView>
                               Text(
                                 'Pin',
                                 style: TextStyle(
-                                  fontFamily: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.fontFamily,
+                                  fontFamily: Theme.of(
+                                    context,
+                                  ).textTheme.bodyMedium?.fontFamily,
                                 ),
                               ),
                           ],
@@ -216,12 +215,12 @@ class _StoriesListViewState extends State<StoriesListView>
                       ),
                       CustomSlidableAction(
                         onPressed: (_) => onMoreTapped(story, context.rect),
-                        backgroundColor: Theme.of(context)
-                            .colorScheme
-                            .primaryContainer,
-                        foregroundColor: Theme.of(context)
-                            .colorScheme
-                            .onPrimaryContainer,
+                        backgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.primaryContainer,
+                        foregroundColor: Theme.of(
+                          context,
+                        ).colorScheme.onPrimaryContainer,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
@@ -231,10 +230,9 @@ class _StoriesListViewState extends State<StoriesListView>
                               Text(
                                 'More',
                                 style: TextStyle(
-                                  fontFamily: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.fontFamily,
+                                  fontFamily: Theme.of(
+                                    context,
+                                  ).textTheme.bodyMedium?.fontFamily,
                                 ),
                               ),
                           ],
@@ -259,9 +257,9 @@ class _StoriesListViewState extends State<StoriesListView>
                             preferenceState.isMarkReadStoriesEnabled
                             ? Theme.of(context).colorScheme.primaryContainer
                             : Palette.grey,
-                        foregroundColor: Theme.of(context)
-                            .colorScheme
-                            .onPrimaryContainer,
+                        foregroundColor: Theme.of(
+                          context,
+                        ).colorScheme.onPrimaryContainer,
                         child: preferenceState.isHideInsteadOfMarkingGrayEnabled
                             ? const Icon(Icons.delete_sweep, size: Dimens.pt24)
                             : Icon(

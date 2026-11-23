@@ -51,10 +51,9 @@ class PinnedStories extends StatelessWidget {
                             Text(
                               L10n.current.unpin,
                               style: TextStyle(
-                                fontFamily: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.fontFamily,
+                                fontFamily: Theme.of(
+                                  context,
+                                ).textTheme.bodyMedium?.fontFamily,
                               ),
                             ),
                           ],
@@ -63,8 +62,9 @@ class PinnedStories extends StatelessWidget {
                     ],
                   ),
                   child: ColoredBox(
-                    color: Theme.of(context).colorScheme.primary
-                        .withValues(alpha: 0.2),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.primary.withValues(alpha: 0.2),
                     child: PinnedItemTile(
                       key: ValueKey<String>('${item.id}-PinnedItemTile'),
                       item: item,
@@ -81,8 +81,9 @@ class PinnedStories extends StatelessWidget {
                   vertical: Dimens.pt4,
                 ),
                 child: Divider(
-                  color: Theme.of(context).colorScheme.primary
-                      .withValues(alpha: 0.8),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.primary.withValues(alpha: 0.8),
                 ),
               ),
           ],

@@ -290,16 +290,16 @@ class HackiApp extends StatelessWidget {
                       );
                       final bool isDarkModeEnabled = () {
                         if (mode == null) {
-                          return View.of(context)
-                                  .platformDispatcher
-                                  .platformBrightness ==
+                          return View.of(
+                                context,
+                              ).platformDispatcher.platformBrightness ==
                               Brightness.dark;
                         } else {
                           return mode == AdaptiveThemeMode.dark ||
                               (mode == AdaptiveThemeMode.system &&
-                                  View.of(context)
-                                          .platformDispatcher
-                                          .platformBrightness ==
+                                  View.of(
+                                        context,
+                                      ).platformDispatcher.platformBrightness ==
                                       Brightness.dark);
                         }
                       }();

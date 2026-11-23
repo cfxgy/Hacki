@@ -122,10 +122,9 @@ class _PinsScreenState extends State<PinsScreen> {
                                 Text(
                                   L10n.current.unpin,
                                   style: TextStyle(
-                                    fontFamily: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.fontFamily,
+                                    fontFamily: Theme.of(
+                                      context,
+                                    ).textTheme.bodyMedium?.fontFamily,
                                   ),
                                 ),
                               ],

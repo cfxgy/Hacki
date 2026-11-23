@@ -110,10 +110,9 @@ class MainView extends StatelessWidget {
                             preferenceState: preferenceState,
                             splitViewEnabled: splitViewEnabled,
                             onMoreTapped: onMoreTapped,
-                            onSlideActionTapped: (
-                              Item item,
-                              SlideAction action,
-                            ) => onSlideActionTapped(context, item, action),
+                            onSlideActionTapped:
+                                (Item item, SlideAction action) =>
+                                    onSlideActionTapped(context, item, action),
                             onStoryUrlTapped: onStoryUrlTapped,
                           ),
                         ),
@@ -634,10 +633,9 @@ class _ParentItemSection extends StatelessWidget {
                     ),
                   ),
                   BlocBuilder<PreferenceCubit, PreferenceState>(
-                    buildWhen: (
-                      PreferenceState previous,
-                      PreferenceState current,
-                    ) => previous.fontSize != current.fontSize,
+                    buildWhen:
+                        (PreferenceState previous, PreferenceState current) =>
+                            previous.fontSize != current.fontSize,
                     builder: (BuildContext context, PreferenceState prefState) {
                       final double fontSize = prefState.fontSize.fontSize;
                       return Column(
@@ -692,9 +690,9 @@ class _ParentItemSection extends StatelessWidget {
                                           fontWeight: FontWeight.bold,
                                           fontSize: fontSize,
                                           color: item.url.isNotEmpty
-                                              ? Theme.of(context)
-                                                    .colorScheme
-                                                    .primary
+                                              ? Theme.of(
+                                                  context,
+                                                ).colorScheme.primary
                                               : null,
                                         ),
                                       ),
@@ -704,9 +702,9 @@ class _ParentItemSection extends StatelessWidget {
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: fontSize - 4,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.primary,
                                           ),
                                         ),
                                     ],
@@ -729,8 +727,9 @@ class _ParentItemSection extends StatelessWidget {
                                   ),
                                   child: ItemText(
                                     item: item,
-                                    textScaler: MediaQuery.of(context)
-                                        .textScaler,
+                                    textScaler: MediaQuery.of(
+                                      context,
+                                    ).textScaler,
                                     selectable: true,
                                   ),
                                 ),
@@ -799,12 +798,13 @@ class _ParentItemSection extends StatelessWidget {
                                   L10n.current.viewParent,
                                   style: Theme.of(context).textTheme.labelLarge
                                       ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
                                       ),
-                                  textScaler: MediaQuery.of(context)
-                                      .clampedTextScaler,
+                                  textScaler: MediaQuery.of(
+                                    context,
+                                  ).clampedTextScaler,
                                 ),
                         );
                       },
@@ -828,12 +828,13 @@ class _ParentItemSection extends StatelessWidget {
                                   L10n.current.viewRoot,
                                   style: Theme.of(context).textTheme.labelLarge
                                       ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
                                       ),
-                                  textScaler: MediaQuery.of(context)
-                                      .clampedTextScaler,
+                                  textScaler: MediaQuery.of(
+                                    context,
+                                  ).clampedTextScaler,
                                 ),
                         );
                       },

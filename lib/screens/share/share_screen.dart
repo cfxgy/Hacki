@@ -136,9 +136,9 @@ class _ShareScreenState extends State<ShareScreen> {
                                   L10n.current.fromHackerNews,
                                   style: TextStyle(
                                     fontSize: TextDimens.pt16,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurface,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface,
                                   ),
                                   textScaler: TextScaler.noScaling,
                                 ),
@@ -161,8 +161,9 @@ class _ShareScreenState extends State<ShareScreen> {
                                 L10n.current.sharedFromHacki,
                                 style: TextStyle(
                                   fontSize: TextDimens.pt10,
-                                  color: Theme.of(context).colorScheme.onSurface
-                                      .withAlpha(150),
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface.withAlpha(150),
                                 ),
                                 textScaler: TextScaler.noScaling,
                                 textAlign: TextAlign.center,

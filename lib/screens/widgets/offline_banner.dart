@@ -29,8 +29,9 @@ class OfflineBanner extends StatelessWidget {
                   ? TextAlign.left
                   : TextAlign.center,
             ),
-            backgroundColor: Theme.of(context).colorScheme.primary
-                .withValues(alpha: 0.3),
+            backgroundColor: Theme.of(
+              context,
+            ).colorScheme.primary.withValues(alpha: 0.3),
             actions: <Widget>[
               if (shouldShowExitButton)
                 TextButton(

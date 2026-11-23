@@ -150,11 +150,12 @@ class _CountDownReminderState extends State<CountdownReminder>
                           return LinearProgressIndicator(
                             value: progressAnimation.value,
                             minHeight: Dimens.pt4,
-                            backgroundColor: Theme.of(context)
-                                .colorScheme
-                                .primary,
-                            color: Theme.of(context).colorScheme.onPrimary
-                                .withAlpha(140),
+                            backgroundColor: Theme.of(
+                              context,
+                            ).colorScheme.primary,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onPrimary.withAlpha(140),
                           );
                         },
                       ),

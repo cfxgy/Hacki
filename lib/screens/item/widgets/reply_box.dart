@@ -130,9 +130,9 @@ class _ReplyBoxState extends State<ReplyBox> with ItemActionMixin {
                                     key: const Key('quote'),
                                     icon: Icon(
                                       FeatherIcons.code,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.primary,
                                       size: TextDimens.pt18,
                                     ),
                                     onPressed: expanded ? showTextPopup : null,
