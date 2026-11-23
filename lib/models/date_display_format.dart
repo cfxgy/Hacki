@@ -16,10 +16,7 @@ enum DateDisplayFormat {
     return switch (this) {
       timeAgo => exampleDate.toTimeAgoString(),
       yMd || yMEd || yMMMd || yMMMEd => () {
-        final DateFormat formatter = DateFormat(
-          name,
-          L10n.current.localeName,
-        ).add_Hm();
+        final DateFormat formatter = L10n.dateFormat(name).add_Hm();
         return formatter.format(exampleDate);
       }(),
     };
@@ -42,10 +39,7 @@ enum DateDisplayFormat {
     if (isTimeAgo) {
       return date.toTimeAgoString();
     } else {
-      final DateFormat formatter = DateFormat(
-        name,
-        L10n.current.localeName,
-      ).add_Hm();
+      final DateFormat formatter = L10n.dateFormat(name).add_Hm();
       final String dateString = formatter.format(date);
       _cache[timestamp] = dateString;
       return dateString;

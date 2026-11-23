@@ -20,8 +20,7 @@ class DateTimeRangeFilterChip extends StatelessWidget {
   final void Function(DateTime, DateTime) onDateTimeRangeUpdated;
   final VoidCallback onDateTimeRangeRemoved;
 
-  static DateFormat get _dateTimeFormatter =>
-      DateFormat.yMMMd(L10n.current.localeName);
+  static DateFormat get _dateTimeFormatter => L10n.dateFormat('yMMMd');
 
   @override
   Widget build(BuildContext context) {

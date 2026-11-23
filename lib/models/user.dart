@@ -33,7 +33,7 @@ class User extends Equatable {
   final int karma;
 
   String get description {
-    final DateFormat formatter = DateFormat.yMMMd(L10n.current.localeName);
+    final DateFormat formatter = L10n.dateFormat('yMMMd');
     final String date = formatter.format(
       DateTime.fromMillisecondsSinceEpoch(created * 1000),
     );

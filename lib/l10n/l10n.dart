@@ -21,4 +21,13 @@ abstract final class L10n {
 
   static String formatNumber(num value) =>
       NumberFormat.decimalPattern(current.localeName).format(value);
+
+  /// Uses the process default locale for English so tests and non-UI code
+  /// don't need to initialize date symbols just to format a date.
+  static DateFormat dateFormat(String skeleton) {
+    final String locale = current.localeName;
+    return locale == 'en'
+        ? DateFormat(skeleton)
+        : DateFormat(skeleton, locale);
+  }
 }

@@ -1,5 +1,4 @@
 import 'package:hacki/l10n/l10n.dart';
-import 'package:intl/intl.dart';
 
 typedef AppExceptionHandler = void Function(AppException);
 
@@ -29,9 +28,7 @@ class TooManyRequestsException extends AppException {
   TooManyRequestsException({required this.retryAfter, super.error})
     : super(
         message: L10n.current.errorTooManyRequests(
-          DateFormat.yMMMd(L10n.current.localeName)
-              .add_Hm()
-              .format(retryAfter.toLocal()),
+          L10n.dateFormat('yMMMd').add_Hm().format(retryAfter.toLocal()),
         ),
       );
 
