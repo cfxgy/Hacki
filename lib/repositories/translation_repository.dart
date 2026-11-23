@@ -104,10 +104,7 @@ class TranslationRepository {
   }
 
   Future<void> saveShowOriginalPreferences(Map<String, bool> preferences) {
-    _preferenceRepository.setString(
-      _showOriginalKey,
-      jsonEncode(preferences),
-    );
+    _preferenceRepository.setString(_showOriginalKey, jsonEncode(preferences));
     return Future<void>.value();
   }
 

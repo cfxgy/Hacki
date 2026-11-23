@@ -222,9 +222,8 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
-  Widget _withTranslationPrompt(Widget child) => Stack(
-    children: <Widget>[child, const TranslationStartupPrompt()],
-  );
+  Widget _withTranslationPrompt(Widget child) =>
+      Stack(children: <Widget>[child, const TranslationStartupPrompt()]);
 
   Future<void> showFeatureDiscoveryDialog() async {
     final PreferenceRepository repo = locator.get<PreferenceRepository>();
@@ -346,6 +345,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   String get logIdentifier => 'HomeScreen';
 }
+
 class TranslationStartupPrompt extends StatefulWidget {
   const TranslationStartupPrompt({super.key});
 

@@ -18,13 +18,11 @@ String translationErrorMessage(TranslationErrorType type) => switch (type) {
   TranslationErrorType.authentication =>
     L10n.current.translationErrorAuthentication,
   TranslationErrorType.permission => L10n.current.translationErrorPermission,
-  TranslationErrorType.rateLimited =>
-    L10n.current.translationErrorRateLimited,
+  TranslationErrorType.rateLimited => L10n.current.translationErrorRateLimited,
   TranslationErrorType.network => L10n.current.translationErrorNetwork,
   TranslationErrorType.server => L10n.current.translationErrorServer,
   TranslationErrorType.parsing => L10n.current.translationErrorParsing,
-  TranslationErrorType.contentRejected =>
-    L10n.current.translationErrorContent,
+  TranslationErrorType.contentRejected => L10n.current.translationErrorContent,
   TranslationErrorType.unknown => L10n.current.translationErrorUnknown,
 };
 
@@ -118,8 +116,7 @@ class _AutoTranslationRequestState extends State<AutoTranslationRequest> {
       builder: (BuildContext context, TranslationState state) {
         final TranslationEntry? entry = state.entryFor(widget.translationKey);
         final bool needsTranslation =
-            entry == null ||
-            entry.status == TranslationEntryStatus.idle;
+            entry == null || entry.status == TranslationEntryStatus.idle;
         if (state.canAutoTranslate &&
             needsTranslation &&
             _scheduledText != widget.text) {
@@ -165,10 +162,7 @@ class TranslationPageActions extends StatelessWidget {
           icon: const Icon(Icons.language),
           tooltip: L10n.current.translationPageActions,
           onSelected: (String action) {
-            cubit.setAll(
-              showOriginal: action == 'original',
-              keys: keys,
-            );
+            cubit.setAll(showOriginal: action == 'original', keys: keys);
           },
           itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
             PopupMenuItem<String>(

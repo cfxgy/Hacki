@@ -733,14 +733,12 @@ class _ParentItemSection extends StatelessWidget {
                               child: SizedBox(
                                 width: double.infinity,
                                 child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Align(
                                       alignment: Alignment.centerRight,
                                       child: TranslationToggleButton(
-                                        translationKey:
-                                            'story_body_${item.id}',
+                                        translationKey: 'story_body_${item.id}',
                                         text: HtmlUtils.parseHtml(item.text),
                                       ),
                                     ),
@@ -750,8 +748,7 @@ class _ParentItemSection extends StatelessWidget {
                                         bottom: Dimens.pt8,
                                       ),
                                       child: TranslationAwareText(
-                                        translationKey:
-                                            'story_body_${item.id}',
+                                        translationKey: 'story_body_${item.id}',
                                         originalText: item.text,
                                         autoTranslate: true,
                                         builder:

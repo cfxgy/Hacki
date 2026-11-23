@@ -75,21 +75,17 @@ class TranslationCubit extends Cubit<TranslationState> {
     emit(state.copyWith(hasOpenAiKey: false));
   }
 
-  Future<void> acknowledgeDataSharing(
-    TranslationProviderType provider,
-  ) async {
+  Future<void> acknowledgeDataSharing(TranslationProviderType provider) async {
     await _repository.acknowledgeDataSharing(provider);
     if (isClosed) return;
-    emit(
-      switch (provider) {
-        TranslationProviderType.azure => state.copyWith(
-          azureDataSharingAcknowledged: true,
-        ),
-        TranslationProviderType.openAi => state.copyWith(
-          openAiDataSharingAcknowledged: true,
-        ),
-      },
-    );
+    emit(switch (provider) {
+      TranslationProviderType.azure => state.copyWith(
+        azureDataSharingAcknowledged: true,
+      ),
+      TranslationProviderType.openAi => state.copyWith(
+        openAiDataSharingAcknowledged: true,
+      ),
+    });
   }
 
   /// Enqueues an automatic translation. The queue is bounded and only two
@@ -173,39 +169,28 @@ class TranslationCubit extends Cubit<TranslationState> {
     final bool showOriginal = !entry.showOriginal;
     final Map<String, TranslationEntry> entries =
         Map<String, TranslationEntry>.of(state.entries);
-    final Map<String, bool> preferences =
-        Map<String, bool>.of(state.originalPreferences);
+    final Map<String, bool> preferences = Map<String, bool>.of(
+      state.originalPreferences,
+    );
     entries[key] = entry.copyWith(showOriginal: showOriginal);
     preferences[key] = showOriginal;
-    emit(
-      state.copyWith(
-        entries: entries,
-        originalPreferences: preferences,
-      ),
-    );
+    emit(state.copyWith(entries: entries, originalPreferences: preferences));
     unawaited(_repository.saveShowOriginalPreferences(preferences));
   }
 
-  void setAll({
-    required bool showOriginal,
-    required Iterable<String> keys,
-  }) {
+  void setAll({required bool showOriginal, required Iterable<String> keys}) {
     final Map<String, TranslationEntry> entries =
         Map<String, TranslationEntry>.of(state.entries);
-    final Map<String, bool> preferences =
-        Map<String, bool>.of(state.originalPreferences);
+    final Map<String, bool> preferences = Map<String, bool>.of(
+      state.originalPreferences,
+    );
     for (final String key in keys) {
       final TranslationEntry? entry = entries[key];
       if (entry == null || !entry.hasTranslation) continue;
       entries[key] = entry.copyWith(showOriginal: showOriginal);
       preferences[key] = showOriginal;
     }
-    emit(
-      state.copyWith(
-        entries: entries,
-        originalPreferences: preferences,
-      ),
-    );
+    emit(state.copyWith(entries: entries, originalPreferences: preferences));
     unawaited(_repository.saveShowOriginalPreferences(preferences));
   }
 
@@ -275,11 +260,7 @@ class TranslationCubit extends Cubit<TranslationState> {
     _ => false,
   };
 
-  void _setEntryStatus(
-    String key,
-    String text,
-    TranslationEntryStatus status,
-  ) {
+  void _setEntryStatus(String key, String text, TranslationEntryStatus status) {
     if (isClosed) return;
     final Map<String, TranslationEntry> entries =
         Map<String, TranslationEntry>.of(state.entries);
@@ -293,11 +274,7 @@ class TranslationCubit extends Cubit<TranslationState> {
     emit(state.copyWith(entries: entries));
   }
 
-  void _markFailure(
-    String key,
-    String text,
-    TranslationErrorType errorType,
-  ) {
+  void _markFailure(String key, String text, TranslationErrorType errorType) {
     if (isClosed) return;
     final Map<String, TranslationEntry> entries =
         Map<String, TranslationEntry>.of(state.entries);
@@ -310,8 +287,7 @@ class TranslationCubit extends Cubit<TranslationState> {
     emit(state.copyWith(entries: entries));
   }
 
-  bool _prefersOriginal(String key) =>
-      state.originalPreferences[key] ?? false;
+  bool _prefersOriginal(String key) => state.originalPreferences[key] ?? false;
 }
 
 class _TranslationJob {
