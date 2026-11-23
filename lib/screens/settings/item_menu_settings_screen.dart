@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hacki/cubits/cubits.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/settings/widgets/item_menu_preview.dart';
 import 'package:hacki/styles/styles.dart';
@@ -34,10 +35,10 @@ class ItemMenuSettingsScreen extends StatelessWidget {
             : Theme.of(context).canvasColor,
         forceMaterialTransparency: isInBottomSheet,
         leading: isInBottomSheet ? const CloseButton() : null,
-        title: const Text('Item Actions'),
+        title: Text(L10n.current.itemActions),
         actions: <Widget>[
           IconButton(
-            tooltip: 'Reset item actions',
+            tooltip: L10n.current.resetItemActions,
             icon: const Icon(Icons.restore),
             onPressed: () {
               HapticFeedbackUtils.selection();
@@ -57,7 +58,7 @@ class ItemMenuSettingsScreen extends StatelessWidget {
                 child: Center(
                   child: ElevatedButton(
                     onPressed: () => _showPreview(context),
-                    child: const Text('Preview'),
+                    child: Text(L10n.current.preview),
                   ),
                 ),
               ),
@@ -87,9 +88,9 @@ class ItemMenuSettingsScreen extends StatelessWidget {
                       Semantics(
                         label: action.description,
                         child: Switch(
-                          activeThumbColor: Theme.of(
-                            context,
-                          ).colorScheme.primary,
+                          activeThumbColor: Theme.of(context)
+                              .colorScheme
+                              .primary,
                           value: state.enabledItemMenuActions.contains(action),
                           onChanged: (bool enabled) {
                             context
@@ -104,7 +105,7 @@ class ItemMenuSettingsScreen extends StatelessWidget {
                       ReorderableDelayedDragStartListener(
                         index: index,
                         child: Semantics(
-                          label: 'Reorder ${action.description}',
+                          label: L10n.current.reorderAction(action.description),
                           child: Container(
                             width: Dimens.pt48,
                             height: Dimens.pt48,

@@ -1,3 +1,4 @@
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/item/item.dart';
 
 class Comment extends Item {
@@ -45,7 +46,7 @@ class Comment extends Item {
   final bool isFromCache;
   final bool isNew;
 
-  String get metadata => '''by $by $timeAgo''';
+  String get metadata => L10n.current.byAuthorTime(by, timeAgo);
 
   bool get isRoot => level == 0;
 

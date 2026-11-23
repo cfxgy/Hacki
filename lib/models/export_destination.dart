@@ -1,11 +1,16 @@
+import 'package:hacki/l10n/l10n.dart';
 import 'package:material_ui/material_ui.dart' show IconData, Icons;
 
 enum ExportDestination {
-  qrCode('QR code', icon: Icons.qr_code),
-  clipBoard('ClipBoard', icon: Icons.copy);
+  qrCode(icon: Icons.qr_code),
+  clipBoard(icon: Icons.copy);
 
-  const ExportDestination(this.label, {required this.icon});
+  const ExportDestination({required this.icon});
 
-  final String label;
   final IconData icon;
+
+  String get label => switch (this) {
+    ExportDestination.qrCode => L10n.current.exportQrCode,
+    ExportDestination.clipBoard => L10n.current.exportClipboard,
+  };
 }

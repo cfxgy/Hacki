@@ -1,8 +1,11 @@
+import 'package:hacki/l10n/l10n.dart';
+
 enum ImportSource {
-  qrCode('QR Code'),
-  file('From File');
+  qrCode,
+  file;
 
-  const ImportSource(this.uiLabel);
-
-  final String uiLabel;
+  String get uiLabel => switch (this) {
+    ImportSource.qrCode => L10n.current.importQrCode,
+    ImportSource.file => L10n.current.importFile,
+  };
 }

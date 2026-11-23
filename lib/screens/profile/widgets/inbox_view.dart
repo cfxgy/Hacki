@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:hacki/cubits/notification/notification_cubit.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/widgets/widgets.dart';
 import 'package:hacki/styles/styles.dart';
@@ -37,7 +38,7 @@ class InboxView extends StatelessWidget {
             unreadCommentsIds.isNotEmpty)
           TextButton(
             onPressed: onMarkAllAsReadTapped,
-            child: const Text('Mark all as read'),
+            child: Text(L10n.current.markAllAsRead),
           ),
         Expanded(
           child: SmartRefresher(
@@ -55,7 +56,7 @@ class InboxView extends StatelessWidget {
                 if (mode == LoadStatus.loading) {
                   body = const CustomCircularProgressIndicator();
                 } else if (mode == LoadStatus.failed) {
-                  body = const Text('loading failed.');
+                  body = Text(L10n.current.loadingFailed);
                 } else {
                   body = const SizedBox.shrink();
                 }
@@ -87,9 +88,8 @@ class InboxView extends StatelessWidget {
                                 top: Dimens.zero,
                                 bottom: Dimens.zero,
                                 child: LinearProgressIndicator(
-                                  color: Theme.of(
-                                    context,
-                                  ).primaryColor.withValues(alpha: 0.1),
+                                  color: Theme.of(context).primaryColor
+                                      .withValues(alpha: 0.1),
                                 ),
                               ),
                             FadeIn(
@@ -107,11 +107,13 @@ class InboxView extends StatelessWidget {
                                       Row(
                                         children: <Widget>[
                                           Text(
-                                            '''${e.timeAgo} from ${e.by}:''',
+                                            L10n.current.notificationFrom(
+                                              e.timeAgo,
+                                              e.by,
+                                            ),
                                             style: TextStyle(
-                                              color: Theme.of(
-                                                context,
-                                              ).metadataColor,
+                                              color: Theme.of(context)
+                                                  .metadataColor,
                                             ),
                                           ),
                                           const SizedBox(width: Dimens.pt12),
@@ -122,9 +124,9 @@ class InboxView extends StatelessWidget {
                                         style: TextStyle(
                                           color:
                                               unreadCommentsIds.contains(e.id)
-                                              ? Theme.of(
-                                                  context,
-                                                ).colorScheme.onSurface
+                                              ? Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface
                                               : Theme.of(context).readGrey,
                                           fontSize: TextDimens.pt16,
                                         ),

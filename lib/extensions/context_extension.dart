@@ -6,6 +6,7 @@ import 'package:hacki/blocs/stories/stories_bloc.dart';
 import 'package:hacki/config/constants.dart';
 import 'package:hacki/config/paths.dart';
 import 'package:hacki/cubits/cubits.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/item/item_screen.dart';
 import 'package:hacki/styles/dimens.dart';
@@ -77,7 +78,7 @@ extension ContextExtension on BuildContext {
       content: isPinned
           ? SnackBarMessages.storyPinned
           : SnackBarMessages.storyUnpinned,
-      label: 'See all pins',
+      label: L10n.current.seeAllPins,
       action: () => router.push(Paths.pins.landing),
       persist: false,
     );
@@ -134,9 +135,8 @@ extension ContextExtension on BuildContext {
               Text(
                 error.toString(),
                 style: TextStyle(
-                  color: Theme.of(
-                    this,
-                  ).colorScheme.onErrorContainer.withAlpha(150),
+                  color: Theme.of(this).colorScheme.onErrorContainer
+                      .withAlpha(150),
                   fontSize: TextDimens.pt10,
                 ),
               ),

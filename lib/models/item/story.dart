@@ -1,4 +1,5 @@
 import 'package:hacki/config/constants.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/item/item.dart';
 
 class Story extends Item {
@@ -57,17 +58,29 @@ class Story extends Item {
     );
   }
 
-  String get metadata =>
-      '''$score pt${score > 1 ? 's' : ''} / $descendants cmt${descendants > 1 ? 's' : ''} / ${by.isNotEmpty ? by : ''} / $shortTimeAgo''';
+  String get metadata => L10n.current.storyMetadata(
+    L10n.current.pointsCount(score),
+    L10n.current.commentsCount(descendants),
+    by.isNotEmpty ? by : '',
+    shortTimeAgo,
+  );
 
-  String get metadataWithShortTimeAgoString =>
-      '''$score pt${score > 1 ? 's' : ''} / $descendants cmt${descendants > 1 ? 's' : ''} / ${by.isNotEmpty ? by : ''} / $shortTimeAgo''';
+  String get metadataWithShortTimeAgoString => metadata;
 
-  String get screenReaderLabel =>
-      '''$title, at $readableUrl, by $by $timeAgo. This story has $score point${score > 1 ? 's' : ''} and $descendants comment${descendants > 1 ? 's' : ''}''';
+  String get screenReaderLabel => L10n.current.storyScreenReader(
+    title,
+    readableUrl,
+    by,
+    timeAgo,
+    L10n.current.pointsCount(score),
+    L10n.current.commentsCount(descendants),
+  );
 
-  String get simpleMetadata =>
-      '''$score point${score > 1 ? 's' : ''} $descendants comment${descendants > 1 ? 's' : ''} $timeAgo''';
+  String get simpleMetadata => L10n.current.storySimpleMetadata(
+    L10n.current.pointsCount(score),
+    L10n.current.commentsCount(descendants),
+    timeAgo,
+  );
 
   String get readableUrl {
     final Uri url = Uri.parse(this.url);

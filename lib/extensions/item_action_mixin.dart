@@ -5,6 +5,7 @@ import 'package:hacki/config/constants.dart';
 import 'package:hacki/config/paths.dart';
 import 'package:hacki/cubits/cubits.dart';
 import 'package:hacki/extensions/extensions.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/item/models/models.dart';
 import 'package:hacki/screens/item/widgets/widgets.dart';
@@ -112,11 +113,11 @@ mixin ItemActionMixin<T extends StatefulWidget> on State<T> {
     final bool isFav = favCubit.state.favIds.contains(item.id);
     if (isFav) {
       favCubit.removeFav(item.id);
-      showSnackBar(content: 'Removed from favorites.');
+      showSnackBar(content: L10n.current.removedFromFavorites);
       HapticFeedbackUtils.success();
     } else {
       favCubit.addFav(item.id);
-      showSnackBar(content: 'Added to favorites.');
+      showSnackBar(content: L10n.current.addedToFavorites);
       HapticFeedbackUtils.success();
     }
   }
@@ -132,18 +133,18 @@ mixin ItemActionMixin<T extends StatefulWidget> on State<T> {
             children: <Widget>[
               ListTile(
                 onTap: () => context.pop('image'),
-                title: const Text('Share as image'),
+                title: Text(L10n.current.shareAsImage),
               ),
               if (item.url.isNotEmpty)
                 ListTile(
                   onTap: () => context.pop(item.url),
-                  title: const Text('Link to article'),
+                  title: Text(L10n.current.linkToArticle),
                 ),
               ListTile(
                 onTap: () => context.pop(
                   '${Constants.hackerNewsItemLinkPrefix}${item.id}',
                 ),
-                title: const Text('Link to HN'),
+                title: Text(L10n.current.linkToHn),
               ),
             ],
           ),
@@ -168,19 +169,19 @@ mixin ItemActionMixin<T extends StatefulWidget> on State<T> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Flag this comment?'),
+          title: Text(L10n.current.flagCommentQuestion),
           content: Text(
-            'Flag this comment posted by ${item.by}?',
+            L10n.current.flagCommentBy(item.by),
             style: const TextStyle(color: Palette.grey),
           ),
           actions: <Widget>[
             TextButton(
               onPressed: () => context.pop(false),
-              child: const Text('Cancel'),
+              child: Text(L10n.current.cancel),
             ),
             TextButton(
               onPressed: () => context.pop(true),
-              child: const Text('Yes'),
+              child: Text(L10n.current.yes),
             ),
           ],
         );
@@ -188,7 +189,7 @@ mixin ItemActionMixin<T extends StatefulWidget> on State<T> {
     ).then((bool? yesTapped) {
       if (mounted && (yesTapped ?? false)) {
         context.read<AuthBloc>().add(AuthFlag(item: item));
-        showSnackBar(content: 'Comment flagged!');
+        showSnackBar(content: L10n.current.commentFlagged);
         HapticFeedbackUtils.success();
       }
     });
@@ -199,21 +200,25 @@ mixin ItemActionMixin<T extends StatefulWidget> on State<T> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('${isBlocked ? 'Unblock' : 'Block'} this user?'),
+          title: Text(
+            isBlocked
+                ? L10n.current.blockUserQuestionUnblock
+                : L10n.current.blockUserQuestionBlock,
+          ),
           content: Text(
-            'Do you want to ${isBlocked ? 'unblock' : 'block'} ${item.by}'
-            ' and ${isBlocked ? 'display' : 'hide'} '
-            'comments posted by this user?',
+            isBlocked
+                ? L10n.current.blockUserBodyUnblock(item.by)
+                : L10n.current.blockUserBodyBlock(item.by),
             style: const TextStyle(color: Palette.grey),
           ),
           actions: <Widget>[
             TextButton(
               onPressed: () => context.pop(false),
-              child: const Text('Cancel'),
+              child: Text(L10n.current.cancel),
             ),
             TextButton(
               onPressed: () => context.pop(true),
-              child: const Text('Yes'),
+              child: Text(L10n.current.yes),
             ),
           ],
         );
@@ -228,7 +233,11 @@ mixin ItemActionMixin<T extends StatefulWidget> on State<T> {
           context.read<BlocklistCubit>().addToBlocklist(item.by);
         }
 
-        showSnackBar(content: 'User ${isBlocked ? 'unblocked' : 'blocked'}!');
+        showSnackBar(
+          content: isBlocked
+              ? L10n.current.userUnblocked
+              : L10n.current.userBlocked,
+        );
         HapticFeedbackUtils.success();
       }
     });

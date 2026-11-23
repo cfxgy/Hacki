@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:go_router/go_router.dart';
 import 'package:hacki/config/constants.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/styles/styles.dart';
 import 'package:hacki/utils/utils.dart';
 import 'package:material_ui/material_ui.dart';
@@ -35,14 +36,14 @@ class _ReviewRequestBottomSheetState extends State<ReviewRequestBottomSheet> {
           Column(
             children: <Widget>[
               SizedBoxes.pt24,
-              const Padding(
-                padding: EdgeInsets.symmetric(
+              Padding(
+                padding: const EdgeInsets.symmetric(
                   vertical: Dimens.pt16,
                   horizontal: Dimens.pt12,
                 ),
                 child: Text(
-                  'How would you rate Hacki so far?',
-                  style: TextStyle(fontSize: TextDimens.pt20),
+                  L10n.current.reviewRateQuestion,
+                  style: const TextStyle(fontSize: TextDimens.pt20),
                   textAlign: .center,
                 ),
               ),
@@ -115,30 +116,20 @@ class _ReviewRequestBottomSheetState extends State<ReviewRequestBottomSheet> {
           Column(
             children: <Widget>[
               SizedBoxes.pt24,
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: Dimens.pt12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: Dimens.pt12),
                 child: Text(
-                  'Would you like to leave a review?',
-                  style: TextStyle(fontSize: TextDimens.pt20),
+                  L10n.current.reviewLeaveQuestion,
+                  style: const TextStyle(fontSize: TextDimens.pt20),
                   textAlign: .center,
                 ),
               ),
               SizedBoxes.pt12,
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: Dimens.pt12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: Dimens.pt12),
                 child: Text(
-                  '(๑•̀ㅂ•́)و✧',
-                  style: TextStyle(fontSize: TextDimens.pt20),
-                  textAlign: .center,
-                ),
-              ),
-              SizedBoxes.pt12,
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: Dimens.pt12),
-                child: Text(
-                  '''
-Hacki is completely free and open source. Your feedback keeps me motivated to make it even better.''',
-                  style: TextStyle(fontSize: TextDimens.pt16),
+                  L10n.current.reviewPitch,
+                  style: const TextStyle(fontSize: TextDimens.pt16),
                   textAlign: .center,
                 ),
               ),
@@ -175,23 +166,20 @@ Hacki is completely free and open source. Your feedback keeps me motivated to ma
           Column(
             children: <Widget>[
               SizedBoxes.pt24,
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: Dimens.pt12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: Dimens.pt12),
                 child: Text(
-                  'Would you like to share some feedback?',
-                  style: TextStyle(fontSize: TextDimens.pt20),
+                  L10n.current.reviewFeedbackQuestion,
+                  style: const TextStyle(fontSize: TextDimens.pt20),
                   textAlign: .center,
                 ),
               ),
               SizedBoxes.pt12,
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: Dimens.pt12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: Dimens.pt12),
                 child: Text(
-                  '''
-Hacki is completely free and open source. Your feedback keeps me motivated to make it even better. 
- 
-Tapping YES will take you to Hacki's GitHub page.''',
-                  style: TextStyle(fontSize: TextDimens.pt16),
+                  L10n.current.reviewFeedbackBody,
+                  style: const TextStyle(fontSize: TextDimens.pt16),
                   textAlign: .center,
                 ),
               ),

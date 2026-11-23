@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hacki/config/router.dart';
 import 'package:hacki/cubits/cubits.dart';
 import 'package:hacki/extensions/context_extension.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/widgets/custom_linkify/linkifiers/linkifiers.dart';
 import 'package:hacki/styles/palette.dart';
@@ -380,7 +381,7 @@ TextSpan buildTextSpan(
                   Clipboard.setData(ClipboardData(text: url)).whenComplete(() {
                     HapticFeedbackUtils.selection();
                     navigatorKey.currentContext?.showSnackBar(
-                      content: 'Link copied.',
+                      content: L10n.current.linkCopied,
                     );
                   });
                 }

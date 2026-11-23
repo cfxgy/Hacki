@@ -1,3 +1,6 @@
+import 'package:hacki/l10n/l10n.dart';
+import 'package:intl/intl.dart';
+
 typedef AppExceptionHandler = void Function(AppException);
 
 class AppException implements Exception {
@@ -10,16 +13,14 @@ class AppException implements Exception {
 
 class RateLimitedException extends AppException {
   RateLimitedException(this.statusCode, {super.error})
-    : super(message: 'Rate limited ($statusCode)...');
+    : super(message: L10n.current.errorRateLimited('$statusCode'));
 
   final int? statusCode;
 }
 
 class RateLimitedWithFallbackException extends AppException {
   RateLimitedWithFallbackException(this.statusCode, {super.error})
-    : super(
-        message: 'Rate limited ($statusCode), fetching from API instead...',
-      );
+    : super(message: L10n.current.errorRateLimitedFallback('$statusCode'));
 
   final int? statusCode;
 }
@@ -27,8 +28,11 @@ class RateLimitedWithFallbackException extends AppException {
 class TooManyRequestsException extends AppException {
   TooManyRequestsException({required this.retryAfter, super.error})
     : super(
-        message:
-            '''Too many requests (429), retry after ${retryAfter.toIso8601String()}, fetching from API instead...''',
+        message: L10n.current.errorTooManyRequests(
+          DateFormat.yMMMd(L10n.current.localeName)
+              .add_Hm()
+              .format(retryAfter.toLocal()),
+        ),
       );
 
   /// The time after which app can keep sending in requests.
@@ -37,11 +41,11 @@ class TooManyRequestsException extends AppException {
 
 class ParsingException extends AppException {
   ParsingException({required this.itemId, super.error})
-    : super(message: 'Possible parsing failure for item with id $itemId...');
+    : super(message: L10n.current.errorParsing('$itemId'));
 
   final int itemId;
 }
 
 class GenericException extends AppException {
-  GenericException({super.error}) : super(message: 'Something went wrong...');
+  GenericException({super.error}) : super(message: L10n.current.errorGeneric);
 }

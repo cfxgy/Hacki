@@ -3,6 +3,7 @@ import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hacki/cubits/cubits.dart';
 import 'package:hacki/extensions/context_extension.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/widgets/widgets.dart';
 import 'package:hacki/styles/styles.dart';
@@ -48,11 +49,12 @@ class PinnedStories extends StatelessWidget {
                             if (preferenceState.isRichStoryTileEnabled)
                               const Icon(Icons.close, size: Dimens.pt24),
                             Text(
-                              'Unpin',
+                              L10n.current.unpin,
                               style: TextStyle(
-                                fontFamily: Theme.of(
-                                  context,
-                                ).textTheme.bodyMedium?.fontFamily,
+                                fontFamily: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.fontFamily,
                               ),
                             ),
                           ],
@@ -61,9 +63,8 @@ class PinnedStories extends StatelessWidget {
                     ],
                   ),
                   child: ColoredBox(
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.primary.withValues(alpha: 0.2),
+                    color: Theme.of(context).colorScheme.primary
+                        .withValues(alpha: 0.2),
                     child: PinnedItemTile(
                       key: ValueKey<String>('${item.id}-PinnedItemTile'),
                       item: item,
@@ -80,9 +81,8 @@ class PinnedStories extends StatelessWidget {
                   vertical: Dimens.pt4,
                 ),
                 child: Divider(
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.primary.withValues(alpha: 0.8),
+                  color: Theme.of(context).colorScheme.primary
+                      .withValues(alpha: 0.8),
                 ),
               ),
           ],

@@ -1,3 +1,4 @@
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/widgets/widgets.dart';
 import 'package:intl/intl.dart';
@@ -19,7 +20,8 @@ class DateTimeRangeFilterChip extends StatelessWidget {
   final void Function(DateTime, DateTime) onDateTimeRangeUpdated;
   final VoidCallback onDateTimeRangeRemoved;
 
-  static final DateFormat _dateTimeFormatter = DateFormat.yMMMd();
+  static DateFormat get _dateTimeFormatter =>
+      DateFormat.yMMMd(L10n.current.localeName);
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +51,14 @@ class DateTimeRangeFilterChip extends StatelessWidget {
     final DateTime? start = filter?.startTime;
     final DateTime? end = filter?.endTime;
     if (start == null && end == null) {
-      return '''date range''';
+      return L10n.current.dateRange;
     } else if (start == end) {
-      return '''from ${_formatDateTime(start)}''';
+      return L10n.current.dateRangeFrom('${_formatDateTime(start)}');
     } else {
-      return '''from ${_formatDateTime(start)} to ${_formatDateTime(end)}''';
+      return L10n.current.dateRangeBetween(
+        '${_formatDateTime(start)}',
+        '${_formatDateTime(end)}',
+      );
     }
   }
 

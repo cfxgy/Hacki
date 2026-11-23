@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hacki/cubits/cubits.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/styles/styles.dart';
 import 'package:material_ui/material_ui.dart';
@@ -14,14 +15,14 @@ class TextScaleFactorSettings extends StatelessWidget {
           previous.textScaleFactor != current.textScaleFactor,
       builder: (BuildContext context, PreferenceState state) {
         final String label = state.textScaleFactor == 1
-            ? '''system default'''
+            ? L10n.current.systemDefault
             : state.textScaleFactor.toString();
         return Column(
           children: <Widget>[
             Row(
               children: <Widget>[
                 const SizedBox(width: Dimens.pt16),
-                Text('Text scale factor: $label'),
+                Text(L10n.current.textScaleFactor(label)),
                 const Spacer(),
               ],
             ),

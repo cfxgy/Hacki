@@ -4,6 +4,7 @@ import 'package:hacki/blocs/stories/stories_bloc.dart';
 import 'package:hacki/config/router.dart';
 import 'package:hacki/cubits/comments/comments_cubit.dart';
 import 'package:hacki/cubits/search/search_cubit.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/item/item.dart';
 import 'package:hacki/screens/item/widgets/time_machine_dialog.dart';
 import 'package:hacki/screens/screens.dart';
@@ -94,19 +95,19 @@ abstract final class DialogProxy {
     showDialog<bool>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        title: const Text('Abort downloading?'),
+        title: Text(L10n.current.abortDownloading),
         actions: <Widget>[
           TextButton(
             onPressed: () => context.pop(),
-            child: const Text('Cancel'),
+            child: Text(L10n.current.cancel),
           ),
           TextButton(
             onPressed: () => context.pop(false),
-            child: const Text('No'),
+            child: Text(L10n.current.no),
           ),
           TextButton(
             onPressed: () => context.pop(true),
-            child: const Text('Yes'),
+            child: Text(L10n.current.yes),
           ),
         ],
       ),
@@ -129,9 +130,9 @@ abstract final class DialogProxy {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) => AlertDialog(
-        title: const Text('Download completed'),
+        title: Text(L10n.current.downloadCompleted),
         actions: <Widget>[
-          TextButton(onPressed: context.pop, child: const Text('Noooice!')),
+          TextButton(onPressed: context.pop, child: Text(L10n.current.noooice)),
         ],
       ),
     );

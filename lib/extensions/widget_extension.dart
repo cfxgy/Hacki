@@ -1,4 +1,5 @@
 import 'package:hacki/config/constants.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/widgets/custom_linkify/custom_linkify.dart';
 import 'package:hacki/services/dialog_proxy.dart';
@@ -38,7 +39,7 @@ extension ContextMenuBuilder on Widget {
               context,
               selectedText,
             ),
-            label: 'Search HN',
+            label: L10n.current.searchHn,
           ),
         )
         ..addAll(<ContextMenuButtonItem>[
@@ -47,14 +48,14 @@ extension ContextMenuBuilder on Widget {
               '''${Constants.wikipediaLink}$selectedText''',
               context,
             ),
-            label: 'Wikipedia',
+            label: L10n.current.wikipedia,
           ),
           ContextMenuButtonItem(
             onPressed: () => LinkUtils.launch(
               '''${Constants.wiktionaryLink}$selectedText''',
               context,
             ),
-            label: 'Wiktionary',
+            label: L10n.current.wiktionary,
           ),
         ]);
     }

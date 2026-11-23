@@ -1,27 +1,42 @@
 import 'dart:convert';
 
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:material_ui/material_ui.dart' show IconData, Icons;
 
 /// Names are persisted, so keep them stable when changing labels or icons.
 enum ItemMenuAction {
-  viewProfile('View Profile', icon: Icons.account_circle),
-  searchOnHackerNews('Search on HN', icon: Icons.search),
-  searchInThread('Search in thread', icon: Icons.manage_search),
-  reply('Reply', icon: Icons.message),
-  upvote('Upvote', icon: Icons.thumb_up_off_alt_outlined),
-  downvote('Downvote', icon: Icons.thumb_down_off_alt_outlined),
-  favorite('Favorite', icon: Icons.favorite_border),
-  share('Share', icon: FeatherIcons.share),
-  flag('Flag', icon: Icons.local_police),
-  block('Block', icon: Icons.visibility_off),
-  viewInSeparateThread('View In Separate Thread', icon: Icons.list),
-  viewInBrowser('View in Browser', icon: Icons.open_in_browser);
+  viewProfile(icon: Icons.account_circle),
+  searchOnHackerNews(icon: Icons.search),
+  searchInThread(icon: Icons.manage_search),
+  reply(icon: Icons.message),
+  upvote(icon: Icons.thumb_up_off_alt_outlined),
+  downvote(icon: Icons.thumb_down_off_alt_outlined),
+  favorite(icon: Icons.favorite_border),
+  share(icon: FeatherIcons.share),
+  flag(icon: Icons.local_police),
+  block(icon: Icons.visibility_off),
+  viewInSeparateThread(icon: Icons.list),
+  viewInBrowser(icon: Icons.open_in_browser);
 
-  const ItemMenuAction(this.description, {required this.icon});
+  const ItemMenuAction({required this.icon});
 
-  final String description;
   final IconData icon;
+
+  String get description => switch (this) {
+    ItemMenuAction.viewProfile => L10n.current.slideActionViewProfile,
+    ItemMenuAction.searchOnHackerNews => L10n.current.searchOnHn,
+    ItemMenuAction.searchInThread => L10n.current.searchInThread,
+    ItemMenuAction.reply => L10n.current.reply,
+    ItemMenuAction.upvote => L10n.current.upvote,
+    ItemMenuAction.downvote => L10n.current.downvote,
+    ItemMenuAction.favorite => L10n.current.favorite,
+    ItemMenuAction.share => L10n.current.share,
+    ItemMenuAction.flag => L10n.current.flag,
+    ItemMenuAction.block => L10n.current.block,
+    ItemMenuAction.viewInSeparateThread => L10n.current.viewInSeparateThread,
+    ItemMenuAction.viewInBrowser => L10n.current.viewInBrowser,
+  };
 }
 
 /// Keeps hidden actions in the order so enabling one restores its position.

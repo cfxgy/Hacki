@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hacki/config/constants.dart';
 import 'package:hacki/cubits/cubits.dart';
 import 'package:hacki/extensions/extensions.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/widgets/comment_tile.dart';
 import 'package:hacki/screens/widgets/story_tile.dart';
@@ -44,7 +45,7 @@ class TimeMachineDialog extends StatelessWidget {
                     children: <Widget>[
                       const SizedBox(width: Dimens.pt12),
                       Text(
-                        'Ancestors:',
+                        L10n.current.ancestors,
                         style: TextTheme.of(context).titleMedium,
                       ),
                       const Spacer(),

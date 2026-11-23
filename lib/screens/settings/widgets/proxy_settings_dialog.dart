@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hacki/cubits/cubits.dart';
 import 'package:hacki/extensions/extensions.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/styles/styles.dart';
 import 'package:hacki/utils/utils.dart';
@@ -46,7 +47,7 @@ class _ProxySettingsDialogState extends State<ProxySettingsDialog> {
     final Color primaryColor = Theme.of(context).colorScheme.primary;
 
     return AlertDialog(
-      title: const Text('Proxy'),
+      title: Text(L10n.current.proxy),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -54,7 +55,7 @@ class _ProxySettingsDialogState extends State<ProxySettingsDialog> {
           children: <Widget>[
             SwitchListTile(
               contentPadding: EdgeInsets.zero,
-              title: const Text('Use Proxy'),
+              title: Text(L10n.current.useProxy),
               value: _isEnabled,
               activeThumbColor: primaryColor,
               onChanged: (bool val) {
@@ -74,7 +75,7 @@ class _ProxySettingsDialogState extends State<ProxySettingsDialog> {
               keyboardType: TextInputType.url,
               textInputAction: TextInputAction.next,
               decoration: InputDecoration(
-                labelText: 'Host',
+                labelText: L10n.current.host,
                 hintText: '127.0.0.1',
                 errorText: _hostError,
               ),
@@ -90,24 +91,27 @@ class _ProxySettingsDialogState extends State<ProxySettingsDialog> {
               ],
               onSubmitted: (_) => _onSaveTapped(),
               decoration: InputDecoration(
-                labelText: 'Port',
+                labelText: L10n.current.port,
                 hintText: '8080',
                 errorText: _portError,
               ),
             ),
             SizedBoxes.pt16,
-            const Text(
-              '''HTTP proxy for every connection Hacki makes, web views included. There is no fallback: if the proxy can't be reached, nothing loads. Links opened in a browser use the connection of that browser.''',
-              style: TextStyle(color: Palette.grey, fontSize: TextDimens.pt12),
+            Text(
+              L10n.current.proxyDescription,
+              style: const TextStyle(
+                color: Palette.grey,
+                fontSize: TextDimens.pt12,
+              ),
             ),
           ],
         ),
       ),
       actions: <Widget>[
-        TextButton(onPressed: context.pop, child: const Text('Cancel')),
+        TextButton(onPressed: context.pop, child: Text(L10n.current.cancel)),
         TextButton(
           onPressed: _isSaving ? null : _onSaveTapped,
-          child: const Text('Save'),
+          child: Text(L10n.current.save),
         ),
       ],
     );
@@ -120,10 +124,10 @@ class _ProxySettingsDialogState extends State<ProxySettingsDialog> {
     if (_isEnabled) {
       final String? hostError = NetworkProxy.isValidHost(host)
           ? null
-          : 'Enter a host name or an IP address.';
+          : L10n.current.proxyHostError;
       final String? portError = NetworkProxy.isValidPort(port)
           ? null
-          : 'Enter a port from 1 to ${NetworkProxy.maxPort}.';
+          : L10n.current.proxyPortError('${NetworkProxy.maxPort}');
 
       if (hostError != null || portError != null) {
         setState(() {
@@ -149,10 +153,10 @@ class _ProxySettingsDialogState extends State<ProxySettingsDialog> {
       ..pop()
       ..showSnackBar(
         content: !state.proxy.isActive
-            ? 'Proxy is off.'
+            ? L10n.current.proxyOff
             : state.isAppliedToWebViews
-            ? 'Connections now go through ${state.proxy.address}.'
-            : '''Connections now go through ${state.proxy.address}, except for web views, which can't use a proxy on this device.''',
+            ? L10n.current.proxyOn(state.proxy.address)
+            : L10n.current.proxyOnExceptWebViews(state.proxy.address),
       );
   }
 }

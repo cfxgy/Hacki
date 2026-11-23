@@ -1,18 +1,25 @@
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/screens/widgets/widgets.dart';
 import 'package:material_ui/material_ui.dart';
 
 typedef DateRangeCallback = void Function(DateTime, DateTime);
 
 enum CustomDateTimeRange {
-  pastDay(Duration(days: 1), label: 'past day'),
-  pastWeek(Duration(days: 7), label: 'past week'),
-  pastMonth(Duration(days: 31), label: 'past month'),
-  pastYear(Duration(days: 365), label: 'past year');
+  pastDay(Duration(days: 1)),
+  pastWeek(Duration(days: 7)),
+  pastMonth(Duration(days: 31)),
+  pastYear(Duration(days: 365));
 
-  const CustomDateTimeRange(this.duration, {required this.label});
+  const CustomDateTimeRange(this.duration);
 
   final Duration duration;
-  final String label;
+
+  String get label => switch (this) {
+    CustomDateTimeRange.pastDay => L10n.current.pastDay,
+    CustomDateTimeRange.pastWeek => L10n.current.pastWeek,
+    CustomDateTimeRange.pastMonth => L10n.current.pastMonth,
+    CustomDateTimeRange.pastYear => L10n.current.pastYear,
+  };
 }
 
 class CustomRangeFilterChip extends StatelessWidget {

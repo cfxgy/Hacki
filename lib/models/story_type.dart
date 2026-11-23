@@ -1,3 +1,5 @@
+import 'package:hacki/l10n/l10n.dart';
+
 enum StoryType {
   top('topstories', ''),
   best('beststories', 'best'),
@@ -15,20 +17,13 @@ enum StoryType {
   /// e.g. https://news.ycombinator.com/{webPathParam}
   final String webPathParam;
 
-  String get label {
-    switch (this) {
-      case StoryType.top:
-        return 'TOP';
-      case StoryType.best:
-        return 'BEST';
-      case StoryType.latest:
-        return 'NEW';
-      case StoryType.ask:
-        return 'ASK';
-      case StoryType.show:
-        return 'SHOW';
-    }
-  }
+  String get label => switch (this) {
+    StoryType.top => L10n.current.storyTypeTop,
+    StoryType.best => L10n.current.storyTypeBest,
+    StoryType.latest => L10n.current.storyTypeLatest,
+    StoryType.ask => L10n.current.storyTypeAsk,
+    StoryType.show => L10n.current.storyTypeShow,
+  };
 
   static int convertToSettingsValue(List<StoryType> tabs) {
     return int.parse(

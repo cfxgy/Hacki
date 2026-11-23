@@ -1,11 +1,15 @@
+import 'package:hacki/l10n/l10n.dart';
+
 enum CommentsOrder {
-  natural('Natural'),
-  newestFirst('Newest first'),
-  oldestFirst('Oldest first');
+  natural,
+  newestFirst,
+  oldestFirst;
 
-  const CommentsOrder(this.description);
-
-  final String description;
+  String get description => switch (this) {
+    CommentsOrder.natural => L10n.current.commentsOrderNatural,
+    CommentsOrder.newestFirst => L10n.current.commentsOrderNewestFirst,
+    CommentsOrder.oldestFirst => L10n.current.commentsOrderOldestFirst,
+  };
 
   @override
   String toString() => description;

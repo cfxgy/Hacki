@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hacki/cubits/cubits.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/screens/home/widgets/widgets.dart';
 import 'package:hacki/screens/screens.dart';
 import 'package:hacki/screens/widgets/widgets.dart';
@@ -112,9 +113,9 @@ class TabletHomeScreen extends StatelessWidget {
                         child: SizedBox(
                           child: CustomPaint(
                             painter: SpindlePainter(
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.primaryContainer,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer,
                             ),
                             child: Center(
                               child: Padding(
@@ -123,9 +124,9 @@ class TabletHomeScreen extends StatelessWidget {
                                 ),
                                 child: FaIcon(
                                   FontAwesomeIcons.gripLinesVertical,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onPrimaryContainer,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
                                   size: TextDimens.pt18,
                                 ),
                               ),
@@ -161,9 +162,7 @@ class _TabletStoryView extends StatelessWidget {
         return Material(
           child: ColoredBox(
             color: Theme.of(context).canvasColor,
-            child: const Center(
-              child: Text('Tap on story tile to view its comments.'),
-            ),
+            child: Center(child: Text(L10n.current.tapStoryToViewComments)),
           ),
         );
       },

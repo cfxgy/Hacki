@@ -21,6 +21,7 @@ import 'package:hacki/config/paths.dart';
 import 'package:hacki/config/router.dart';
 import 'package:hacki/cubits/cubits.dart';
 import 'package:hacki/extensions/extensions.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/repositories/repositories.dart';
 import 'package:hacki/screens/home/home_screen.dart';
@@ -48,7 +49,7 @@ class _SettingsScreenState extends State<SettingsScreen> with ItemActionMixin {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).canvasColor,
-        title: const Text('Settings'),
+        title: Text(L10n.current.settings),
       ),
       body: const SettingsView(),
     );
@@ -80,7 +81,9 @@ class _SettingsViewState extends State<SettingsView>
                       ? Theme.of(context).colorScheme.primary
                       : null,
                 ),
-                title: Text(isLoggedIn ? 'Log Out' : 'Log In'),
+                title: Text(
+                  isLoggedIn ? L10n.current.logout : L10n.current.login,
+                ),
                 subtitle: isLoggedIn
                     ? Text(context.read<AuthBloc>().state.username)
                     : null,
@@ -91,6 +94,12 @@ class _SettingsViewState extends State<SettingsView>
                     onLoginTapped();
                   }
                 },
+              ),
+              ListTile(
+                leading: const Icon(Icons.language),
+                title: Text(L10n.current.language),
+                subtitle: Text(_languageName(preferenceState.language)),
+                onTap: showLanguageDialog,
               ),
               const EnterOfflineModeListTile(),
               const OfflineListTile(),
@@ -104,7 +113,7 @@ class _SettingsViewState extends State<SettingsView>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const Text('Default fetch mode'),
+                        Text(L10n.current.defaultFetchMode),
                         DropdownMenu<FetchMode>(
                           initialSelection: preferenceState.fetchMode,
                           dropdownMenuEntries: FetchMode.values
@@ -135,7 +144,7 @@ class _SettingsViewState extends State<SettingsView>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const Text('Default comments order'),
+                        Text(L10n.current.defaultCommentsOrder),
                         DropdownMenu<CommentsOrder>(
                           initialSelection: preferenceState.order,
                           dropdownMenuEntries: CommentsOrder.values
@@ -171,7 +180,7 @@ class _SettingsViewState extends State<SettingsView>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const Text('Date time display of comments'),
+                        Text(L10n.current.dateTimeDisplayComments),
                         DropdownMenu<DateDisplayFormat>(
                           initialSelection: preferenceState.displayDateFormat,
                           dropdownMenuEntries: DateDisplayFormat.values
@@ -204,7 +213,7 @@ class _SettingsViewState extends State<SettingsView>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const Text('Data source'),
+                        Text(L10n.current.dataSource),
                         BlocSelector<StoriesBloc, StoriesState, bool>(
                           selector: (StoriesState state) =>
                               state.statusByType.values.any(
@@ -276,7 +285,7 @@ class _SettingsViewState extends State<SettingsView>
                         SizedBoxes.pt12,
                         const Flexible(child: Divider()),
                         SizedBoxes.pt12,
-                        Text(preference.label),
+                        Text(preference.localizedLabel),
                         SizedBoxes.pt12,
                         const Flexible(child: Divider()),
                         SizedBoxes.pt12,
@@ -289,14 +298,17 @@ class _SettingsViewState extends State<SettingsView>
                       enabled: preference.dependencies.satisfy(
                         preferenceState.preferences,
                       ),
-                      title: Text(preference.title),
+                      title: Text(preference.localizedTitle),
                       trailing: SegmentedButton<bool>(
                         showSelectedIcon: false,
-                        segments: const <ButtonSegment<bool>>[
-                          ButtonSegment<bool>(value: true, label: Text('Left')),
+                        segments: <ButtonSegment<bool>>[
+                          ButtonSegment<bool>(
+                            value: true,
+                            label: Text(L10n.current.left),
+                          ),
                           ButtonSegment<bool>(
                             value: false,
-                            label: Text('Right'),
+                            label: Text(L10n.current.right),
                           ),
                         ],
                         selected: <bool>{
@@ -334,9 +346,9 @@ class _SettingsViewState extends State<SettingsView>
                           },
                     child: SwitchListTile(
                       key: ValueKey<String>(preference.key),
-                      title: Text(preference.title),
-                      subtitle: preference.subtitle.isNotEmpty
-                          ? Text(preference.subtitle)
+                      title: Text(preference.localizedTitle),
+                      subtitle: preference.localizedSubtitle.isNotEmpty
+                          ? Text(preference.localizedSubtitle)
                           : null,
                       value: preferenceState.isOn(
                         preference as BooleanPreference,
@@ -381,7 +393,7 @@ class _SettingsViewState extends State<SettingsView>
                     ),
                     child: DropdownMenu<StoryMarkingMode>(
                       enabled: preferenceState.isMarkReadStoriesEnabled,
-                      label: Text(StoryMarkingModePreference().title),
+                      label: Text(StoryMarkingModePreference().localizedTitle),
                       initialSelection: preferenceState.storyMarkingMode,
                       onSelected: (StoryMarkingMode? storyMarkingMode) {
                         if (storyMarkingMode != null) {
@@ -416,49 +428,52 @@ class _SettingsViewState extends State<SettingsView>
                 if (preference is DividerPreference) const Divider(),
               ],
               ListTile(
-                title: const Text('Accent Color'),
+                title: Text(L10n.current.accentColor),
                 onTap: showColorPicker,
               ),
-              ListTile(title: const Text('Font'), onTap: showFontSettingDialog),
               ListTile(
-                title: const Text('Theme'),
+                title: Text(L10n.current.font),
+                onTap: showFontSettingDialog,
+              ),
+              ListTile(
+                title: Text(L10n.current.theme),
                 onTap: showThemeSettingDialog,
               ),
               const Divider(),
               ListTile(
-                title: const Text('Filter Keywords'),
+                title: Text(L10n.current.filterKeywords),
                 onTap: onFilterKeywordsTapped,
               ),
               ListTile(
-                title: const Text('Export Favorites'),
+                title: Text(L10n.current.exportFavorites),
                 onTap: onExportFavoritesTapped,
               ),
               ListTile(
-                title: const Text('Import Favorites'),
+                title: Text(L10n.current.importFavorites),
                 onTap: () => onImportFavoritesTapped(context.read<FavCubit>()),
               ),
               ListTile(
-                title: const Text('Clear Favorites'),
+                title: Text(L10n.current.clearFavorites),
                 onTap: showClearFavoritesDialog,
               ),
               ListTile(
-                title: const Text('Clear Cache'),
+                title: Text(L10n.current.clearCache),
                 onTap: showClearCacheDialog,
               ),
               ListTile(
-                title: const Text('Restore Default Settings'),
+                title: Text(L10n.current.restoreDefaultSettings),
                 onTap: showRestoreDefaultSettingsDialog,
               ),
               const ProxyListTile(),
               if (preferenceState.isDevModeEnabled) ...<Widget>[
                 ListTile(
-                  title: const Text('Logs'),
+                  title: Text(L10n.current.logs),
                   onTap: () {
                     context.go(Paths.logs.landing);
                   },
                 ),
                 ListTile(
-                  title: const Text('Reset Feature Discovery'),
+                  title: Text(L10n.current.resetFeatureDiscovery),
                   onTap: () {
                     HapticFeedbackUtils.light();
                     locator.get<PreferenceRepository>().resetTourStatus();
@@ -471,14 +486,14 @@ class _SettingsViewState extends State<SettingsView>
                   },
                 ),
                 ListTile(
-                  title: const Text('Reset Feedback Request'),
+                  title: Text(L10n.current.resetFeedbackRequest),
                   onTap: () {
                     HapticFeedbackUtils.light();
                     context.read<ReviewRequestCubit>().reset();
                   },
                 ),
                 ListTile(
-                  title: const Text('Reset Tips'),
+                  title: Text(L10n.current.resetTips),
                   onTap: () {
                     HapticFeedbackUtils.light();
                     context.read<TipsCubit>().reset();
@@ -487,11 +502,11 @@ class _SettingsViewState extends State<SettingsView>
               ],
               const Divider(),
               ListTile(
-                title: const Text('Feature Request'),
+                title: Text(L10n.current.featureRequest),
                 onTap: () => LinkUtils.launch(Constants.githubLink, context),
               ),
               ListTile(
-                title: const Text('Rate Hacki : )'),
+                title: Text(L10n.current.rateHacki),
                 onTap: () {
                   LinkUtils.launch(
                     Platform.isIOS
@@ -502,7 +517,7 @@ class _SettingsViewState extends State<SettingsView>
                 },
               ),
               ListTile(
-                title: const Text('About'),
+                title: Text(L10n.current.about),
                 subtitle: Text(Constants.magicWord),
                 onTap: showAboutHackiDialog,
                 onLongPress: () {
@@ -513,14 +528,62 @@ class _SettingsViewState extends State<SettingsView>
                   context.read<PreferenceCubit>().update(updatedDevMode);
                   HapticFeedbackUtils.heavy();
                   if (updatedDevMode.val) {
-                    showSnackBar(content: 'You are a dev now.');
+                    showSnackBar(content: L10n.current.devModeOn);
                   } else {
-                    showSnackBar(content: 'Dev mode disabled.');
+                    showSnackBar(content: L10n.current.devModeOff);
                   }
                 },
               ),
               const SizedBox(height: Dimens.pt200),
             ],
+          ),
+        );
+      },
+    );
+  }
+
+  String _languageName(String language) => switch (language) {
+    LanguagePreference.system => L10n.current.languageSystem,
+    LanguagePreference.english => L10n.current.languageEnglish,
+    _ => L10n.current.languageChinese,
+  };
+
+  void showLanguageDialog() {
+    final String currentLanguage = context
+        .read<PreferenceCubit>()
+        .state
+        .language;
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(L10n.current.language),
+          content: RadioGroup<String>(
+            groupValue: currentLanguage,
+            onChanged: (String? language) {
+              if (language == null) return;
+              context.read<PreferenceCubit>().update(
+                LanguagePreference(val: language),
+              );
+              context.pop();
+            },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                RadioListTile<String>(
+                  value: LanguagePreference.system,
+                  title: Text(L10n.current.languageSystem),
+                ),
+                RadioListTile<String>(
+                  value: LanguagePreference.simplifiedChinese,
+                  title: Text(L10n.current.languageChinese),
+                ),
+                RadioListTile<String>(
+                  value: LanguagePreference.english,
+                  title: Text(L10n.current.languageEnglish),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -536,13 +599,13 @@ class _SettingsViewState extends State<SettingsView>
       builder: (BuildContext context) {
         return AlertDialog(
           content: Text(
-            'Log out as ${authBloc.state.username}?',
+            L10n.current.logOutAs(authBloc.state.username),
             style: const TextStyle(fontSize: TextDimens.pt16),
           ),
           actions: <Widget>[
             TextButton(
               onPressed: () => context.pop(),
-              child: const Text('Cancel'),
+              child: Text(L10n.current.cancel),
             ),
             TextButton(
               onPressed: () {
@@ -550,7 +613,7 @@ class _SettingsViewState extends State<SettingsView>
                 context.read<AuthBloc>().add(AuthLogout());
                 context.read<HistoryCubit>().reset();
               },
-              child: const Text('Log out'),
+              child: Text(L10n.current.logout),
             ),
           ],
         );
@@ -636,20 +699,20 @@ class _SettingsViewState extends State<SettingsView>
           content: RadioGroup<AdaptiveThemeMode>(
             groupValue: themeMode,
             onChanged: updateThemeSetting,
-            child: const Column(
+            child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 RadioListTile<AdaptiveThemeMode>(
                   value: AdaptiveThemeMode.light,
-                  title: Text('Light'),
+                  title: Text(L10n.current.light),
                 ),
                 RadioListTile<AdaptiveThemeMode>(
                   value: AdaptiveThemeMode.dark,
-                  title: Text('Dark'),
+                  title: Text(L10n.current.dark),
                 ),
                 RadioListTile<AdaptiveThemeMode>(
                   value: AdaptiveThemeMode.system,
-                  title: Text('System'),
+                  title: Text(L10n.current.system),
                 ),
               ],
             ),
@@ -692,7 +755,7 @@ class _SettingsViewState extends State<SettingsView>
       builder: (_) {
         return AlertDialog(
           contentPadding: const EdgeInsets.all(Dimens.pt18),
-          title: Text(AppColorPreference().title),
+          title: Text(AppColorPreference().localizedTitle),
           content: MaterialColorPicker(
             colors: materialColors,
             selectedColor: context.read<PreferenceCubit>().state.appColor,
@@ -717,12 +780,12 @@ class _SettingsViewState extends State<SettingsView>
       context: context,
       builder: (_) {
         return AlertDialog(
-          title: const Text('Restore default settings?'),
-          content: const Text('Your existing settings will be wiped out.'),
+          title: Text(L10n.current.restoreDefaultSettingsQuestion),
+          content: Text(L10n.current.restoreDefaultSettingsBody),
           actions: <Widget>[
             TextButton(
               onPressed: () => context.pop(),
-              child: const Text('Cancel'),
+              child: Text(L10n.current.cancel),
             ),
             TextButton(
               onPressed: () {
@@ -731,9 +794,12 @@ class _SettingsViewState extends State<SettingsView>
                 context.read<PreferenceCubit>().restoreDefaultSettings();
 
                 HapticFeedbackUtils.success();
-                showSnackBar(content: 'Default settings restored.');
+                showSnackBar(content: L10n.current.defaultSettingsRestored);
               },
-              child: const Text('Yes', style: TextStyle(color: Palette.red)),
+              child: Text(
+                L10n.current.yes,
+                style: const TextStyle(color: Palette.red),
+              ),
             ),
           ],
         );
@@ -746,12 +812,12 @@ class _SettingsViewState extends State<SettingsView>
       context: context,
       builder: (_) {
         return AlertDialog(
-          title: const Text('Clear cache?'),
-          content: const Text('Clear all cached images, stories and comments.'),
+          title: Text(L10n.current.clearCacheQuestion),
+          content: Text(L10n.current.clearCacheBody),
           actions: <Widget>[
             TextButton(
               onPressed: () => context.pop(),
-              child: const Text('Cancel'),
+              child: Text(L10n.current.cancel),
             ),
             TextButton(
               onPressed: () {
@@ -766,9 +832,12 @@ class _SettingsViewState extends State<SettingsView>
                 locator.get<CollapseStateCacheRepository>().clear();
 
                 HapticFeedbackUtils.success();
-                showSnackBar(content: 'Cache cleared!');
+                showSnackBar(content: L10n.current.cacheCleared);
               },
-              child: const Text('Yes', style: TextStyle(color: Palette.red)),
+              child: Text(
+                L10n.current.yes,
+                style: const TextStyle(color: Palette.red),
+              ),
             ),
           ],
         );
@@ -796,21 +865,21 @@ class _SettingsViewState extends State<SettingsView>
         children: <Widget>[
           ElevatedButton(
             onPressed: () => LinkUtils.launch(Constants.portfolioLink, context),
-            child: const Row(
+            child: Row(
               children: <Widget>[
-                FaIcon(FontAwesomeIcons.addressCard),
-                SizedBox(width: Dimens.pt12),
-                Text('Developer'),
+                const FaIcon(FontAwesomeIcons.addressCard),
+                const SizedBox(width: Dimens.pt12),
+                Text(L10n.current.developer),
               ],
             ),
           ),
           ElevatedButton(
             onPressed: () => LinkUtils.launch(Constants.githubLink, context),
-            child: const Row(
+            child: Row(
               children: <Widget>[
-                FaIcon(FontAwesomeIcons.github),
-                SizedBox(width: Dimens.pt12),
-                Text('Source code'),
+                const FaIcon(FontAwesomeIcons.github),
+                const SizedBox(width: Dimens.pt12),
+                Text(L10n.current.sourceCode),
               ],
             ),
           ),
@@ -821,42 +890,42 @@ class _SettingsViewState extends State<SettingsView>
                   : Constants.googlePlayLink,
               context,
             ),
-            child: const Row(
+            child: Row(
               children: <Widget>[
-                Icon(Icons.thumb_up),
-                SizedBox(width: Dimens.pt12),
-                Text('Like this app?'),
+                const Icon(Icons.thumb_up),
+                const SizedBox(width: Dimens.pt12),
+                Text(L10n.current.likeThisApp),
               ],
             ),
           ),
           ElevatedButton(
             onPressed: () => LinkUtils.launch(Constants.spotifyLink, context),
-            child: const Row(
+            child: Row(
               children: <Widget>[
-                Icon(FeatherIcons.music),
-                SizedBox(width: Dimens.pt12),
-                Text('Music I listen to'),
+                const Icon(FeatherIcons.music),
+                const SizedBox(width: Dimens.pt12),
+                Text(L10n.current.musicIListenTo),
               ],
             ),
           ),
           ElevatedButton(
             onPressed: () =>
                 LinkUtils.launch(Constants.privacyPolicyLink, context),
-            child: const Row(
+            child: Row(
               children: <Widget>[
-                Icon(Icons.privacy_tip_outlined),
-                SizedBox(width: Dimens.pt12),
-                Text('Privacy policy'),
+                const Icon(Icons.privacy_tip_outlined),
+                const SizedBox(width: Dimens.pt12),
+                Text(L10n.current.privacyPolicy),
               ],
             ),
           ),
           ElevatedButton(
             onPressed: onReportIssueTapped,
-            child: const Row(
+            child: Row(
               children: <Widget>[
-                Icon(Icons.bug_report_outlined),
-                SizedBox(width: Dimens.pt12),
-                Text('Report issue'),
+                const Icon(Icons.bug_report_outlined),
+                const SizedBox(width: Dimens.pt12),
+                Text(L10n.current.reportIssue),
               ],
             ),
           ),
@@ -874,21 +943,21 @@ class _SettingsViewState extends State<SettingsView>
           actions: <Widget>[
             ElevatedButton(
               onPressed: onSendEmailTapped,
-              child: const Row(
+              child: Row(
                 children: <Widget>[
-                  Icon(Icons.email),
-                  SizedBox(width: Dimens.pt12),
-                  Text('Email'),
+                  const Icon(Icons.email),
+                  const SizedBox(width: Dimens.pt12),
+                  Text(L10n.current.email),
                 ],
               ),
             ),
             ElevatedButton(
               onPressed: () => onGithubTapped(context.rect),
-              child: const Row(
+              child: Row(
                 children: <Widget>[
-                  Icon(Icons.bug_report_outlined),
-                  SizedBox(width: Dimens.pt12),
-                  Text('GitHub'),
+                  const Icon(Icons.bug_report_outlined),
+                  const SizedBox(width: Dimens.pt12),
+                  Text(L10n.current.github),
                 ],
               ),
             ),
@@ -907,9 +976,8 @@ class _SettingsViewState extends State<SettingsView>
     await LogUtils.exportLogs();
 
     final Email email = Email(
-      body:
-          '''Please describe how to reproduce the bug or what you have down before the bug occurred:''',
-      subject: 'Found a bug in Hacki',
+      body: L10n.current.bugReportBody,
+      subject: L10n.current.bugReportSubject,
       recipients: <String>[Constants.supportEmail],
       attachmentPaths: <String>[previousLogPath],
     );
@@ -943,9 +1011,9 @@ class _SettingsViewState extends State<SettingsView>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text(
-            'Filter Keywords',
-            style: TextStyle(fontSize: TextDimens.pt16),
+          title: Text(
+            L10n.current.filterKeywords,
+            style: const TextStyle(fontSize: TextDimens.pt16),
           ),
           content: BlocBuilder<FilterCubit, FilterState>(
             builder: (BuildContext context, FilterState state) {
@@ -953,10 +1021,7 @@ class _SettingsViewState extends State<SettingsView>
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   if (state.keywords.isEmpty)
-                    const CenteredText(
-                      text:
-                          '''story or comment that contains keywords here will be hidden.''',
-                    ),
+                    CenteredText(text: L10n.current.filterKeywordsHint),
                   Wrap(
                     spacing: Dimens.pt4,
                     children: <Widget>[
@@ -980,11 +1045,11 @@ class _SettingsViewState extends State<SettingsView>
           actions: <Widget>[
             TextButton(
               onPressed: onAddKeywordTapped,
-              child: const Text('Add keyword'),
+              child: Text(L10n.current.addKeyword),
             ),
             TextButton(
               onPressed: () => context.pop(),
-              child: const Text('Okay'),
+              child: Text(L10n.current.okay),
             ),
           ],
         );
@@ -1002,7 +1067,7 @@ class _SettingsViewState extends State<SettingsView>
           actions: <Widget>[
             TextButton(
               onPressed: () => context.pop(),
-              child: const Text('Cancel'),
+              child: Text(L10n.current.cancel),
             ),
             TextButton(
               onPressed: () {
@@ -1011,7 +1076,7 @@ class _SettingsViewState extends State<SettingsView>
                 context.read<FilterCubit>().addKeyword(keyword.toLowerCase());
                 context.pop();
               },
-              child: const Text('Confirm'),
+              child: Text(L10n.current.confirm),
             ),
           ],
         );
@@ -1054,12 +1119,12 @@ class _SettingsViewState extends State<SettingsView>
             children: <Widget>[
               ListTile(
                 leading: const Icon(Icons.qr_code_scanner),
-                title: const Text('QR Code'),
+                title: Text(L10n.current.qrCode),
                 onTap: () => context.pop(ImportSource.qrCode),
               ),
               ListTile(
                 leading: const Icon(Icons.file_open_outlined),
-                title: const Text('From File'),
+                title: Text(L10n.current.fromFile),
                 onTap: () => context.pop(ImportSource.file),
               ),
             ],
@@ -1080,7 +1145,7 @@ class _SettingsViewState extends State<SettingsView>
         if (result == null) return;
         final List<int> bytes = await result.readAsBytes();
         if (bytes.isEmpty) {
-          showSnackBar(content: 'Could not read file.');
+          showSnackBar(content: L10n.current.couldNotReadFile);
           return;
         }
         data = String.fromCharCodes(bytes).trim();
@@ -1096,7 +1161,7 @@ class _SettingsViewState extends State<SettingsView>
     for (final int id in ids) {
       await favCubit.addFav(id);
     }
-    showSnackBar(content: 'Favorites imported successfully.');
+    showSnackBar(content: L10n.current.favoritesImported);
   }
 
   Future<void> exportFavorites({required ExportDestination? to}) async {
@@ -1105,7 +1170,7 @@ class _SettingsViewState extends State<SettingsView>
 
     final List<int> allFavorites = context.read<FavCubit>().state.favIds;
     if (allFavorites.isEmpty) {
-      showSnackBar(content: "You don't have any favorite item.");
+      showSnackBar(content: L10n.current.noFavoriteItem);
       return;
     }
     final String allFavoritesStr = allFavorites.take(100).join('\n');
@@ -1115,12 +1180,9 @@ class _SettingsViewState extends State<SettingsView>
         await router.push(Paths.qrCode.viewer, extra: allFavoritesStr);
       case ExportDestination.clipBoard:
         try {
-          await Clipboard.setData(
-            ClipboardData(text: allFavoritesStr),
-          ).whenComplete(HapticFeedbackUtils.selection);
-          showSnackBar(
-            content: 'Ids of favorites have been copied to clipboard.',
-          );
+          await Clipboard.setData(ClipboardData(text: allFavoritesStr))
+              .whenComplete(HapticFeedbackUtils.selection);
+          showSnackBar(content: L10n.current.favoriteIdsCopied);
         } catch (error, stackTrace) {
           logError(error, stackTrace: stackTrace);
         }
@@ -1132,28 +1194,26 @@ class _SettingsViewState extends State<SettingsView>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Remove all favorites?'),
-          content: const Text(
-            '''This will not effect favorites saved in your Hacker News account.''',
-          ),
+          title: Text(L10n.current.removeAllFavoritesQuestion),
+          content: Text(L10n.current.removeAllFavoritesBody),
           actions: <Widget>[
             TextButton(
               onPressed: () => context.pop(),
-              child: const Text('Cancel'),
+              child: Text(L10n.current.cancel),
             ),
             TextButton(
               onPressed: () {
                 context.pop();
                 try {
                   context.read<FavCubit>().removeAll();
-                  showSnackBar(content: 'All favorites have been removed.');
+                  showSnackBar(content: L10n.current.allFavoritesRemoved);
                 } catch (error, stackTrace) {
                   logError(error, stackTrace: stackTrace);
                 }
               },
-              child: const Text(
-                'Confirm',
-                style: TextStyle(color: Palette.red),
+              child: Text(
+                L10n.current.confirm,
+                style: const TextStyle(color: Palette.red),
               ),
             ),
           ],

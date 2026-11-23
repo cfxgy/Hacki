@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:hacki/config/constants.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 
 class LocalNotificationService {
@@ -17,7 +17,7 @@ class LocalNotificationService {
 
     return flutterLocalNotificationsPlugin.show(
       id: newReply.id,
-      title: 'You have a new reply! ${Constants.happyFace}',
+      title: L10n.current.newReplyNotification,
       body: '${newReply.by}: ${newReply.text}',
       notificationDetails: const NotificationDetails(
         iOS: DarwinNotificationDetails(

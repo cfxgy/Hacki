@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hacki/config/constants.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/repositories/repositories.dart';
 import 'package:hacki/utils/utils.dart';
@@ -78,9 +79,8 @@ abstract class Fetcher {
 
             await sembastRepository.updateKidsOf(id: id, kids: kids);
 
-            final Set<int> diff = <int>{
-              ...kids,
-            }.difference(<int>{...previousKids});
+            final Set<int> diff = <int>{...kids}
+                .difference(<int>{...previousKids});
 
             if (diff.isNotEmpty) {
               for (final int newCommentId in diff) {
@@ -135,7 +135,7 @@ abstract class Fetcher {
 
         await flutterLocalNotificationsPlugin.show(
           id: newReply?.id ?? 0,
-          title: 'You have a new reply! ${Constants.happyFace}',
+          title: L10n.current.newReplyNotification,
           body: '${newReply?.by}: $text',
           notificationDetails: const NotificationDetails(
             iOS: DarwinNotificationDetails(

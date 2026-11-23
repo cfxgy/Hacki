@@ -4,6 +4,7 @@ import 'package:hacki/config/constants.dart';
 import 'package:hacki/config/locator.dart';
 import 'package:hacki/cubits/cubits.dart' show ReminderCubit, ReminderState;
 import 'package:hacki/extensions/extensions.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/repositories/repositories.dart';
 import 'package:hacki/screens/screens.dart';
@@ -127,7 +128,7 @@ class _CountDownReminderState extends State<CountdownReminder>
                         child: Row(
                           children: <Widget>[
                             Text(
-                              'Pick up where you left off',
+                              L10n.current.pickUpWhereYouLeftOff,
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.onPrimary,
                                 fontSize: TextDimens.pt12,
@@ -149,12 +150,11 @@ class _CountDownReminderState extends State<CountdownReminder>
                           return LinearProgressIndicator(
                             value: progressAnimation.value,
                             minHeight: Dimens.pt4,
-                            backgroundColor: Theme.of(
-                              context,
-                            ).colorScheme.primary,
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onPrimary.withAlpha(140),
+                            backgroundColor: Theme.of(context)
+                                .colorScheme
+                                .primary,
+                            color: Theme.of(context).colorScheme.onPrimary
+                                .withAlpha(140),
                           );
                         },
                       ),

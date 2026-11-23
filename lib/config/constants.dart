@@ -1,4 +1,5 @@
 import 'package:hacki/extensions/extensions.dart';
+import 'package:hacki/l10n/l10n.dart';
 
 abstract class Constants {
   static const String hackiFirstCommitLink =
@@ -56,18 +57,18 @@ abstract class Constants {
       'Mozilla/5.0 (Linux; Android 16) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.7680.178 Mobile Safari/537.36';
 
   static String get tips => <String>[
-    'Swipe right on story title to vote or share',
-    'Long press on story title to copy its article URL',
-    'Long press on any link in comment or story to copy',
-    'Long press and select text in comment to search on HN',
-    'Text preview on collapsed comment can be turned off in settings',
-    'Use lazy fetching to fetch only the root level comments',
-    'Turn on True Dark Mode in settings to use black background',
-    'Download stories in settings to read stories offline',
-    'Open any Hacker News links in Hacki via the system share menu',
-    '''Swipe right on a comment and tap the dots icon to search for the poster within the thread or across HN''',
-    '''Disabling `Mark Read Stories` in settings will clear your existing read history''',
-    "What's beyond the universe?",
+    L10n.current.tip1,
+    L10n.current.tip2,
+    L10n.current.tip3,
+    L10n.current.tip4,
+    L10n.current.tip5,
+    L10n.current.tip6,
+    L10n.current.tip7,
+    L10n.current.tip8,
+    L10n.current.tip9,
+    L10n.current.tip10,
+    L10n.current.tip11,
+    L10n.current.tip12,
   ].randomlyPicked!;
 
   static final String happyFace = <String>[
@@ -105,9 +106,8 @@ abstract class Constants {
     'Life is too short, carpe diem',
   ].randomlyPicked!;
 
-  static final String errorMessage = 'Something went wrong...$sadFace';
-  static final String loginErrorMessage =
-      '''Failed to log in $sadFace, this could happen if your account requires a CAPTCHA, please try logging in inside a browser to see if this is the case, if so, you may try logging in here again later after CAPTCHA is no longer needed.''';
+  static String get errorMessage => L10n.current.errorGeneric;
+  static String get loginErrorMessage => L10n.current.errorLogin;
 
   static String favicon(String url, {int size = 32}) {
     final Uri uri = Uri.parse(url);
@@ -151,15 +151,12 @@ abstract class HeroTags {
 }
 
 abstract class SnackBarMessages {
-  static const String storyPinned = 'Added to Pins.';
-  static const String storyUnpinned = 'Removed from Pins.';
+  static String get storyPinned => L10n.current.storyPinned;
+  static String get storyUnpinned => L10n.current.storyUnpinned;
 
-  static const String notLoggedInNoVoting =
-      '''Not logged in, no voting! (;｀O´)o''';
-  static const String noVotingOnYourOwnComment =
-      '''No voting on your own post! (;｀O´)o''';
-  static const String karmalyBroke =
-      '''You can't downvote because you are karmaly broke.''';
-  static const String voteSubmitted = 'Vote submitted.';
-  static const String voteCanceled = 'Vote canceled.';
+  static String get notLoggedInNoVoting => L10n.current.notLoggedInNoVoting;
+  static String get noVotingOnYourOwnComment => L10n.current.noVotingOnOwnPost;
+  static String get karmalyBroke => L10n.current.karmaBroke;
+  static String get voteSubmitted => L10n.current.voteSubmitted;
+  static String get voteCanceled => L10n.current.voteCanceled;
 }

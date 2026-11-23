@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hacki/cubits/cubits.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/screens/settings/widgets/proxy_settings_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -11,7 +12,7 @@ class ProxyListTile extends StatelessWidget {
     return BlocBuilder<NetworkProxyCubit, NetworkProxyState>(
       builder: (BuildContext context, NetworkProxyState state) {
         return ListTile(
-          title: const Text('Proxy'),
+          title: Text(L10n.current.proxy),
           subtitle: state.proxy.isActive ? Text(state.proxy.address) : null,
           onTap: () => showDialog<void>(
             context: context,

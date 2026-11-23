@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:hacki/config/constants.dart';
 import 'package:hacki/config/locator.dart';
 import 'package:hacki/extensions/extensions.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/repositories/repositories.dart';
 import 'package:hacki/utils/proxy_http_overrides.dart';
@@ -301,9 +302,9 @@ ${info.toJson()}
 
     late final bool shouldRetry;
     InfoBase? info;
-    String description = sanitizeText(
-      (res?[2] as String?) ?? story.text,
-    ).removeAllEmojis().trim();
+    String description = sanitizeText((res?[2] as String?) ?? story.text)
+        .removeAllEmojis()
+        .trim();
 
     // If description is empty, use one of the comments under the story.
     if (res == null || description.isEmpty) {
@@ -311,7 +312,7 @@ ${info.toJson()}
       final String? commentText = await _fetchInfoFromStory(ids);
       shouldRetry = commentText == null;
       description = commentText.isNullOrEmpty
-          ? 'no comment yet'
+          ? L10n.current.noCommentYet
           : (commentText ?? '');
     } else {
       shouldRetry = false;
@@ -449,9 +450,8 @@ ${info.toJson()}
       } else if (stream.statusCode == HttpStatus.ok) {
         res = await Response.fromStream(stream);
         if (uri.host == 'm.tb.cn') {
-          final RegExpMatch? match = RegExp(
-            r"var url = \'(.*)\'",
-          ).firstMatch(res.body);
+          final RegExpMatch? match = RegExp(r"var url = \'(.*)\'")
+              .firstMatch(res.body);
           if (match != null) {
             final String? newUrl = match.group(1);
             if (newUrl != null) {

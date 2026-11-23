@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hacki/blocs/blocs.dart';
 import 'package:hacki/config/constants.dart';
 import 'package:hacki/extensions/extensions.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/status.dart';
 import 'package:hacki/screens/widgets/widgets.dart';
 import 'package:hacki/styles/styles.dart';
@@ -26,9 +27,7 @@ class _LoginDialogState extends State<LoginDialog> with ItemActionMixin {
       listener: (BuildContext context, AuthState state) {
         if (state.isLoggedIn) {
           context.pop();
-          showSnackBar(
-            content: 'Logged in successfully! ${Constants.happyFace}',
-          );
+          showSnackBar(content: L10n.current.loggedInSuccess);
         }
       },
       builder: (BuildContext context, AuthState state) {
@@ -52,7 +51,7 @@ class _LoginDialogState extends State<LoginDialog> with ItemActionMixin {
                   cursorColor: Theme.of(context).colorScheme.primary,
                   autocorrect: false,
                   autofillHints: const <String>[AutofillHints.username],
-                  decoration: const InputDecoration(hintText: 'Username'),
+                  decoration: InputDecoration(hintText: L10n.current.username),
                 ),
               ),
               const SizedBox(height: Dimens.pt16),
@@ -64,7 +63,7 @@ class _LoginDialogState extends State<LoginDialog> with ItemActionMixin {
                   obscureText: true,
                   autocorrect: false,
                   autofillHints: const <String>[AutofillHints.password],
-                  decoration: const InputDecoration(hintText: 'Password'),
+                  decoration: InputDecoration(hintText: L10n.current.password),
                 ),
               ),
               const SizedBox(height: Dimens.pt16),
@@ -102,9 +101,9 @@ class _LoginDialogState extends State<LoginDialog> with ItemActionMixin {
                     child: Text.rich(
                       TextSpan(
                         children: <InlineSpan>[
-                          const TextSpan(
-                            text: 'I agree to ',
-                            style: TextStyle(fontWeight: FontWeight.w500),
+                          TextSpan(
+                            text: L10n.current.agreeTo,
+                            style: const TextStyle(fontWeight: FontWeight.w500),
                           ),
                           WidgetSpan(
                             child: Transform.translate(
@@ -115,11 +114,11 @@ class _LoginDialogState extends State<LoginDialog> with ItemActionMixin {
                                   context,
                                 ),
                                 child: Text(
-                                  'End User Agreement',
+                                  L10n.current.endUserAgreement,
                                   style: TextStyle(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.primary,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primary,
                                     decoration: TextDecoration.underline,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -143,7 +142,7 @@ class _LoginDialogState extends State<LoginDialog> with ItemActionMixin {
                         context.pop();
                         context.read<AuthBloc>().add(AuthInitialize());
                       },
-                      child: const Text('Cancel'),
+                      child: Text(L10n.current.cancel),
                     ),
                     ElevatedButton(
                       onPressed: () {
@@ -165,7 +164,7 @@ class _LoginDialogState extends State<LoginDialog> with ItemActionMixin {
                         ),
                       ),
                       child: Text(
-                        'Log in',
+                        L10n.current.login,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).colorScheme.onPrimary,

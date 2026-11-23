@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:hacki/config/constants.dart';
 import 'package:hacki/extensions/extensions.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/widgets/link_preview/image_wrapped_text.dart';
 import 'package:hacki/screens/widgets/link_preview/link_view.dart';
@@ -123,9 +124,7 @@ class _LinkPreviewState extends State<LinkPreview> {
   @override
   void initState() {
     _errorTitle = widget.errorTitle ?? Constants.errorMessage;
-    _errorBody =
-        widget.errorBody ??
-        'T_T Oops... Unable to parse the url, please try again later.';
+    _errorBody = widget.errorBody ?? L10n.current.errorPreviewParse;
     _loading = true;
     _getInfo();
 
@@ -229,7 +228,7 @@ class _LinkPreviewState extends State<LinkPreview> {
         url: widget.link,
         readableUrl: widget.story.readableUrl,
         title: widget.story.title,
-        description: desc ?? title ?? 'no comment yet.',
+        description: desc ?? title ?? L10n.current.noCommentYet,
         imageUri: imageUri,
         iconUri: iconUri,
         imagePath: Constants.hackerNewsLogoPath,
@@ -261,7 +260,7 @@ class _LinkPreviewState extends State<LinkPreview> {
             color: Palette.grey[200],
           ),
           alignment: Alignment.center,
-          child: const Text('Fetching data...'),
+          child: Text(L10n.current.fetchingData),
         );
 
     Widget loadedWidget;

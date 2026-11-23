@@ -3,6 +3,7 @@ import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:hacki/config/constants.dart';
 import 'package:hacki/cubits/cubits.dart';
 import 'package:hacki/extensions/extensions.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/screens.dart';
 import 'package:hacki/screens/search/widgets/widgets.dart';
@@ -68,6 +69,16 @@ class _SearchScreenState extends State<SearchScreen> with ItemActionMixin {
 
   void onScroll() => focusNode.unfocus();
 
+  String _typeTagLabel(TypeTagFilter filter) => switch (filter) {
+    StoryFilter() => L10n.current.searchTagStory,
+    PollFilter() => L10n.current.searchTagPoll,
+    CommentFilter() => L10n.current.searchTagComment,
+    FrontPageFilter() => L10n.current.searchTagFrontPage,
+    AskHnFilter() => L10n.current.searchTagAskHn,
+    ShowHnFilter() => L10n.current.searchTagShowHn,
+    _ => filter.query,
+  };
+
   @override
   Widget build(BuildContext context) {
     final PreferenceState prefState = context.watch<PreferenceCubit>().state;
@@ -93,9 +104,9 @@ class _SearchScreenState extends State<SearchScreen> with ItemActionMixin {
                     enablePullDown: false,
                     enablePullUp: true,
                     header: WaterDropMaterialHeader(
-                      backgroundColor: Theme.of(
-                        context,
-                      ).colorScheme.primaryContainer,
+                      backgroundColor: Theme.of(context)
+                          .colorScheme
+                          .primaryContainer,
                       color: Theme.of(context).colorScheme.onPrimaryContainer,
                     ),
                     footer: CustomFooter(
@@ -107,7 +118,7 @@ class _SearchScreenState extends State<SearchScreen> with ItemActionMixin {
                         if (mode == LoadStatus.loading) {
                           body = const CustomCircularProgressIndicator();
                         } else if (mode == LoadStatus.failed) {
-                          body = const Text('loading failed.');
+                          body = Text(L10n.current.loadingFailed);
                         } else {
                           body = const SizedBox.shrink();
                         }
@@ -139,12 +150,12 @@ class _SearchScreenState extends State<SearchScreen> with ItemActionMixin {
                                     .read<SearchCubit>()
                                     .textEditingController,
                                 focusNode: focusNode,
-                                cursorColor: Theme.of(
-                                  context,
-                                ).colorScheme.primary,
+                                cursorColor: Theme.of(context)
+                                    .colorScheme
+                                    .primary,
                                 autocorrect: false,
-                                decoration: const InputDecoration(
-                                  hintText: 'Search Hacker News',
+                                decoration: InputDecoration(
+                                  hintText: L10n.current.searchHackerNews,
                                 ),
                                 onChanged: (String val) {
                                   debouncer.run(() {
@@ -281,7 +292,7 @@ class _SearchScreenState extends State<SearchScreen> with ItemActionMixin {
                                                 DateTimeRangeFilter
                                               >(),
                                           selected: false,
-                                          label: '''reset''',
+                                          label: L10n.current.reset,
                                         ),
                                         const SizedBox(width: Dimens.pt8),
                                       ],
@@ -326,7 +337,7 @@ class _SearchScreenState extends State<SearchScreen> with ItemActionMixin {
                                         .read<SearchCubit>()
                                         .onSortToggled(),
                                     selected: state.params.sorted,
-                                    label: '''newest first''',
+                                    label: L10n.current.newestFirst,
                                   ),
                                   SizedBoxes.pt8,
                                   CustomChip(
@@ -334,7 +345,7 @@ class _SearchScreenState extends State<SearchScreen> with ItemActionMixin {
                                         .read<SearchCubit>()
                                         .onExactMatchToggled(),
                                     selected: state.params.exactMatch,
-                                    label: '''exact match''',
+                                    label: L10n.current.exactMatch,
                                   ),
                                   SizedBoxes.pt8,
                                 ],
@@ -358,7 +369,7 @@ class _SearchScreenState extends State<SearchScreen> with ItemActionMixin {
                                               .params
                                               .get<TypeTagFilter>() ==
                                           filter,
-                                      label: filter.query,
+                                      label: _typeTagLabel(filter),
                                     ),
                                   ],
                                   SizedBoxes.pt8,
@@ -377,8 +388,8 @@ class _SearchScreenState extends State<SearchScreen> with ItemActionMixin {
                               const SizedBox(height: Dimens.pt100),
                               const Center(
                                 child: Text(
-                                  'Nothing found...',
-                                  style: TextStyle(color: Palette.grey),
+                                  L10n.current.nothingFound,
+                                  style: const TextStyle(color: Palette.grey),
                                 ),
                               ),
                             ],

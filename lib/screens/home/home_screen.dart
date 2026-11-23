@@ -12,6 +12,7 @@ import 'package:hacki/config/paths.dart';
 import 'package:hacki/config/router.dart';
 import 'package:hacki/cubits/cubits.dart';
 import 'package:hacki/extensions/extensions.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/main.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/repositories/repositories.dart';
@@ -176,7 +177,9 @@ class _HomeScreenState extends State<HomeScreen>
                               ? ListTile(
                                   leading: const Icon(Icons.push_pin),
                                   title: Text(
-                                    '''${pinState.pinnedItems.length} Pin${pinState.pinnedItems.length > 1 ? 's' : ''}''',
+                                    L10n.current.pinnedCount(
+                                      pinState.pinnedItems.length,
+                                    ),
                                   ),
                                   trailing: const Icon(Icons.chevron_right),
                                   onTap: () {
@@ -229,14 +232,14 @@ class _HomeScreenState extends State<HomeScreen>
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) => AlertDialog(
-          title: const Text('Welcome to Hacki!'),
-          content: const Text('Take a quick tour to see what Hacki can do?'),
+          title: Text(L10n.current.welcomeTitle),
+          content: Text(L10n.current.welcomeBody),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 context.pop();
               },
-              child: const Text('No'),
+              child: Text(L10n.current.no),
             ),
             TextButton(
               onPressed: () {
@@ -251,7 +254,7 @@ class _HomeScreenState extends State<HomeScreen>
                   DiscoverableFeature.jumpDownButton.featureId,
                 });
               },
-              child: const Text('Yes'),
+              child: Text(L10n.current.yes),
             ),
           ],
         ),

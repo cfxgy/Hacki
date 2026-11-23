@@ -1,32 +1,45 @@
+import 'package:hacki/l10n/l10n.dart';
+
 extension DateTimeExtension on DateTime {
   String toTimeAgoString({bool shouldUseAbbreviations = false}) {
     final DateTime now = DateTime.now();
     final Duration diff = now.difference(this);
-    final String hourStr = shouldUseAbbreviations ? 'hr' : 'hour';
-    final String dayStr = shouldUseAbbreviations ? 'day' : 'day';
-    final String minuteStr = shouldUseAbbreviations ? 'min' : 'minute';
-    final String secondStr = shouldUseAbbreviations ? 'sec' : 'second';
+
     if (diff.inDays > 365) {
       final int gap = now.year - year;
-      return '$gap year${gap == 1 ? '' : 's'} ago';
+      return shouldUseAbbreviations
+          ? L10n.current.timeAgoYearsShort(gap)
+          : L10n.current.timeAgoYears(gap);
     } else if (diff.inDays > 30) {
       int gap = now.month - month;
       if (gap <= 0) {
         gap = now.month + 12 - month;
       }
-      return '$gap month${gap == 1 ? '' : 's'} ago';
+      return shouldUseAbbreviations
+          ? L10n.current.timeAgoMonthsShort(gap)
+          : L10n.current.timeAgoMonths(gap);
     } else if (diff.inDays >= 1) {
       if (diff.inHours <= 24) {
-        return '${diff.inHours} $hourStr${diff.inHours == 1 ? '' : 's'} ago';
+        return shouldUseAbbreviations
+            ? L10n.current.timeAgoHoursShort(diff.inHours)
+            : L10n.current.timeAgoHours(diff.inHours);
       }
-      return '${diff.inDays} $dayStr${diff.inDays == 1 ? '' : 's'} ago';
+      return shouldUseAbbreviations
+          ? L10n.current.timeAgoDaysShort(diff.inDays)
+          : L10n.current.timeAgoDays(diff.inDays);
     } else if (diff.inHours >= 1) {
-      return '${diff.inHours} $hourStr${diff.inHours == 1 ? '' : 's'} ago';
+      return shouldUseAbbreviations
+          ? L10n.current.timeAgoHoursShort(diff.inHours)
+          : L10n.current.timeAgoHours(diff.inHours);
     } else if (diff.inMinutes >= 1) {
-      return '''${diff.inMinutes} $minuteStr${diff.inMinutes == 1 ? '' : 's'} ago''';
+      return shouldUseAbbreviations
+          ? L10n.current.timeAgoMinutesShort(diff.inMinutes)
+          : L10n.current.timeAgoMinutes(diff.inMinutes);
     } else if (diff.inSeconds >= 1) {
-      return '''${diff.inSeconds} $secondStr${diff.inSeconds == 1 ? '' : 's'} ago''';
+      return shouldUseAbbreviations
+          ? L10n.current.timeAgoSecondsShort(diff.inSeconds)
+          : L10n.current.timeAgoSeconds(diff.inSeconds);
     }
-    return 'just now';
+    return L10n.current.justNow;
   }
 }

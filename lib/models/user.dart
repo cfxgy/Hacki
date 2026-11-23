@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:intl/intl.dart';
 
 class User extends Equatable {
@@ -31,10 +32,12 @@ class User extends Equatable {
   final String id;
   final int karma;
 
-  static final DateFormat _dateTimeFormatter = DateFormat.yMMMd();
-
   String get description {
-    return '''$karma karma, created on ${_dateTimeFormatter.format(DateTime.fromMillisecondsSinceEpoch(created * 1000))}''';
+    final DateFormat formatter = DateFormat.yMMMd(L10n.current.localeName);
+    final String date = formatter.format(
+      DateTime.fromMillisecondsSinceEpoch(created * 1000),
+    );
+    return L10n.current.userKarmaCreated(L10n.formatNumber(karma), date);
   }
 
   @override

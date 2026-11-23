@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hacki/config/constants.dart';
 import 'package:hacki/cubits/cubits.dart';
 import 'package:hacki/extensions/extensions.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/settings/item_menu_settings_screen.dart';
 import 'package:hacki/styles/styles.dart';
@@ -33,9 +34,8 @@ class SlideActionSettings extends StatelessWidget {
       );
       return;
     }
-    Navigator.of(
-      context,
-    ).push<void>(MaterialPageRoute<void>(builder: (_) => settings));
+    Navigator.of(context)
+        .push<void>(MaterialPageRoute<void>(builder: (_) => settings));
   }
 
   @override
@@ -95,10 +95,10 @@ class SlideActionSettings extends StatelessWidget {
                                   ),
                                   SizedBoxes.pt4,
                                   IconButton(
-                                    tooltip: 'Customize item actions',
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.primary,
+                                    tooltip: L10n.current.customizeItemActions,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primary,
                                     constraints: const BoxConstraints.tightFor(
                                       width: Dimens.pt48,
                                       height: Dimens.pt48,
@@ -139,17 +139,19 @@ class SlideActionSettings extends StatelessWidget {
                     mainAxisAlignment: .center,
                     children: <Widget>[
                       SizedBoxes.pt16,
-                      const Column(
+                      Column(
                         mainAxisSize: .min,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[Text('Leading slide action')],
+                        children: <Widget>[
+                          Text(L10n.current.leadingSlideAction),
+                        ],
                       ),
                       Expanded(
                         child: Center(
                           heightFactor: 1,
                           child: IconButton(
                             icon: const Icon(Icons.swap_horiz),
-                            tooltip: 'Swap leading and trailing panes',
+                            tooltip: L10n.current.swapLeadingTrailing,
                             constraints: const BoxConstraints.tightFor(
                               width: Dimens.pt48,
                               height: Dimens.pt48,
@@ -166,10 +168,12 @@ class SlideActionSettings extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const Column(
+                      Column(
                         mainAxisSize: .min,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[Text('Trailing slide action')],
+                        children: <Widget>[
+                          Text(L10n.current.trailingSlideAction),
+                        ],
                       ),
                       SizedBoxes.pt16,
                     ],
@@ -193,9 +197,9 @@ class _SlideActionMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final InputBorder? enabledBorder = Theme.of(
-      context,
-    ).inputDecorationTheme.enabledBorder;
+    final InputBorder? enabledBorder = Theme.of(context)
+        .inputDecorationTheme
+        .enabledBorder;
     final BorderSide borderSide = enabledBorder is UnderlineInputBorder
         ? enabledBorder.borderSide
         : BorderSide(color: Theme.of(context).dividerColor);

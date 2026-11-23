@@ -4,6 +4,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hacki/blocs/blocs.dart';
 import 'package:hacki/cubits/cubits.dart';
 import 'package:hacki/extensions/extensions.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/widgets/widgets.dart';
 import 'package:hacki/styles/styles.dart';
@@ -161,7 +162,9 @@ class _StoriesListViewState extends State<StoriesListView>
                             ),
                           ),
                           child: Text(
-                            '''Load Page ${(state.currentPageByType[widget.storyType] ?? 0) + 1}''',
+                            L10n.current.loadPage(
+                              '${(state.currentPageByType[widget.storyType] ?? 0) + 1}',
+                            ),
                           ),
                         ),
                       ),
@@ -186,12 +189,12 @@ class _StoriesListViewState extends State<StoriesListView>
                           HapticFeedbackUtils.light();
                           pinStory(story);
                         },
-                        backgroundColor: Theme.of(
-                          context,
-                        ).colorScheme.primaryContainer,
-                        foregroundColor: Theme.of(
-                          context,
-                        ).colorScheme.onPrimaryContainer,
+                        backgroundColor: Theme.of(context)
+                            .colorScheme
+                            .primaryContainer,
+                        foregroundColor: Theme.of(context)
+                            .colorScheme
+                            .onPrimaryContainer,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
@@ -204,9 +207,10 @@ class _StoriesListViewState extends State<StoriesListView>
                               Text(
                                 'Pin',
                                 style: TextStyle(
-                                  fontFamily: Theme.of(
-                                    context,
-                                  ).textTheme.bodyMedium?.fontFamily,
+                                  fontFamily: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.fontFamily,
                                 ),
                               ),
                           ],
@@ -214,12 +218,12 @@ class _StoriesListViewState extends State<StoriesListView>
                       ),
                       CustomSlidableAction(
                         onPressed: (_) => onMoreTapped(story, context.rect),
-                        backgroundColor: Theme.of(
-                          context,
-                        ).colorScheme.primaryContainer,
-                        foregroundColor: Theme.of(
-                          context,
-                        ).colorScheme.onPrimaryContainer,
+                        backgroundColor: Theme.of(context)
+                            .colorScheme
+                            .primaryContainer,
+                        foregroundColor: Theme.of(context)
+                            .colorScheme
+                            .onPrimaryContainer,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
@@ -229,9 +233,10 @@ class _StoriesListViewState extends State<StoriesListView>
                               Text(
                                 'More',
                                 style: TextStyle(
-                                  fontFamily: Theme.of(
-                                    context,
-                                  ).textTheme.bodyMedium?.fontFamily,
+                                  fontFamily: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.fontFamily,
                                 ),
                               ),
                           ],
@@ -256,9 +261,9 @@ class _StoriesListViewState extends State<StoriesListView>
                             preferenceState.isMarkReadStoriesEnabled
                             ? Theme.of(context).colorScheme.primaryContainer
                             : Palette.grey,
-                        foregroundColor: Theme.of(
-                          context,
-                        ).colorScheme.onPrimaryContainer,
+                        foregroundColor: Theme.of(context)
+                            .colorScheme
+                            .onPrimaryContainer,
                         child: preferenceState.isHideInsteadOfMarkingGrayEnabled
                             ? const Icon(Icons.delete_sweep, size: Dimens.pt24)
                             : Icon(
@@ -337,7 +342,7 @@ class _StoriesListViewState extends State<StoriesListView>
         storiesBloc.add(StoryRead(story: story));
       }
     } else {
-      context.showSnackBar(content: 'Read story marking is disabled.');
+      context.showSnackBar(content: L10n.current.readMarkingDisabled);
     }
   }
 

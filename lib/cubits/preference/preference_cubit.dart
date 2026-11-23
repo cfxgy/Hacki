@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart' show Locale;
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:hacki/config/locator.dart';
 import 'package:hacki/extensions/extensions.dart';
@@ -93,6 +94,10 @@ class PreferenceCubit extends Cubit<PreferenceState> with Loggable {
 
     if (preference is EyeCandyPreference && preference.val as bool) {
       unawaited(HapticFeedbackUtils.loadAndPlay());
+    }
+
+    if (preference is LanguagePreference) {
+      DateDisplayFormat.clearCache();
     }
 
     switch (preference.val) {

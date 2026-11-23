@@ -4,6 +4,7 @@ import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:hacki/blocs/blocs.dart';
 import 'package:hacki/cubits/cubits.dart';
 import 'package:hacki/extensions/context_extension.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/widgets/widgets.dart';
 import 'package:hacki/styles/styles.dart';
@@ -132,7 +133,10 @@ class ItemsListView<T extends Item> extends StatelessWidget {
                                 children: <Widget>[
                                   Text(
                                     shouldShowAuthor
-                                        ? '''${e.timeAgo} by ${e.by}'''
+                                        ? L10n.current.byAuthorTime(
+                                            e.by,
+                                            e.timeAgo,
+                                          )
                                         : e.timeAgo,
                                     style: TextStyle(
                                       color: Theme.of(context).metadataColor,
@@ -208,8 +212,8 @@ class ItemsListView<T extends Item> extends StatelessWidget {
                                 child: Padding(
                                   padding: EdgeInsets.only(top: Dimens.pt6),
                                   child: Text(
-                                    'deleted',
-                                    style: TextStyle(color: Palette.grey),
+                                    L10n.current.deleted,
+                                    style: const TextStyle(color: Palette.grey),
                                   ),
                                 ),
                               ),
@@ -221,7 +225,10 @@ class ItemsListView<T extends Item> extends StatelessWidget {
                                   children: <Widget>[
                                     Text(
                                       shouldShowAuthor
-                                          ? '''${e.timeAgo} by ${e.by}'''
+                                          ? L10n.current.byAuthorTime(
+                                              e.by,
+                                              e.timeAgo,
+                                            )
                                           : e.timeAgo,
                                       style: TextStyle(
                                         color: Theme.of(context).metadataColor,
@@ -237,9 +244,9 @@ class ItemsListView<T extends Item> extends StatelessWidget {
                                     fontSize: TextDimens.pt16,
                                   ),
                                   linkStyle: TextStyle(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.primary,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primary,
                                   ),
                                   onOpen: (LinkableElement link) =>
                                       LinkUtils.launch(link.url, context),
@@ -283,7 +290,7 @@ class ItemsListView<T extends Item> extends StatelessWidget {
           if (mode == LoadStatus.loading) {
             body = const CustomCircularProgressIndicator();
           } else if (mode == LoadStatus.failed) {
-            body = const Text('loading failed.');
+            body = Text(L10n.current.loadingFailed);
           } else {
             body = const SizedBox.shrink();
           }

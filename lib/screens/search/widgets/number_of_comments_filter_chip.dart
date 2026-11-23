@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart'
     show CommentsNumberFilter, NumericCondition;
 import 'package:hacki/screens/widgets/widgets.dart';
@@ -26,8 +27,11 @@ class NumberOfCommentsFilterChip extends StatelessWidget {
       },
       selected: filter != null,
       label: filter == null
-          ? 'num_cmt'
-          : '${filter!.condition.operator} ${filter!.commentsNumber} comments',
+          ? L10n.current.commentsFilter
+          : L10n.current.commentsFilterWithCondition(
+              filter!.condition.operator,
+              L10n.formatNumber(filter!.commentsNumber),
+            ),
     );
   }
 
@@ -101,7 +105,9 @@ class _NumberOfCommentsDialogState extends State<_NumberOfCommentsDialog> {
             cursorColor: Theme.of(context).colorScheme.primary,
             keyboardType: TextInputType.number,
             autocorrect: false,
-            decoration: const InputDecoration(hintText: 'Number of comments'),
+            decoration: InputDecoration(
+              hintText: L10n.current.numberOfComments,
+            ),
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.digitsOnly,
             ],
@@ -115,11 +121,11 @@ class _NumberOfCommentsDialogState extends State<_NumberOfCommentsDialog> {
             children: <Widget>[
               TextButton(
                 onPressed: () => context.pop(widget.filter),
-                child: const Text('Cancel'),
+                child: Text(L10n.current.cancel),
               ),
               TextButton(
                 onPressed: () => context.pop(),
-                child: const Text('Remove'),
+                child: Text(L10n.current.remove),
               ),
               SizedBoxes.pt6,
               ElevatedButton(
@@ -134,7 +140,7 @@ class _NumberOfCommentsDialogState extends State<_NumberOfCommentsDialog> {
                   );
                   context.pop(filter);
                 },
-                child: const Text('Confirm'),
+                child: Text(L10n.current.confirm),
               ),
             ],
           ),

@@ -117,6 +117,14 @@ class PreferenceState extends Equatable {
 
   bool get isDevModeEnabled => _isOn<DevMode>();
 
+  String get language => preferences.singleWhereType<LanguagePreference>().val;
+
+  Locale? get locale => switch (language) {
+    LanguagePreference.english => const Locale('en'),
+    LanguagePreference.system => null,
+    _ => const Locale('zh'),
+  };
+
   bool get areSlidePanesSwapped => _isOn<SwappedSlidePanesPreference>();
 
   bool get isDynamicColorEnabled => _isOn<DynamicColorPreference>();
@@ -142,9 +150,8 @@ class PreferenceState extends Equatable {
 
   MaterialColor get appColor {
     return materialColors.elementAt(
-          preferences.singleWhereType<AppColorPreference>().val,
-        )
-        as MaterialColor;
+      preferences.singleWhereType<AppColorPreference>().val,
+    ) as MaterialColor;
   }
 
   HackerNewsDataSource get dataSource {

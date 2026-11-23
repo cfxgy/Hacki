@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hacki/blocs/blocs.dart';
 import 'package:hacki/config/constants.dart';
 import 'package:hacki/extensions/extensions.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/services/dialog_proxy.dart';
 import 'package:hacki/styles/styles.dart';
 import 'package:hacki/utils/haptic_feedback_utils.dart';
@@ -149,12 +150,13 @@ class _DownloadProgressReminderState extends State<DownloadProgressReminder>
                                       return LinearProgressIndicator(
                                         value: progressAnimation.value,
                                         minHeight: Dimens.pt4,
-                                        backgroundColor: Theme.of(
-                                          context,
-                                        ).colorScheme.primary,
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.onPrimary.withAlpha(140),
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary
+                                            .withAlpha(140),
                                       );
                                     },
                                   ),
@@ -186,7 +188,10 @@ class _DownloadProgressReminderState extends State<DownloadProgressReminder>
                           child: Material(
                             color: Palette.transparent,
                             child: Text(
-                              '''Downloading stories ($storiesDownloaded/$storiesToBeDownloaded)''',
+                              L10n.current.downloadingStories(
+                                '$storiesDownloaded',
+                                '$storiesToBeDownloaded',
+                              ),
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.onPrimary,
                                 fontSize: TextDimens.pt12,

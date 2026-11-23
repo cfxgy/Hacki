@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hacki/cubits/cubits.dart';
 import 'package:hacki/extensions/extensions.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/styles/styles.dart';
 import 'package:hacki/utils/utils.dart';
@@ -38,7 +39,7 @@ class _SubmitScreenState extends State<SubmitScreen> with ItemActionMixin {
         if (state.status == Status.success) {
           context.pop();
           HapticFeedbackUtils.light();
-          showSnackBar(content: 'Post submitted.');
+          showSnackBar(content: L10n.current.postSubmitted);
         } else if (state.status == Status.failure) {
           showErrorSnackBar();
         }
@@ -67,17 +68,17 @@ class _SubmitScreenState extends State<SubmitScreen> with ItemActionMixin {
                   barrierDismissible: false,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: const Text('Quit editing?'),
+                      title: Text(L10n.current.quitEditing),
                       actions: <Widget>[
                         TextButton(
                           onPressed: () => context.pop(false),
-                          child: const Text('Cancel'),
+                          child: Text(L10n.current.cancel),
                         ),
                         TextButton(
                           onPressed: () => context.pop(true),
-                          child: const Text(
-                            'Yes',
-                            style: TextStyle(color: Palette.red),
+                          child: Text(
+                            L10n.current.yes,
+                            style: const TextStyle(color: Palette.red),
                           ),
                         ),
                       ],
@@ -91,7 +92,7 @@ class _SubmitScreenState extends State<SubmitScreen> with ItemActionMixin {
               },
             ),
             title: Text(
-              'Submit',
+              L10n.current.submit,
               style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             ),
             actions: <Widget>[
@@ -122,17 +123,17 @@ class _SubmitScreenState extends State<SubmitScreen> with ItemActionMixin {
                       barrierDismissible: false,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: const Text('Submit?'),
+                          title: Text(L10n.current.submitQuestion),
                           actions: <Widget>[
                             TextButton(
                               onPressed: () => context.pop(false),
-                              child: const Text('Cancel'),
+                              child: Text(L10n.current.cancel),
                             ),
                             TextButton(
                               onPressed: () => context.pop(true),
-                              child: const Text(
-                                'Yes',
-                                style: TextStyle(color: Palette.red),
+                              child: Text(
+                                L10n.current.yes,
+                                style: const TextStyle(color: Palette.red),
                               ),
                             ),
                           ],
@@ -161,7 +162,9 @@ class _SubmitScreenState extends State<SubmitScreen> with ItemActionMixin {
                   cursorColor: Theme.of(context).colorScheme.primary,
                   autocorrect: false,
                   maxLength: 80,
-                  decoration: const InputDecoration(hintText: 'Title'),
+                  decoration: InputDecoration(
+                    hintText: L10n.current.titleLabel,
+                  ),
                   onChanged: context.read<SubmitCubit>().onTitleChanged,
                 ),
               ),
@@ -172,13 +175,13 @@ class _SubmitScreenState extends State<SubmitScreen> with ItemActionMixin {
                   controller: urlEditingController,
                   cursorColor: Theme.of(context).colorScheme.primary,
                   autocorrect: false,
-                  decoration: const InputDecoration(hintText: 'Url'),
+                  decoration: InputDecoration(hintText: L10n.current.urlLabel),
                   onChanged: context.read<SubmitCubit>().onUrlChanged,
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: Dimens.pt12),
-                child: Center(child: Text('or')),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: Dimens.pt12),
+                child: Center(child: Text(L10n.current.orLabel)),
               ),
               Expanded(
                 child: Padding(
@@ -188,8 +191,8 @@ class _SubmitScreenState extends State<SubmitScreen> with ItemActionMixin {
                     controller: textEditingController,
                     cursorColor: Theme.of(context).colorScheme.primary,
                     maxLines: 200,
-                    decoration: const InputDecoration(
-                      hintText: 'Text',
+                    decoration: InputDecoration(
+                      hintText: L10n.current.textLabel,
                       enabledBorder: .none,
                       disabledBorder: .none,
                       errorBorder: .none,

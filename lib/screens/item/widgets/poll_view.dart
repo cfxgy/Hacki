@@ -4,6 +4,7 @@ import 'package:hacki/blocs/auth/auth_bloc.dart';
 import 'package:hacki/config/constants.dart';
 import 'package:hacki/cubits/cubits.dart';
 import 'package:hacki/extensions/extensions.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/styles/styles.dart';
 import 'package:hacki/utils/utils.dart';
@@ -31,7 +32,9 @@ class _PollViewState extends State<PollView> with ItemActionMixin {
                 children: <Widget>[
                   const SizedBox(width: Dimens.pt24),
                   Text(
-                    'Total votes: ${state.totalVotes}',
+                    L10n.current.totalVotes(
+                      L10n.formatNumber(state.totalVotes),
+                    ),
                     style: const TextStyle(fontSize: TextDimens.pt14),
                   ),
                 ],
@@ -66,7 +69,7 @@ class _PollViewState extends State<PollView> with ItemActionMixin {
                           content: SnackBarMessages.notLoggedInNoVoting,
                           persist: false,
                           action: onLoginTapped,
-                          label: 'Log in',
+                          label: L10n.current.login,
                         );
                       } else if (voteState.status ==
                           VoteStatus.failureBeHumble) {
@@ -103,7 +106,7 @@ class _PollViewState extends State<PollView> with ItemActionMixin {
                                 children: <Widget>[
                                   Text(option.text),
                                   Text(
-                                    '''${option.score} vote${option.score > 1 ? 's' : ''}''',
+                                    L10n.current.voteCount(option.score),
                                     style: const TextStyle(
                                       color: Palette.grey,
                                       fontSize: TextDimens.pt12,
@@ -112,9 +115,9 @@ class _PollViewState extends State<PollView> with ItemActionMixin {
                                   const SizedBox(height: Dimens.pt4),
                                   LinearProgressIndicator(
                                     value: option.ratio,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.primary,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primary,
                                   ),
                                 ],
                               ),

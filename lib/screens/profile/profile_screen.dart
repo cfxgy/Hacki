@@ -5,6 +5,7 @@ import 'package:hacki/config/constants.dart';
 import 'package:hacki/config/paths.dart';
 import 'package:hacki/cubits/cubits.dart';
 import 'package:hacki/extensions/extensions.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/profile/models/models.dart';
 import 'package:hacki/screens/profile/widgets/widgets.dart';
@@ -86,10 +87,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                             if ((!authState.isLoggedIn ||
                                     historyState.submittedItems.isEmpty) &&
                                 historyState.status != Status.inProgress) {
-                              return const CenteredMessageView(
-                                content:
-                                    'Your past comments and stories will '
-                                    'show up here.',
+                              return CenteredMessageView(
+                                content: L10n.current.profileEmpty,
                               );
                             }
 
@@ -154,10 +153,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                   child: Visibility(
                     visible: pageType == PageType.notification,
                     child: notificationState.comments.isEmpty
-                        ? const CenteredMessageView(
-                            content:
-                                'New replies to your comments or stories '
-                                'will show up here.',
+                        ? CenteredMessageView(
+                            content: L10n.current.notificationEmpty,
                           )
                         : InboxView(
                             refreshController: refreshControllerNotification,
@@ -220,15 +217,15 @@ class _ProfileScreenState extends State<ProfileScreen>
                           const SizedBox(width: Dimens.pt12),
                           if (authState.isLoggedIn) ...<Widget>[
                             CustomChip(
-                              label: 'Submit',
+                              label: L10n.current.submitTab,
                               selected: false,
                               onSelected: (bool val) {
                                 if (authState.isLoggedIn) {
                                   context.push(Paths.item.submit);
                                 } else {
                                   showSnackBar(
-                                    content: 'You need to log in first.',
-                                    label: 'Log in',
+                                    content: L10n.current.logInFirst,
+                                    label: L10n.current.login,
                                     action: onLoginTapped,
                                   );
                                 }
@@ -237,7 +234,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                             const SizedBox(width: Dimens.pt12),
                             CustomChip(
                               label:
-                                  '''Inbox : ${notificationState.unreadCommentsIds.length}''',
+                                  '''${L10n.current.inbox} : ${notificationState.unreadCommentsIds.length}''',
                               selected: pageType == PageType.notification,
                               onSelected: (bool val) {
                                 if (val) {
@@ -250,7 +247,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                             const SizedBox(width: Dimens.pt12),
                           ],
                           CustomChip(
-                            label: 'Favorite',
+                            label: L10n.current.favoriteTab,
                             selected: pageType == PageType.fav,
                             onSelected: (bool val) {
                               if (val) {
@@ -263,7 +260,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                           const SizedBox(width: Dimens.pt12),
                           if (authState.isLoggedIn) ...<Widget>[
                             CustomChip(
-                              label: 'Submitted',
+                              label: L10n.current.submitted,
                               selected: pageType == PageType.history,
                               onSelected: (bool val) {
                                 if (val) {
@@ -276,7 +273,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                             const SizedBox(width: Dimens.pt12),
                           ],
                           CustomChip(
-                            label: 'Search',
+                            label: L10n.current.searchTab,
                             selected: pageType == PageType.search,
                             onSelected: (bool val) {
                               if (val) {
@@ -288,7 +285,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                           ),
                           const SizedBox(width: Dimens.pt12),
                           CustomChip(
-                            label: 'Settings',
+                            label: L10n.current.settingsTab,
                             selected: pageType == PageType.settings,
                             onSelected: (bool val) {
                               if (val) {

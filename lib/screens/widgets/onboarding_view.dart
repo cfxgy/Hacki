@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:hacki/config/constants.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/screens/widgets/widgets.dart';
 import 'package:hacki/styles/styles.dart';
 import 'package:hacki/utils/utils.dart';
@@ -45,20 +46,18 @@ class _OnboardingViewState extends State<OnboardingView> {
               child: PageView(
                 controller: pageController,
                 scrollDirection: Axis.vertical,
-                children: const <Widget>[
+                children: <Widget>[
                   _PageViewChild(
                     path: Constants.commentTileRightSlidePath,
-                    description: '''Swipe right to reply, vote, and more.''',
+                    description: L10n.current.onboardingSwipeRight,
                   ),
                   _PageViewChild(
                     path: Constants.commentTileLeftSlidePath,
-                    description:
-                        '''Swipe left to view all ancestor comments.''',
+                    description: L10n.current.onboardingSwipeLeft,
                   ),
                   _PageViewChild(
                     path: Constants.commentTileTopTapPath,
-                    description:
-                        '''Tap anywhere on a comment to collapse it. Long press any link to copy it.''',
+                    description: L10n.current.onboardingTap,
                   ),
                 ],
               ),

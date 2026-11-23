@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hacki/config/constants.dart';
 import 'package:hacki/cubits/cubits.dart';
 import 'package:hacki/extensions/context_extension.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/discoverable_feature.dart';
 import 'package:hacki/screens/widgets/widgets.dart';
 import 'package:hacki/styles/styles.dart';
@@ -68,9 +69,10 @@ class FloatingSkipButtons extends StatelessWidget {
                   },
                   child: FloatingActionButton(
                     enableFeedback: false,
-                    backgroundColor: Theme.of(
-                      context,
-                    ).colorScheme.primaryContainer.withAlpha(200),
+                    backgroundColor: Theme.of(context)
+                        .colorScheme
+                        .primaryContainer
+                        .withAlpha(200),
 
                     /// Randomly generated string as heroTag to
                     /// prevent default [FloatingActionButton]
@@ -119,9 +121,10 @@ class FloatingSkipButtons extends StatelessWidget {
                   },
                   child: FloatingActionButton(
                     enableFeedback: false,
-                    backgroundColor: Theme.of(
-                      context,
-                    ).colorScheme.primaryContainer.withAlpha(200),
+                    backgroundColor: Theme.of(context)
+                        .colorScheme
+                        .primaryContainer
+                        .withAlpha(200),
 
                     /// Same as above.
                     heroTag: UniqueKey().hashCode,
@@ -129,7 +132,7 @@ class FloatingSkipButtons extends StatelessWidget {
                       HapticFeedbackUtils.selection();
                       context.read<CommentsCubit>().scrollToNextRoot(
                         onError: () => context.showSnackBar(
-                          content: '''No more root level comment below.''',
+                          content: L10n.current.noMoreRootComment,
                         ),
                       );
                     },
@@ -257,7 +260,7 @@ class _BackButton extends StatelessWidget {
       builder: (BuildContext context, bool canNavigateBack) {
         return _NavigationHistoryButton(
           icon: Icons.turn_left,
-          tooltip: 'Back to previous position',
+          tooltip: L10n.current.backToPreviousPosition,
           isEnabled: canNavigateBack,
           isDragging: isDragging,
           onPressed: context.read<CommentsCubit>().navigateBack,
@@ -279,7 +282,7 @@ class _ForwardButton extends StatelessWidget {
       builder: (BuildContext context, bool canNavigateForward) {
         return _NavigationHistoryButton(
           icon: Icons.turn_right,
-          tooltip: 'Forward to next position',
+          tooltip: L10n.current.forwardToNextPosition,
           isEnabled: canNavigateForward,
           isDragging: isDragging,
           onPressed: context.read<CommentsCubit>().navigateForward,

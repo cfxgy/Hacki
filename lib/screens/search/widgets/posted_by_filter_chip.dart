@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/widgets/widgets.dart';
 import 'package:hacki/styles/styles.dart';
@@ -25,7 +26,7 @@ class PostedByFilterChip extends StatelessWidget {
         onChanged(username);
       },
       selected: filter != null,
-      label: '''posted by ${filter?.author ?? ''}'''.trimRight(),
+      label: L10n.current.postedByFilter(filter?.author ?? ''),
     );
   }
 
@@ -48,7 +49,9 @@ class PostedByFilterChip extends StatelessWidget {
                 controller: usernameController,
                 cursorColor: Theme.of(context).colorScheme.primary,
                 autocorrect: false,
-                decoration: const InputDecoration(hintText: 'Username'),
+                decoration: InputDecoration(
+                  hintText: L10n.current.usernameHint,
+                ),
               ),
             ),
             const SizedBox(height: Dimens.pt16),
@@ -59,18 +62,18 @@ class PostedByFilterChip extends StatelessWidget {
                 children: <Widget>[
                   TextButton(
                     onPressed: () => context.pop(filter?.author),
-                    child: const Text('Cancel'),
+                    child: Text(L10n.current.cancel),
                   ),
                   TextButton(
                     onPressed: () => context.pop(),
-                    child: const Text('Clear'),
+                    child: Text(L10n.current.clear),
                   ),
                   ElevatedButton(
                     onPressed: () {
                       final String text = usernameController.text.trim();
                       context.pop(text.isEmpty ? null : text);
                     },
-                    child: const Text('Confirm'),
+                    child: Text(L10n.current.confirm),
                   ),
                 ],
               ),

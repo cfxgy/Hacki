@@ -11,6 +11,7 @@ import 'package:hacki/config/constants.dart';
 import 'package:hacki/config/paths.dart';
 import 'package:hacki/cubits/cubits.dart';
 import 'package:hacki/extensions/extensions.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/item/item_screen.dart' show ItemScreenArgs;
 import 'package:hacki/screens/item/widgets/widgets.dart';
@@ -109,9 +110,10 @@ class MainView extends StatelessWidget {
                             preferenceState: preferenceState,
                             splitViewEnabled: splitViewEnabled,
                             onMoreTapped: onMoreTapped,
-                            onSlideActionTapped:
-                                (Item item, SlideAction action) =>
-                                    onSlideActionTapped(context, item, action),
+                            onSlideActionTapped: (
+                              Item item,
+                              SlideAction action,
+                            ) => onSlideActionTapped(context, item, action),
                             onStoryUrlTapped: onStoryUrlTapped,
                           ),
                         ),
@@ -156,7 +158,7 @@ class MainView extends StatelessWidget {
                                     )
                                   else if (DateUtils.isMidnight)
                                     Text(
-                                      'Time for bed',
+                                      L10n.current.timeForBed,
                                       style: TextStyle(
                                         color: Theme.of(context).hintColor,
                                         fontSize: TextDimens.pt10,
@@ -166,7 +168,9 @@ class MainView extends StatelessWidget {
                                     )
                                   else if (DateUtils.isTodayAnniversary)
                                     Text(
-                                      '''Hacki turns ${DateUtils.yearsSinceFirstCommit} today!''',
+                                      L10n.current.anniversary(
+                                        '${DateUtils.yearsSinceFirstCommit}',
+                                      ),
                                       style: TextStyle(
                                         color: Theme.of(context).hintColor,
                                         fontSize: TextDimens.pt10,
@@ -326,7 +330,7 @@ class MainView extends StatelessWidget {
             },
           );
         },
-        label: 'Log in',
+        label: L10n.current.login,
       );
     }
   }
@@ -372,7 +376,7 @@ class MainView extends StatelessWidget {
             },
           );
         },
-        label: 'Log in',
+        label: L10n.current.login,
       );
     }
   }
@@ -454,10 +458,10 @@ class MainView extends StatelessWidget {
     final bool isFav = favCubit.state.favIds.contains(item.id);
     if (isFav) {
       favCubit.removeFav(item.id);
-      context.showSnackBar(content: 'Removed from favorites.');
+      context.showSnackBar(content: L10n.current.removedFromFavorites);
     } else {
       favCubit.addFav(item.id);
-      context.showSnackBar(content: 'Added to favorites.');
+      context.showSnackBar(content: L10n.current.addedToFavorites);
     }
     HapticFeedbackUtils.success();
   }
@@ -476,7 +480,7 @@ class MainView extends StatelessWidget {
                   .fontSize
                   .fontSize;
               return AlertDialog(
-                title: Text('About $username'),
+                title: Text(L10n.current.aboutUser(username)),
                 content: state.status == Status.inProgress
                     ? const SizedBox(
                         height: Dimens.pt40,
@@ -486,7 +490,10 @@ class MainView extends StatelessWidget {
                     ? const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text('empty', style: TextStyle(color: Palette.grey)),
+                          Text(
+                            L10n.current.empty,
+                            style: const TextStyle(color: Palette.grey),
+                          ),
                         ],
                       )
                     : SelectableLinkify(
@@ -501,7 +508,10 @@ class MainView extends StatelessWidget {
                         semanticsLabel: state.user.about,
                       ),
                 actions: <Widget>[
-                  TextButton(onPressed: context.pop, child: const Text('Okay')),
+                  TextButton(
+                    onPressed: context.pop,
+                    child: Text(L10n.current.okay),
+                  ),
                 ],
               );
             },
@@ -557,8 +567,12 @@ class _ParentItemSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final Item item = state.item;
     return Semantics(
-      label:
-          '''Posted by ${item.by} ${item.timeAgo}, ${item.title}. ${item.text}''',
+      label: L10n.current.postedBy(
+        item.by,
+        item.timeAgo,
+        item.title,
+        item.text,
+      ),
       child: Column(
         children: <Widget>[
           if (!splitViewEnabled)
@@ -620,9 +634,10 @@ class _ParentItemSection extends StatelessWidget {
                     ),
                   ),
                   BlocBuilder<PreferenceCubit, PreferenceState>(
-                    buildWhen:
-                        (PreferenceState previous, PreferenceState current) =>
-                            previous.fontSize != current.fontSize,
+                    buildWhen: (
+                      PreferenceState previous,
+                      PreferenceState current,
+                    ) => previous.fontSize != current.fontSize,
                     builder: (BuildContext context, PreferenceState prefState) {
                       final double fontSize = prefState.fontSize.fontSize;
                       return Column(
@@ -654,7 +669,7 @@ class _ParentItemSection extends StatelessWidget {
                                     HapticFeedbackUtils.selection();
                                     if (context.mounted) {
                                       context.showSnackBar(
-                                        content: 'Link copied.',
+                                        content: L10n.current.linkCopied,
                                       );
                                     }
                                   });
@@ -677,9 +692,9 @@ class _ParentItemSection extends StatelessWidget {
                                           fontWeight: FontWeight.bold,
                                           fontSize: fontSize,
                                           color: item.url.isNotEmpty
-                                              ? Theme.of(
-                                                  context,
-                                                ).colorScheme.primary
+                                              ? Theme.of(context)
+                                                    .colorScheme
+                                                    .primary
                                               : null,
                                         ),
                                       ),
@@ -689,9 +704,9 @@ class _ParentItemSection extends StatelessWidget {
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: fontSize - 4,
-                                            color: Theme.of(
-                                              context,
-                                            ).colorScheme.primary,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
                                           ),
                                         ),
                                     ],
@@ -714,9 +729,8 @@ class _ParentItemSection extends StatelessWidget {
                                   ),
                                   child: ItemText(
                                     item: item,
-                                    textScaler: MediaQuery.of(
-                                      context,
-                                    ).textScaler,
+                                    textScaler: MediaQuery.of(context)
+                                        .textScaler,
                                     selectable: true,
                                   ),
                                 ),
@@ -743,7 +757,7 @@ class _ParentItemSection extends StatelessWidget {
             Center(
               child: TextButton(
                 onPressed: () => context.read<CommentsCubit>().loadAll(item),
-                child: const Text('View all comments'),
+                child: Text(L10n.current.viewAllComments),
               ),
             ),
             const Divider(height: Dimens.zero),
@@ -755,7 +769,10 @@ class _ParentItemSection extends StatelessWidget {
                   if (item is Story) ...<Widget>[
                     const SizedBox(width: Dimens.pt12),
                     Text(
-                      '''${item.score} karma, ${item.descendants} cmt${item.descendants > 1 ? 's' : ''}''',
+                      L10n.current.storyKarmaComments(
+                        L10n.formatNumber(item.score),
+                        L10n.current.commentsCount(item.descendants),
+                      ),
                       style: Theme.of(context).textTheme.labelLarge,
                       textScaler: MediaQuery.of(context).clampedTextScaler,
                     ),
@@ -779,16 +796,15 @@ class _ParentItemSection extends StatelessWidget {
                                   ),
                                 )
                               : Text(
-                                  'View Parent',
+                                  L10n.current.viewParent,
                                   style: Theme.of(context).textTheme.labelLarge
                                       ?.copyWith(
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.primary,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                       ),
-                                  textScaler: MediaQuery.of(
-                                    context,
-                                  ).clampedTextScaler,
+                                  textScaler: MediaQuery.of(context)
+                                      .clampedTextScaler,
                                 ),
                         );
                       },
@@ -809,16 +825,15 @@ class _ParentItemSection extends StatelessWidget {
                                   ),
                                 )
                               : Text(
-                                  'View Root',
+                                  L10n.current.viewRoot,
                                   style: Theme.of(context).textTheme.labelLarge
                                       ?.copyWith(
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.primary,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                       ),
-                                  textScaler: MediaQuery.of(
-                                    context,
-                                  ).clampedTextScaler,
+                                  textScaler: MediaQuery.of(context)
+                                      .clampedTextScaler,
                                 ),
                         );
                       },
@@ -846,8 +861,11 @@ class _ParentItemSection extends StatelessWidget {
           if (state.comments.isEmpty &&
               state.status == CommentsStatus.allLoaded) ...<Widget>[
             const SizedBox(height: 240),
-            const Center(
-              child: Text('Nothing yet', style: TextStyle(color: Palette.grey)),
+            Center(
+              child: Text(
+                L10n.current.nothingYet,
+                style: const TextStyle(color: Palette.grey),
+              ),
             ),
             SizedBox(height: MediaQuery.of(context).size.height - 240),
           ],

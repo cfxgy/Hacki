@@ -8,6 +8,7 @@ import 'package:hacki/blocs/blocs.dart';
 import 'package:hacki/config/constants.dart';
 import 'package:hacki/cubits/cubits.dart';
 import 'package:hacki/extensions/extensions.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/item/widgets/lazy_fetch_load_button.dart';
 import 'package:hacki/screens/widgets/widgets.dart';
@@ -175,9 +176,9 @@ class CommentTile extends StatelessWidget {
                                 Text(
                                   comment.by,
                                   style: TextStyle(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.primary,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primary,
                                   ),
                                   textScaler: MediaQuery.of(context).textScaler,
                                 ),
@@ -189,11 +190,11 @@ class CommentTile extends StatelessWidget {
                                   ),
                                   SizedBoxes.pt6,
                                   Text(
-                                    'OP',
+                                    L10n.current.op,
                                     style: TextStyle(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.primary,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -202,17 +203,15 @@ class CommentTile extends StatelessWidget {
                                   Text(
                                     ' #${index! + 1}',
                                     style: const TextStyle(color: Palette.grey),
-                                    textScaler: MediaQuery.of(
-                                      context,
-                                    ).textScaler,
+                                    textScaler: MediaQuery.of(context)
+                                        .textScaler,
                                   ),
                                 if (kDebugMode || isDev)
                                   Text(
                                     ' ${comment.id}',
                                     style: const TextStyle(color: Palette.grey),
-                                    textScaler: MediaQuery.of(
-                                      context,
-                                    ).textScaler,
+                                    textScaler: MediaQuery.of(context)
+                                        .textScaler,
                                   ),
                                 if (isResponse)
                                   const Padding(
@@ -240,9 +239,9 @@ class CommentTile extends StatelessWidget {
                                     child: Icon(
                                       Icons.fiber_new,
                                       size: Dimens.pt16,
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.primaryContainer,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primaryContainer,
                                     ),
                                   )
                                 else if (shouldHighlightNewComments &&
@@ -310,9 +309,8 @@ class CommentTile extends StatelessWidget {
                                               child: Text(
                                                 comment.text,
                                                 style: TextStyle(
-                                                  color: Theme.of(
-                                                    context,
-                                                  ).disabledColor,
+                                                  color: Theme.of(context)
+                                                      .disabledColor,
                                                   fontSize: prefState
                                                       .fontSize
                                                       .fontSize,
@@ -326,8 +324,15 @@ class CommentTile extends StatelessWidget {
                                       ),
                                       SizedBoxes.pt6,
                                       CenteredText(
-                                        text:
-                                            '''collapsed ($hiddenCommentsCount${newCommentsCount == 0 ? '' : ' + $newCommentsCount new'})''',
+                                        text: newCommentsCount == 0
+                                            ? L10n.current.commentCollapsed(
+                                                '$hiddenCommentsCount',
+                                              )
+                                            : L10n.current
+                                                  .commentCollapsedWithNew(
+                                                    '$hiddenCommentsCount',
+                                                    '$newCommentsCount',
+                                                  ),
                                         color: Theme.of(context)
                                             .colorScheme
                                             .primary
@@ -346,7 +351,9 @@ class CommentTile extends StatelessWidget {
                                   child: SizedBox(
                                     width: double.infinity,
                                     child: Semantics(
-                                      label: '''At level ${comment.level}.''',
+                                      label: L10n.current.atLevel(
+                                        '${comment.level}',
+                                      ),
                                       child: () {
                                         if (comment.hidden) {
                                           return const CenteredText.hidden();
@@ -362,9 +369,8 @@ class CommentTile extends StatelessWidget {
                                             key: ValueKey<int>(comment.id),
                                             item: comment,
                                             selectable: isSelectable,
-                                            textScaler: MediaQuery.of(
-                                              context,
-                                            ).textScaler,
+                                            textScaler: MediaQuery.of(context)
+                                                .textScaler,
                                             onTap: () {
                                               if (isCollapsable) {
                                                 HapticFeedbackUtils.selection();

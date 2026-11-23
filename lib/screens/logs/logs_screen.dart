@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:hacki/extensions/context_extension.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/styles/styles.dart';
 import 'package:hacki/utils/haptic_feedback_utils.dart';
 import 'package:hacki/utils/log_utils.dart';
@@ -54,10 +55,9 @@ class _LogsScreenState extends State<LogsScreen> {
               final String data = _logs.reduce(
                 (String lhs, String rhs) => lhs + rhs,
               );
-              Clipboard.setData(
-                ClipboardData(text: data),
-              ).whenComplete(HapticFeedbackUtils.selection);
-              context.showSnackBar(content: 'Logs copied.');
+              Clipboard.setData(ClipboardData(text: data))
+                  .whenComplete(HapticFeedbackUtils.selection);
+              context.showSnackBar(content: L10n.current.logsCopied);
             },
             icon: Icon(
               Icons.copy,
@@ -70,11 +70,11 @@ class _LogsScreenState extends State<LogsScreen> {
       ),
       body: Scrollbar(
         child: kDebugMode
-            ? const Column(
+            ? Column(
                 children: <Widget>[
                   SizedBoxes.pt48,
                   Text(
-                    '''Logs won't show up here in debug mode.\nYou can modify `LogUtil.logOutput()` to enable it.''',
+                    L10n.current.logsDebugNotice,
                     textAlign: TextAlign.center,
                   ),
                 ],

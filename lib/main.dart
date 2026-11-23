@@ -17,6 +17,8 @@ import 'package:hacki/config/locator.dart';
 import 'package:hacki/config/paths.dart';
 import 'package:hacki/config/router.dart';
 import 'package:hacki/cubits/cubits.dart';
+import 'package:hacki/l10n/generated/app_localizations.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/screens/widgets/widgets.dart';
 import 'package:hacki/services/fetcher.dart';
 import 'package:hacki/styles/styles.dart';
@@ -51,7 +53,7 @@ Future<void> main({bool testing = false}) async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  await initializeDateFormatting(Platform.localeName);
+  await initializeDateFormatting();
 
   isTesting = testing;
 
@@ -249,7 +251,8 @@ class HackiApp extends StatelessWidget {
             previous.isDynamicColorEnabled != current.isDynamicColorEnabled ||
             previous.isHackerNewsThemeEnabled !=
                 current.isHackerNewsThemeEnabled ||
-            previous.isDevModeEnabled != current.isDevModeEnabled,
+            previous.isDevModeEnabled != current.isDevModeEnabled ||
+            previous.language != current.language,
         builder: (BuildContext context, PreferenceState state) {
           return AdaptiveTheme(
             light: ThemeData(
@@ -287,16 +290,16 @@ class HackiApp extends StatelessWidget {
                       );
                       final bool isDarkModeEnabled = () {
                         if (mode == null) {
-                          return View.of(
-                                context,
-                              ).platformDispatcher.platformBrightness ==
+                          return View.of(context)
+                                  .platformDispatcher
+                                  .platformBrightness ==
                               Brightness.dark;
                         } else {
                           return mode == AdaptiveThemeMode.dark ||
                               (mode == AdaptiveThemeMode.system &&
-                                  View.of(
-                                        context,
-                                      ).platformDispatcher.platformBrightness ==
+                                  View.of(context)
+                                          .platformDispatcher
+                                          .platformBrightness ==
                                       Brightness.dark);
                         }
                       }();
@@ -347,14 +350,41 @@ class HackiApp extends StatelessWidget {
                                             isTrueDarkModeEnabled:
                                                 state.isTrueDarkModeEnabled,
                                           ),
+                                    locale: state.locale,
+                                    supportedLocales:
+                                        AppLocalizations.supportedLocales,
+                                    localizationsDelegates:
+                                        AppLocalizations.localizationsDelegates,
+                                    localeListResolutionCallback:
+                                        (
+                                          List<Locale>? locales,
+                                          Iterable<Locale> supportedLocales,
+                                        ) {
+                                          for (final Locale locale
+                                              in locales ?? const <Locale>[]) {
+                                            if (locale.languageCode == 'zh') {
+                                              return const Locale('zh');
+                                            }
+                                            if (locale.languageCode == 'en') {
+                                              return const Locale('en');
+                                            }
+                                          }
+                                          return const Locale('zh');
+                                        },
                                     routerConfig: router,
-                                    builder: state.isDevModeEnabled
-                                        ? (
-                                            BuildContext context,
-                                            Widget? child,
-                                          ) => Stack(
+                                    builder:
+                                        (BuildContext context, Widget? child) {
+                                          L10n.update(
+                                            AppLocalizations.of(context),
+                                          );
+                                          final Widget content =
+                                              child ?? const SizedBox.shrink();
+                                          if (!state.isDevModeEnabled) {
+                                            return content;
+                                          }
+                                          return Stack(
                                             children: <Widget>[
-                                              Positioned.fill(child: child!),
+                                              Positioned.fill(child: content),
                                               DraggableFloatingButton(
                                                 onTap: () {
                                                   final bool isOnLogsScreen =
@@ -377,8 +407,8 @@ class HackiApp extends StatelessWidget {
                                                 ),
                                               ),
                                             ],
-                                          )
-                                        : null,
+                                          );
+                                        },
                                   ),
                                 ),
                               );

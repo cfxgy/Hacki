@@ -7,6 +7,7 @@ import 'package:hacki/config/constants.dart';
 import 'package:hacki/config/paths.dart';
 import 'package:hacki/cubits/cubits.dart';
 import 'package:hacki/extensions/extensions.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/item/item_screen.dart';
 import 'package:hacki/screens/widgets/widgets.dart';
@@ -38,7 +39,7 @@ class _PinsScreenState extends State<PinsScreen> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).canvasColor,
         elevation: Dimens.zero,
-        title: const Text('Pins'),
+        title: Text(L10n.current.pins),
         actions: <Widget>[
           IconButton(
             icon: Icon(
@@ -51,15 +52,15 @@ class _PinsScreenState extends State<PinsScreen> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: const Text('Remove all pins?'),
+                    title: Text(L10n.current.removeAllPinsQuestion),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () => context.pop(false),
-                        child: const Text('Cancel'),
+                        child: Text(L10n.current.cancel),
                       ),
                       TextButton(
                         onPressed: () => context.pop(true),
-                        child: const Text('Yes'),
+                        child: Text(L10n.current.yes),
                       ),
                     ],
                   );
@@ -89,7 +90,7 @@ class _PinsScreenState extends State<PinsScreen> {
                   .join('\n\n');
               final ShareParams params = ShareParams(
                 text: urls,
-                subject: 'Pinned Items on Hacker News',
+                subject: L10n.current.pinnedItemsShareSubject,
               );
               await SharePlus.instance.share(params);
             },
@@ -97,7 +98,7 @@ class _PinsScreenState extends State<PinsScreen> {
         ],
       ),
       body: pinnedItems.isEmpty
-          ? const CenteredText(text: 'No pins here')
+          ? CenteredText(text: L10n.current.noPins)
           : ListView(
               children: <Widget>[
                 for (final Item item in pinnedItems)
@@ -119,11 +120,12 @@ class _PinsScreenState extends State<PinsScreen> {
                                 if (preferenceState.isRichStoryTileEnabled)
                                   const Icon(Icons.close, size: Dimens.pt24),
                                 Text(
-                                  'Unpin',
+                                  L10n.current.unpin,
                                   style: TextStyle(
-                                    fontFamily: Theme.of(
-                                      context,
-                                    ).textTheme.bodyMedium?.fontFamily,
+                                    fontFamily: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.fontFamily,
                                   ),
                                 ),
                               ],

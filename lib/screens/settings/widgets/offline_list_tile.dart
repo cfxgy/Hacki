@@ -2,6 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hacki/blocs/blocs.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/widgets/widgets.dart';
 import 'package:hacki/services/dialog_proxy.dart';
@@ -57,30 +58,30 @@ class OfflineListTile extends StatelessWidget {
         return ListTile(
           title: Text(() {
             if (downloading) {
-              return '''Downloading Stories (${state.storiesDownloaded}/${state.storiesToBeDownloaded})''';
+              return L10n.current.downloadingStories(
+                '${state.storiesDownloaded}',
+                '${state.storiesToBeDownloaded}',
+              );
             } else if (state.storiesDownloaded != 0) {
-              return '''${state.storiesDownloaded} stories downloaded.''';
+              return L10n.current.storiesDownloaded(
+                '${state.storiesDownloaded}',
+              );
             }
-            return 'Download Stories';
+            return L10n.current.downloadStories;
           }()),
           subtitle: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const Text(
-                'download latest stories that have at least one comment '
-                'for offline reading. (Please keep Hacki in foreground while '
-                'downloading.)',
-              ),
+              Text(L10n.current.downloadStoriesDescription),
               if (state.downloadStatus != StoriesDownloadStatus.downloading &&
                   state.downloadTimestamp != null)
                 Text(
-                  'Last downloaded at ${state.downloadDateTime}',
+                  L10n.current.lastDownloadedAt('${state.downloadDateTime}'),
                   style: TextStyle(
                     fontSize: TextDimens.pt12,
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.onSurface.withAlpha(160),
+                    color: Theme.of(context).colorScheme.onSurface
+                        .withAlpha(160),
                   ),
                 ),
             ],
@@ -104,9 +105,7 @@ class OfflineListTile extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             SizedBoxes.pt12,
-                            const Text(
-                              'How many stories do you want to download?',
-                            ),
+                            Text(L10n.current.howManyStories),
                             for (final MaxOfflineStoriesCount count
                                 in MaxOfflineStoriesCount.values)
                               ListTile(
@@ -142,20 +141,20 @@ class OfflineListTile extends StatelessWidget {
     showDialog<bool>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        title: const Text('Download web pages as well?'),
-        content: const Text('It will take longer time.'),
+        title: Text(L10n.current.downloadWebPages),
+        content: Text(L10n.current.willTakeLonger),
         actions: <Widget>[
           TextButton(
             onPressed: () => context.pop(),
-            child: const Text('Cancel'),
+            child: Text(L10n.current.cancel),
           ),
           TextButton(
             onPressed: () => context.pop(false),
-            child: const Text('No'),
+            child: Text(L10n.current.no),
           ),
           TextButton(
             onPressed: () => context.pop(true),
-            child: const Text('Yes'),
+            child: Text(L10n.current.yes),
           ),
         ],
       ),

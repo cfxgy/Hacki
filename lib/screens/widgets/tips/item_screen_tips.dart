@@ -2,6 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hacki/config/constants.dart';
 import 'package:hacki/cubits/cubits.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/styles/styles.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:video_player/video_player.dart';
@@ -50,7 +51,7 @@ class _ItemScreenTipsState extends State<ItemScreenTips> {
         _controller.play();
         context.read<TipsCubit>().completeTips(Tips.itemScreen);
         return Scaffold(
-          appBar: AppBar(title: const Text('Tips')),
+          appBar: AppBar(title: Text(L10n.current.tips)),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: Dimens.pt12),
             child: Column(
@@ -85,7 +86,7 @@ class _ItemScreenTipsState extends State<ItemScreenTips> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: Dimens.pt12),
                   child: Text(
-                    '''When you find yourself too deep in a thread, you can swipe left on a comment to see all its ancestors including the root story (or comment).''',
+                    L10n.current.itemTip,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSecondaryContainer,
                       fontSize: TextDimens.pt16,
@@ -98,16 +99,16 @@ class _ItemScreenTipsState extends State<ItemScreenTips> {
                     const Spacer(),
                     TextButton(
                       onPressed: action,
-                      child: const Text(
-                        'Dismiss',
-                        style: TextStyle(fontSize: TextDimens.pt16),
+                      child: Text(
+                        L10n.current.dismiss,
+                        style: const TextStyle(fontSize: TextDimens.pt16),
                       ),
                     ),
                     TextButton(
                       onPressed: action,
-                      child: const Text(
-                        'LGTM',
-                        style: TextStyle(
+                      child: Text(
+                        L10n.current.lgtm,
+                        style: const TextStyle(
                           fontSize: TextDimens.pt16,
                           fontWeight: FontWeight.bold,
                         ),

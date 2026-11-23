@@ -10,6 +10,7 @@ import 'package:hacki/config/constants.dart';
 import 'package:hacki/config/locator.dart';
 import 'package:hacki/cubits/cubits.dart';
 import 'package:hacki/extensions/extensions.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/repositories/repositories.dart';
 import 'package:hacki/screens/item/widgets/widgets.dart';
@@ -260,11 +261,10 @@ class _ItemScreenState extends State<ItemScreen>
         BlocListener<PostCubit, PostState>(
           listener: (BuildContext context, PostState postState) {
             if (postState.status == Status.success) {
-              final String verb =
+              final String msg =
                   context.read<EditCubit>().state.replyingTo == null
-                  ? 'updated'
-                  : 'submitted';
-              final String msg = 'Comment $verb! ${Constants.happyFace}';
+                  ? L10n.current.commentUpdated
+                  : L10n.current.commentSubmitted;
               HapticFeedbackUtils.success();
               showSnackBar(content: msg);
 
@@ -362,9 +362,10 @@ class _ItemScreenState extends State<ItemScreen>
                     ),
                   ),
                   BlocBuilder<SplitViewCubit, SplitViewState>(
-                    buildWhen:
-                        (SplitViewState previous, SplitViewState current) =>
-                            previous.expanded != current.expanded,
+                    buildWhen: (
+                      SplitViewState previous,
+                      SplitViewState current,
+                    ) => previous.expanded != current.expanded,
                     builder: (BuildContext context, SplitViewState state) {
                       return Positioned(
                         top: Dimens.zero,
@@ -372,9 +373,8 @@ class _ItemScreenState extends State<ItemScreen>
                         right: Dimens.zero,
                         child: CustomAppBar(
                           context: context,
-                          backgroundColor: Theme.of(
-                            context,
-                          ).canvasColor.withValues(alpha: 0.6),
+                          backgroundColor: Theme.of(context).canvasColor
+                              .withValues(alpha: 0.6),
                           foregroundColor: Theme.of(context).iconTheme.color,
                           item: widget.item,
                           splitViewEnabled: state.enabled,
@@ -422,9 +422,8 @@ class _ItemScreenState extends State<ItemScreen>
                       resizeToAvoidBottomInset: false,
                       appBar: CustomAppBar(
                         context: context,
-                        backgroundColor: Theme.of(
-                          context,
-                        ).canvasColor.withValues(alpha: 0.6),
+                        backgroundColor: Theme.of(context).canvasColor
+                            .withValues(alpha: 0.6),
                         foregroundColor: Theme.of(context).iconTheme.color,
                         item: widget.item,
                         onBackTap: widget.showBackButton ? onBackTapped : null,

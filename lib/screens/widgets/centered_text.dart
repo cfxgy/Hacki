@@ -1,3 +1,4 @@
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/styles/styles.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -23,10 +24,18 @@ class CenteredText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String displayText = switch (text) {
+      'hidden' => L10n.current.hidden,
+      'deleted' => L10n.current.deleted,
+      'dead' => L10n.current.dead,
+      'blocked' => L10n.current.blocked,
+      'empty' => L10n.current.empty,
+      _ => text,
+    };
     return Center(
       child: Padding(
         padding: const EdgeInsets.only(bottom: Dimens.pt12),
-        child: Text(text, style: TextStyle(color: color)),
+        child: Text(displayText, style: TextStyle(color: color)),
       ),
     );
   }

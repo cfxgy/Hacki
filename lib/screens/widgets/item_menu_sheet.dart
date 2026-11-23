@@ -1,3 +1,4 @@
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -24,7 +25,7 @@ class ItemMenuSheet extends StatelessWidget {
             if (actions[action] case final Widget widget) widget,
           ListTile(
             leading: const Icon(Icons.close),
-            title: const Text('Cancel'),
+            title: Text(L10n.current.cancel),
             onTap: onCancel,
           ),
         ],

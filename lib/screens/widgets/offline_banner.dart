@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hacki/blocs/blocs.dart';
 import 'package:hacki/cubits/cubits.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/services/services.dart';
 import 'package:hacki/styles/styles.dart';
 import 'package:material_ui/material_ui.dart';
@@ -21,15 +22,15 @@ class OfflineBanner extends StatelessWidget {
           return MaterialBanner(
             dividerColor: Palette.transparent,
             content: Text(
-              'You are currently in offline mode. '
-              '${shouldShowExitButton ? 'Exit to fetch latest stories.' : ''}',
+              L10n.current.offlineBanner(
+                shouldShowExitButton ? L10n.current.offlineBannerExit : '',
+              ),
               textAlign: shouldShowExitButton
                   ? TextAlign.left
                   : TextAlign.center,
             ),
-            backgroundColor: Theme.of(
-              context,
-            ).colorScheme.primary.withValues(alpha: 0.3),
+            backgroundColor: Theme.of(context).colorScheme.primary
+                .withValues(alpha: 0.3),
             actions: <Widget>[
               if (shouldShowExitButton)
                 TextButton(
@@ -39,17 +40,17 @@ class OfflineBanner extends StatelessWidget {
                       barrierDismissible: false,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: const Text('Exit offline mode?'),
+                          title: Text(L10n.current.exitOfflineMode),
                           actions: <Widget>[
                             TextButton(
                               onPressed: () => context.pop(false),
-                              child: const Text('Cancel'),
+                              child: Text(L10n.current.cancel),
                             ),
                             TextButton(
                               onPressed: () => context.pop(true),
-                              child: const Text(
-                                'Yes',
-                                style: TextStyle(color: Palette.red),
+                              child: Text(
+                                L10n.current.yes,
+                                style: const TextStyle(color: Palette.red),
                               ),
                             ),
                           ],
@@ -66,7 +67,7 @@ class OfflineBanner extends StatelessWidget {
                       }
                     });
                   },
-                  child: const Text('Exit'),
+                  child: Text(L10n.current.exit),
                 )
               else
                 Container(),

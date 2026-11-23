@@ -5,6 +5,7 @@ import 'package:hacki/blocs/blocs.dart';
 import 'package:hacki/config/constants.dart';
 import 'package:hacki/cubits/cubits.dart';
 import 'package:hacki/extensions/extensions.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/item/models/models.dart';
 import 'package:hacki/screens/screens.dart';
@@ -56,7 +57,7 @@ class MorePopupMenu extends StatelessWidget {
               content: SnackBarMessages.notLoggedInNoVoting,
               persist: false,
               action: onLoginTapped,
-              label: 'Log in',
+              label: L10n.current.login,
             );
           } else if (voteState.status == VoteStatus.failureBeHumble) {
             context.showSnackBar(
@@ -109,16 +110,19 @@ class MorePopupMenu extends StatelessWidget {
                             showDialog<void>(
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
-                                semanticLabel:
-                                    '''About ${state.user.id}. ${state.user.about}''',
-                                title: Text('About ${state.user.id}'),
+                                semanticLabel: L10n.current.aboutUser(
+                                  state.user.id,
+                                ),
+                                title: Text(
+                                  L10n.current.aboutUser(state.user.id),
+                                ),
                                 content: state.user.about.isEmpty
                                     ? const Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: <Widget>[
                                           Text(
-                                            'empty',
+                                            L10n.current.empty,
                                             style: TextStyle(
                                               color: Palette.grey,
                                             ),
@@ -132,9 +136,9 @@ class MorePopupMenu extends StatelessWidget {
                                         style: TextStyle(fontSize: fontSize),
                                         linkStyle: TextStyle(
                                           fontSize: fontSize,
-                                          color: Theme.of(
-                                            context,
-                                          ).colorScheme.primary,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                         ),
                                         onOpen: (LinkableElement link) =>
                                             LinkUtils.launch(link.url, context),
@@ -146,11 +150,11 @@ class MorePopupMenu extends StatelessWidget {
                                       context.pop();
                                       onSearchUserTapped(context);
                                     },
-                                    child: const Text('Search'),
+                                    child: Text(L10n.current.search),
                                   ),
                                   TextButton(
                                     onPressed: context.pop,
-                                    child: const Text('Okay'),
+                                    child: Text(L10n.current.okay),
                                   ),
                                 ],
                               ),
@@ -163,7 +167,7 @@ class MorePopupMenu extends StatelessWidget {
                 ),
                 ItemMenuAction.searchOnHackerNews: ListTile(
                   leading: const Icon(Icons.search),
-                  title: const Text('Search on HN'),
+                  title: Text(L10n.current.searchOnHn),
                   onTap: () {
                     context.pop();
                     onSearchUserTapped(context);
@@ -172,13 +176,13 @@ class MorePopupMenu extends StatelessWidget {
                 if (onSearchInThreadTapped != null)
                   ItemMenuAction.searchInThread: ListTile(
                     leading: const Icon(Icons.manage_search),
-                    title: const Text('Search in thread'),
+                    title: Text(L10n.current.searchInThread),
                     onTap: onSearchInThreadTapped,
                   ),
                 if (onReplyTapped != null)
                   ItemMenuAction.reply: ListTile(
                     leading: const Icon(Icons.message),
-                    title: const Text('Reply'),
+                    title: Text(L10n.current.reply),
                     onTap: () {
                       context.pop();
                       onReplyTapped?.call();
@@ -194,7 +198,7 @@ class MorePopupMenu extends StatelessWidget {
                         : null,
                   ),
                   title: Text(
-                    upvoted ? 'Upvoted' : 'Upvote',
+                    upvoted ? L10n.current.upvoted : L10n.current.upvote,
                     style: upvoted
                         ? TextStyle(
                             color: Theme.of(context).colorScheme.primary,
@@ -214,7 +218,7 @@ class MorePopupMenu extends StatelessWidget {
                         : null,
                   ),
                   title: Text(
-                    downvoted ? 'Downvoted' : 'Downvote',
+                    downvoted ? L10n.current.downvoted : L10n.current.downvote,
                     style: downvoted
                         ? TextStyle(
                             color: Theme.of(context).colorScheme.primary,
@@ -233,32 +237,36 @@ class MorePopupMenu extends StatelessWidget {
                             ? Theme.of(context).colorScheme.primary
                             : null,
                       ),
-                      title: Text(isFav ? 'Unfavorite' : 'Favorite'),
+                      title: Text(
+                        isFav ? L10n.current.unfavorite : L10n.current.favorite,
+                      ),
                       onTap: () => context.pop(MenuAction.fav),
                     );
                   },
                 ),
                 ItemMenuAction.share: ListTile(
                   leading: const Icon(FeatherIcons.share),
-                  title: const Text('Share'),
+                  title: Text(L10n.current.share),
                   onTap: () => context.pop(MenuAction.share),
                 ),
                 ItemMenuAction.flag: ListTile(
                   leading: const Icon(Icons.local_police),
-                  title: const Text('Flag'),
+                  title: Text(L10n.current.flag),
                   onTap: () => context.pop(MenuAction.flag),
                 ),
                 ItemMenuAction.block: ListTile(
                   leading: Icon(
                     isBlocked ? Icons.visibility : Icons.visibility_off,
                   ),
-                  title: Text(isBlocked ? 'Unblock' : 'Block'),
+                  title: Text(
+                    isBlocked ? L10n.current.unblock : L10n.current.block,
+                  ),
                   onTap: () => context.pop(MenuAction.block),
                 ),
                 if (onViewInSeparateThreadTapped != null && item is Comment)
                   ItemMenuAction.viewInSeparateThread: ListTile(
                     leading: const Icon(Icons.list),
-                    title: const Text('View In Separate Thread'),
+                    title: Text(L10n.current.viewInSeparateThread),
                     onTap: () {
                       context.pop();
                       onViewInSeparateThreadTapped?.call();
@@ -266,7 +274,7 @@ class MorePopupMenu extends StatelessWidget {
                   ),
                 ItemMenuAction.viewInBrowser: ListTile(
                   leading: const Icon(Icons.open_in_browser),
-                  title: const Text('View in Browser'),
+                  title: Text(L10n.current.viewInBrowser),
                   onTap: () {
                     context.pop();
                     final String url =

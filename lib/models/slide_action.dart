@@ -1,22 +1,23 @@
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:material_ui/material_ui.dart' show IconData, Icons;
 
 enum SlideAction {
-  upvote('Upvote', icon: Icons.thumb_up),
-  downvote('Downvote', icon: Icons.thumb_down),
-  timeMachine('Time Machine', icon: Icons.av_timer),
-  goToParent('Go To Parent', icon: Icons.arrow_upward),
-  viewProfile('View Profile', icon: Icons.account_circle),
-  searchOnHackerNews('Search on HN', icon: Icons.search),
-  searchInThread('Search in Thread', icon: Icons.manage_search),
-  favorite('Favorite', icon: Icons.favorite),
-  share('Share', icon: FeatherIcons.share),
-  viewInBrowser('View in Browser', icon: Icons.open_in_browser),
-  reply('Reply', icon: Icons.message),
-  viewInSeparateThread('View In Separate Thread', icon: Icons.list),
-  goToRoot(' Go To Root', icon: Icons.vertical_align_top);
+  upvote(icon: Icons.thumb_up),
+  downvote(icon: Icons.thumb_down),
+  timeMachine(icon: Icons.av_timer),
+  goToParent(icon: Icons.arrow_upward),
+  viewProfile(icon: Icons.account_circle),
+  searchOnHackerNews(icon: Icons.search),
+  searchInThread(icon: Icons.manage_search),
+  favorite(icon: Icons.favorite),
+  share(icon: FeatherIcons.share),
+  viewInBrowser(icon: Icons.open_in_browser),
+  reply(icon: Icons.message),
+  viewInSeparateThread(icon: Icons.list),
+  goToRoot(icon: Icons.vertical_align_top);
 
-  const SlideAction(this.description, {required this.icon});
+  const SlideAction({required this.icon});
 
   /// The order in which actions are offered to the user, following the
   /// "more" bottom sheet. Preferences store [index], so the declaration
@@ -37,8 +38,23 @@ enum SlideAction {
     goToRoot,
   ];
 
-  final String description;
   final IconData icon;
+
+  String get description => switch (this) {
+    SlideAction.upvote => L10n.current.upvote,
+    SlideAction.downvote => L10n.current.downvote,
+    SlideAction.timeMachine => L10n.current.slideActionTimeMachine,
+    SlideAction.goToParent => L10n.current.slideActionGoToParent,
+    SlideAction.viewProfile => L10n.current.slideActionViewProfile,
+    SlideAction.searchOnHackerNews => L10n.current.searchOnHn,
+    SlideAction.searchInThread => L10n.current.searchInThread,
+    SlideAction.favorite => L10n.current.favorite,
+    SlideAction.share => L10n.current.share,
+    SlideAction.viewInBrowser => L10n.current.viewInBrowser,
+    SlideAction.reply => L10n.current.reply,
+    SlideAction.viewInSeparateThread => L10n.current.viewInSeparateThread,
+    SlideAction.goToRoot => L10n.current.slideActionGoToRoot,
+  };
 
   @override
   String toString() => description;

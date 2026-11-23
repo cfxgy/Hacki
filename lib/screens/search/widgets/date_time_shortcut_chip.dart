@@ -1,3 +1,4 @@
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/screens/search/widgets/date_time_range_filter_chip.dart';
 import 'package:hacki/screens/widgets/widgets.dart' show CustomChip;
 import 'package:material_ui/material_ui.dart';
@@ -21,7 +22,7 @@ class DateTimeShortcutChip extends StatelessWidget {
     required this.startDate,
     required this.endDate,
     super.key,
-  }) : label = '- day',
+  }) : label = L10n.current.dayBefore,
        _calculator = ((DateTime date) =>
            date.subtract(const Duration(hours: 24)));
 
@@ -30,7 +31,7 @@ class DateTimeShortcutChip extends StatelessWidget {
     required this.startDate,
     required this.endDate,
     super.key,
-  }) : label = '+ day',
+  }) : label = L10n.current.dayAfter,
        _calculator = ((DateTime date) => date.add(const Duration(hours: 24)));
 
   DateTimeShortcutChip.weekBefore({
@@ -38,7 +39,7 @@ class DateTimeShortcutChip extends StatelessWidget {
     required this.startDate,
     required this.endDate,
     super.key,
-  }) : label = '- week',
+  }) : label = L10n.current.weekBefore,
        _calculator = ((DateTime date) =>
            date.subtract(const Duration(days: 7)));
 
@@ -47,7 +48,7 @@ class DateTimeShortcutChip extends StatelessWidget {
     required this.startDate,
     required this.endDate,
     super.key,
-  }) : label = '+ week',
+  }) : label = L10n.current.weekAfter,
        _calculator = ((DateTime date) => date.add(const Duration(days: 7)));
 
   DateTimeShortcutChip.monthBefore({
@@ -55,7 +56,7 @@ class DateTimeShortcutChip extends StatelessWidget {
     required this.startDate,
     required this.endDate,
     super.key,
-  }) : label = '- 30 days',
+  }) : label = L10n.current.monthBefore,
        _calculator = ((DateTime date) =>
            date.subtract(const Duration(days: 30)));
 
@@ -64,7 +65,7 @@ class DateTimeShortcutChip extends StatelessWidget {
     required this.startDate,
     required this.endDate,
     super.key,
-  }) : label = '+ 30 days',
+  }) : label = L10n.current.monthAfter,
        _calculator = ((DateTime date) => date.add(const Duration(days: 30)));
 
   DateTimeShortcutChip.yearAfter({
@@ -72,7 +73,7 @@ class DateTimeShortcutChip extends StatelessWidget {
     required this.startDate,
     required this.endDate,
     super.key,
-  }) : label = '+ 1 year',
+  }) : label = L10n.current.yearAfter,
        _calculator = ((DateTime date) => date.add(const Duration(days: 365)));
 
   DateTimeShortcutChip.yearBefore({
@@ -80,7 +81,7 @@ class DateTimeShortcutChip extends StatelessWidget {
     required this.startDate,
     required this.endDate,
     super.key,
-  }) : label = '- 1 year',
+  }) : label = L10n.current.yearBefore,
        _calculator = ((DateTime date) =>
            date.subtract(const Duration(days: 365)));
 

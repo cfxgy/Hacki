@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:hacki/config/router.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/styles/palette.dart';
 import 'package:material_ui/material_ui.dart';
@@ -38,6 +39,7 @@ abstract final class Preference<T> extends Equatable with SettingsDisplayable {
   static final List<Preference<dynamic>> allPreferences =
       UnmodifiableListView<Preference<dynamic>>(<Preference<dynamic>>[
         /// Order of these preferences does not matter.
+        const LanguagePreference(),
         FetchModePreference(),
         CommentsOrderPreference(),
         FontPreference(),
@@ -137,8 +139,10 @@ abstract final class BooleanPreference extends Preference<bool> {
             (Preference<dynamic> pref) => pref.key == dependency.key,
           );
       if (concreteDependency?.val != dependency.val) {
-        final String action = dependency.val == true ? 'enable' : 'disable';
-        unmetDependencies.add('$action ${dependency.title}');
+        final String action = dependency.val == true
+            ? L10n.current.enableAction
+            : L10n.current.disableAction;
+        unmetDependencies.add('$action ${dependency.localizedTitle}');
       }
     }
 
@@ -146,15 +150,10 @@ abstract final class BooleanPreference extends Preference<bool> {
       return null;
     }
 
-    final String precedingDependencies = unmetDependencies
-        .sublist(0, unmetDependencies.length - 1)
-        .join(', ');
-    final String dependencyList = switch (unmetDependencies.length) {
-      1 => unmetDependencies.single,
-      2 => '${unmetDependencies.first} and ${unmetDependencies.last}',
-      _ => '$precedingDependencies, and ${unmetDependencies.last}',
-    };
-    return 'Please $dependencyList first.';
+    final String separator = L10n.current.localeName.startsWith('zh')
+        ? '、'
+        : ', ';
+    return L10n.current.dependencyError(unmetDependencies.join(separator));
   }
 }
 
@@ -168,6 +167,29 @@ abstract final class StringPreference extends Preference<String> {
 
 abstract final class DoublePreference extends Preference<double> {
   const DoublePreference({required super.val});
+}
+
+/// The app language. [system] follows the device locale.
+final class LanguagePreference extends StringPreference {
+  const LanguagePreference({String? val}) : super(val: val ?? defaultLanguage);
+
+  static const String system = 'system';
+  static const String simplifiedChinese = 'zh';
+  static const String english = 'en';
+  static const String defaultLanguage = simplifiedChinese;
+
+  @override
+  LanguagePreference copyWith({required String? val}) =>
+      LanguagePreference(val: val);
+
+  @override
+  String get key => 'language';
+
+  @override
+  String get title => L10n.current.prefLanguage;
+
+  @override
+  String get subtitle => L10n.current.prefLanguageSubtitle;
 }
 
 final class DevMode extends BooleanPreference {
@@ -1246,4 +1268,113 @@ final class ItemMenuActionsPreference extends StringPreference {
 
   @override
   bool get isDisplayable => false;
+}
+
+/// UI labels for preferences. The English getters in each preference are kept
+/// for persistence and tests; every screen displays these localized values.
+extension LocalizedPreference on Preference<dynamic> {
+  String get localizedTitle => switch (this) {
+    LanguagePreference() => L10n.current.prefLanguage,
+    SkipButtonsPreference() => L10n.current.prefSkipButtons,
+    HistoryButtonsPreference() => L10n.current.prefHistoryButtons,
+    CombineHistoryButtonsPreference() => L10n.current.prefCombineHistoryButtons,
+    SkipButtonsIgnoreCollapsedCommentsPreference() =>
+      L10n.current.prefSkipCollapsed,
+    SplitViewPreference() => L10n.current.prefSplitView,
+    EyeCandyPreference() => L10n.current.prefEyeCandy,
+    HackerNewsThemePreference() => L10n.current.prefHackerNewsTheme,
+    SwipeGesturePreference() => L10n.current.prefSwipeGesture,
+    NotificationModePreference() => L10n.current.prefNotificationMode,
+    CollapseModePreference() => L10n.current.prefCollapseMode,
+    IndexedStoryTilePreference() => L10n.current.prefIndexedStoryTile,
+    RichStoryTilePreference() => L10n.current.prefRichStoryTile,
+    PreviewImageAlignmentPreference() => L10n.current.prefImageAlignment,
+    ExpandTileForLongerTextPreference() => L10n.current.prefExpandTile,
+    RichStoryTileImageDisplayPreference() => L10n.current.prefShowPreviewImage,
+    FaviconModePreference() => L10n.current.prefShowFavicon,
+    MetadataModePreference() => L10n.current.prefShowMetadata,
+    StoryUrlModePreference() => L10n.current.prefShowUrl,
+    DividerPreference() => L10n.current.prefDivider,
+    ReaderModePreference() => L10n.current.prefSafariReader,
+    MarkReadStoriesModePreference() => L10n.current.prefGrayOutRead,
+    HideStoryInsteadOfMarkingGray() => L10n.current.prefHideRead,
+    ManualPaginationPreference() => L10n.current.prefManualPagination,
+    PersistCollapseStateAcrossSessions() => L10n.current.prefPersistCollapse,
+    PreserveCollapseStateAfterScreenExit() => L10n.current.prefPreserveCollapse,
+    CompactCollapsedTile() => L10n.current.prefHidePreviewCollapse,
+    HighlightNewComments() => L10n.current.prefHighlightNewComments,
+    CustomTabPreference() => L10n.current.prefUseCustomTabs,
+    WebViewBottomSheetPreference() => L10n.current.prefWebViewBottomSheet,
+    TrueDarkModePreference() => L10n.current.prefTrueDarkMode,
+    DynamicColorPreference() => L10n.current.prefDynamicColors,
+    HapticFeedbackPreference() => L10n.current.prefHapticFeedback,
+    FetchModePreference() => L10n.current.prefDefaultFetchMode,
+    CommentsOrderPreference() => L10n.current.prefDefaultCommentsOrder,
+    FontPreference() => L10n.current.prefDefaultFont,
+    FontSizePreference() => L10n.current.prefDefaultFontSize,
+    TabOrderPreference() => L10n.current.prefTabOrder,
+    StoryMarkingModePreference() => L10n.current.prefMarkAsReadOn,
+    AppColorPreference() => L10n.current.prefAccentColor,
+    TextScaleFactorPreference() => L10n.current.prefDefaultTextScale,
+    DateFormatPreference() => L10n.current.prefDateFormat,
+    HackerNewsDataSourcePreference() => L10n.current.prefDataSource,
+    LeadingActionPreference() => L10n.current.prefLeadingAction,
+    SecondaryActionPreference() => L10n.current.prefSecondaryAction,
+    TrailingActionPreference() => L10n.current.prefTrailingAction,
+    SwappedSlidePanesPreference() => L10n.current.prefSwapPanes,
+    ItemMenuActionsPreference() => L10n.current.prefItemMenuActions,
+    DividerPlaceholder() => localizedLabel,
+    _ => title,
+  };
+
+  String get localizedSubtitle => switch (this) {
+    LanguagePreference() => L10n.current.prefLanguageSubtitle,
+    SkipButtonsPreference() => L10n.current.prefSkipButtonsSubtitle,
+    HistoryButtonsPreference() => L10n.current.prefHistoryButtonsSubtitle,
+    CombineHistoryButtonsPreference() =>
+      L10n.current.prefCombineHistoryButtonsSubtitle,
+    SkipButtonsIgnoreCollapsedCommentsPreference() =>
+      L10n.current.prefSkipCollapsedSubtitle,
+    SplitViewPreference() => L10n.current.prefSplitViewSubtitle,
+    EyeCandyPreference() => L10n.current.prefEyeCandySubtitle,
+    HackerNewsThemePreference() => L10n.current.prefHackerNewsThemeSubtitle,
+    SwipeGesturePreference() => L10n.current.prefSwipeGestureSubtitle,
+    NotificationModePreference() => L10n.current.prefNotificationModeSubtitle,
+    CollapseModePreference() => L10n.current.prefCollapseModeSubtitle,
+    IndexedStoryTilePreference() => L10n.current.prefIndexedStoryTileSubtitle,
+    RichStoryTilePreference() => L10n.current.prefRichStoryTileSubtitle,
+    ExpandTileForLongerTextPreference() => L10n.current.prefExpandTileSubtitle,
+    RichStoryTileImageDisplayPreference() =>
+      L10n.current.prefShowPreviewImageSubtitle,
+    FaviconModePreference() => L10n.current.prefShowFaviconSubtitle,
+    MetadataModePreference() => L10n.current.prefShowMetadataSubtitle,
+    StoryUrlModePreference() => L10n.current.prefShowUrlSubtitle,
+    DividerPreference() => L10n.current.prefDividerSubtitle,
+    ReaderModePreference() => L10n.current.prefSafariReaderSubtitle,
+    MarkReadStoriesModePreference() => L10n.current.prefGrayOutReadSubtitle,
+    HideStoryInsteadOfMarkingGray() => L10n.current.prefHideReadSubtitle,
+    ManualPaginationPreference() => L10n.current.prefManualPaginationSubtitle,
+    PersistCollapseStateAcrossSessions() =>
+      L10n.current.prefPersistCollapseSubtitle,
+    PreserveCollapseStateAfterScreenExit() =>
+      L10n.current.prefPreserveCollapseSubtitle,
+    CompactCollapsedTile() => L10n.current.prefHidePreviewCollapseSubtitle,
+    HighlightNewComments() => L10n.current.prefHighlightNewCommentsSubtitle,
+    CustomTabPreference() => L10n.current.prefUseCustomTabsSubtitle,
+    WebViewBottomSheetPreference() =>
+      L10n.current.prefWebViewBottomSheetSubtitle,
+    TrueDarkModePreference() => L10n.current.prefTrueDarkModeSubtitle,
+    DynamicColorPreference() => L10n.current.prefDynamicColorsSubtitle,
+    _ => subtitle,
+  };
+
+  String get localizedLabel => switch (this) {
+    DividerPlaceholder(:final String label) => switch (label) {
+      'Thread' => L10n.current.dividerThread,
+      'Thread Navigation' => L10n.current.dividerThreadNavigation,
+      'Look And Feel' => L10n.current.dividerLookAndFeel,
+      _ => label,
+    },
+    _ => localizedTitle,
+  };
 }

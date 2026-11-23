@@ -1,4 +1,5 @@
 import 'package:hacki/cubits/cubits.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/widgets/widgets.dart';
 import 'package:hacki/styles/styles.dart';
@@ -45,11 +46,11 @@ class PinnedItemTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              '${item.timeAgo} by ${item.by}',
+              L10n.current.byAuthorTime(item.by, item.timeAgo),
               style: TextStyle(color: Theme.of(context).metadataColor),
             ),
             Linkify(
-              text: item.deleted ? 'deleted' : item.text,
+              text: item.deleted ? L10n.current.deleted : item.text,
               maxLines: 4,
               style: const TextStyle(fontSize: TextDimens.pt16),
               linkStyle: TextStyle(

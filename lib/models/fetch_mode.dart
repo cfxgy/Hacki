@@ -1,10 +1,13 @@
+import 'package:hacki/l10n/l10n.dart';
+
 enum FetchMode {
-  lazy('Lazy'),
-  eager('Eager');
+  lazy,
+  eager;
 
-  const FetchMode(this.description);
-
-  final String description;
+  String get description => switch (this) {
+    FetchMode.lazy => L10n.current.fetchModeLazy,
+    FetchMode.eager => L10n.current.fetchModeEager,
+  };
 
   @override
   String toString() => description;

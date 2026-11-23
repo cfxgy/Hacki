@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hacki/cubits/cubits.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/item/comment.dart';
 import 'package:hacki/styles/styles.dart';
 import 'package:hacki/utils/utils.dart';
@@ -14,9 +15,8 @@ class LazyFetchLoadButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: Dimens.pt12,
-        ).copyWith(bottom: Dimens.pt6),
+        padding: const EdgeInsets.symmetric(horizontal: Dimens.pt12)
+            .copyWith(bottom: Dimens.pt6),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -35,7 +35,7 @@ class LazyFetchLoadButton extends StatelessWidget {
                       size: Dimens.pt28,
                     ),
                     Text(
-                      '''${comment.kids.length} ${comment.kids.length > 1 ? 'replies' : 'reply'}''',
+                      L10n.current.replies(comment.kids.length),
                       textAlign: TextAlign.center,
                     ),
                   ],

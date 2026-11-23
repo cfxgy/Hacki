@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hacki/cubits/cubits.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/extensions/context_extension.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/widgets/widgets.dart';
@@ -23,7 +24,7 @@ class PinIconButton extends StatelessWidget {
           child: Transform.translate(
             offset: const Offset(2, 0),
             child: IconButton(
-              tooltip: 'Pin to home screen',
+              tooltip: L10n.current.pinToHome,
               icon: CustomDescribedFeatureOverlay(
                 tapTarget: Icon(
                   pinned ? Icons.push_pin : Icons.push_pin_outlined,

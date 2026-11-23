@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:feature_discovery/feature_discovery.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/discoverable_feature.dart';
 import 'package:hacki/styles/styles.dart';
 import 'package:hacki/utils/utils.dart';
@@ -53,7 +54,7 @@ class CustomDescribedFeatureOverlay extends StatelessWidget {
           ),
           SizedBoxes.pt6,
           Text(
-            'Tap anywhere inside to dismiss',
+            L10n.current.tapAnywhereToDismiss,
             style: TextStyle(
               fontSize: TextDimens.pt12,
               color: Theme.of(context).hintColor,

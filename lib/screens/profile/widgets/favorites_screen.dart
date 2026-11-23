@@ -4,6 +4,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hacki/blocs/auth/auth_bloc.dart';
 import 'package:hacki/cubits/cubits.dart';
 import 'package:hacki/extensions/extensions.dart';
+import 'package:hacki/l10n/l10n.dart';
 import 'package:hacki/models/models.dart';
 import 'package:hacki/screens/profile/widgets/centered_message_view.dart';
 import 'package:hacki/screens/widgets/widgets.dart';
@@ -48,8 +49,9 @@ class FavoritesScreen extends StatelessWidget {
                     onPressed: () => context.read<FavCubit>().merge(
                       onError: (AppException e) =>
                           context.showErrorSnackBar(e.message),
-                      onSuccess: () =>
-                          context.showSnackBar(content: '''Sync completed.'''),
+                      onSuccess: () => context.showSnackBar(
+                        content: L10n.current.syncCompleted,
+                      ),
                     ),
                     child: status == Status.inProgress
                         ? const SizedBox(
@@ -59,7 +61,7 @@ class FavoritesScreen extends StatelessWidget {
                               strokeWidth: Dimens.pt2,
                             ),
                           )
-                        : const Text('Sync from Hacker News'),
+                        : Text(L10n.current.syncFromHn),
                   );
                 },
               ),
@@ -68,13 +70,13 @@ class FavoritesScreen extends StatelessWidget {
                 const SizedBox(width: Dimens.pt12),
                 CustomChip(
                   selected: favState.isDisplayingStories,
-                  label: 'Story',
+                  label: L10n.current.storyTab,
                   onSelected: (_) => context.read<FavCubit>().switchTab(),
                 ),
                 const SizedBox(width: Dimens.pt12),
                 CustomChip(
                   selected: !favState.isDisplayingStories,
-                  label: 'Comment',
+                  label: L10n.current.commentTab,
                   onSelected: (_) => context.read<FavCubit>().switchTab(),
                 ),
               ],
@@ -86,12 +88,7 @@ class FavoritesScreen extends StatelessWidget {
           return Column(
             children: <Widget>[
               header() ?? const SizedBox.shrink(),
-              const CenteredMessageView(
-                content:
-                    'Your favorite stories will show up here.'
-                    '\nThey will be synced to your Hacker '
-                    'News account if you are logged in.',
-              ),
+              CenteredMessageView(content: L10n.current.favoritesEmpty),
             ],
           );
         } else {
@@ -99,7 +96,7 @@ class FavoritesScreen extends StatelessWidget {
             return Column(
               children: <Widget>[
                 header() ?? const SizedBox.shrink(),
-                const CenteredMessageView(content: 'No favorite story.'),
+                CenteredMessageView(content: L10n.current.noFavoriteStory),
               ],
             );
           } else if (!favState.isDisplayingStories &&
@@ -107,7 +104,7 @@ class FavoritesScreen extends StatelessWidget {
             return Column(
               children: <Widget>[
                 header() ?? const SizedBox.shrink(),
-                const CenteredMessageView(content: 'No favorite comment.'),
+                CenteredMessageView(content: L10n.current.noFavoriteComment),
               ],
             );
           }
