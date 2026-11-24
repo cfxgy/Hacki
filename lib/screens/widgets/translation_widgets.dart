@@ -150,7 +150,7 @@ class TranslationErrorHint extends StatelessWidget {
     return BlocBuilder<TranslationCubit, TranslationState>(
       buildWhen: (TranslationState previous, TranslationState current) =>
           previous.entryFor(translationKey)?.status !=
-          current.entryFor(translationKey)?.status ||
+              current.entryFor(translationKey)?.status ||
           previous.entryFor(translationKey)?.errorType !=
               current.entryFor(translationKey)?.errorType,
       builder: (BuildContext context, TranslationState state) {
