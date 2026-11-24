@@ -29,6 +29,15 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
+def requiredSigningProperties = ['storeFile', 'storePassword', 'keyAlias', 'keyPassword']
+def releaseSigningConfigured = keystorePropertiesFile.exists() &&
+    requiredSigningProperties.every {
+        keystoreProperties[it]?.toString()?.trim()
+    }
+def releaseKeystoreFile = releaseSigningConfigured
+    ? file(keystoreProperties['storeFile'])
+    : null
+
 
 android {
     namespace "com.jiaqifeng.hacki"
@@ -60,23 +69,57 @@ android {
 
     signingConfigs {
         release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-            storePassword keystoreProperties['storePassword']
+            if (releaseSigningConfigured) {
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile releaseKeystoreFile
+                storePassword keystoreProperties['storePassword']
+            }
         }
     }
 
     buildTypes {
         release {
-            // Without a stable keystore the release APK stays unsigned instead
-            // of being signed with a new random key on every CI run.
-            if (keystorePropertiesFile.exists()) {
+            // A release build must never fall back to an unsigned or random
+            // signing key. The task graph check below fails with a clear
+            // message when the stable signing properties are missing.
+            if (releaseSigningConfigured) {
                 signingConfig signingConfigs.release
             }
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+gradle.taskGraph.whenReady { taskGraph ->
+    def isReleaseBuild = taskGraph.allTasks.any {
+        it.name.toLowerCase().contains('release')
+    }
+    if (isReleaseBuild) {
+        if (!keystorePropertiesFile.exists()) {
+            throw new GradleException(
+                'Release signing is not configured. Add android/key.properties ' +
+                '(storeFile, storePassword, keyAlias, keyPassword) or configure ' +
+                'the KEYSTORE_BASE64, STORE_PASSWORD, KEY_PASSWORD and KEY_ALIAS ' +
+                'GitHub Actions secrets. Refusing to build an unsigned release APK.'
+            )
+        }
+        def missing = requiredSigningProperties.findAll {
+            !keystoreProperties[it]?.toString()?.trim()
+        }
+        if (!missing.isEmpty()) {
+            throw new GradleException(
+                "Release signing is incomplete. Missing key.properties fields: ${missing.join(', ')}. " +
+                'Configure the stable release keystore secrets before building.'
+            )
+        }
+        if (releaseKeystoreFile == null || !releaseKeystoreFile.exists()) {
+            throw new GradleException(
+                "Release keystore not found at '${releaseKeystoreFile}'. " +
+                'Add the stable keystore and set storeFile in android/key.properties.'
+            )
         }
     }
 }

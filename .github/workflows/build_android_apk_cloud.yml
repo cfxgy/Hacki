@@ -92,11 +92,10 @@ jobs:
       - name: Run tests
         run: flutter test
 
-      # Release builds use the repository's stable keystore when configured.
-      # Without it the APK is deliberately left unsigned; we never generate a
-      # new release key per CI run.
+      # Release builds require the repository's stable keystore. Never create
+      # a throwaway key here: an unsigned or newly signed APK is not upgrade
+      # compatible with the existing release.
       - name: Configure release signing
-        id: signing
         if: inputs.build_type == 'release'
         working-directory: android
         env:
@@ -105,20 +104,28 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
         run: |
-          if [[ -n "${KEYSTORE_BASE64}" ]]; then
-            printf '%s' "${KEYSTORE_BASE64}" | base64 --decode > app/release.jks
-            cat > key.properties <<EOF
+          set -euo pipefail
+          missing=()
+          for name in KEYSTORE_BASE64 STORE_PASSWORD KEY_PASSWORD KEY_ALIAS; do
+            if [[ -z "${!name:-}" ]]; then
+              missing+=("${name}")
+            fi
+          done
+          if (( ${#missing[@]} > 0 )); then
+            echo "::error::Release signing secrets are missing: ${missing[*]}"
+            echo "Add KEYSTORE_BASE64, STORE_PASSWORD, KEY_PASSWORD and KEY_ALIAS in Settings > Secrets and variables > Actions."
+            echo "Refusing to produce an unsigned release APK."
+            exit 1
+          fi
+          umask 077
+          printf '%s' "${KEYSTORE_BASE64}" | base64 --decode > app/release.jks
+          cat > key.properties <<EOF
           storePassword=${STORE_PASSWORD}
           keyPassword=${KEY_PASSWORD}
           keyAlias=${KEY_ALIAS}
           storeFile=release.jks
           EOF
-            echo "signed=true" >> "${GITHUB_OUTPUT}"
-            echo "Using the stable release keystore from repository secrets."
-          else
-            echo "signed=false" >> "${GITHUB_OUTPUT}"
-            echo "No KEYSTORE_BASE64 secret found; release APK will be unsigned."
-          fi
+          echo "Using the stable release keystore from repository secrets."
 
       - name: Build APKs
         env:
@@ -160,6 +167,27 @@ jobs:
           fi
           echo "===== APK sizes ====="
           ls -lh build/dist
+
+      - name: Verify signed Release APKs
+        if: inputs.build_type == 'release'
+        run: |
+          set -euo pipefail
+          apksigner="$(find "${ANDROID_HOME}/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
+          if [[ -z "${apksigner}" || ! -x "${apksigner}" ]]; then
+            echo "::error::apksigner was not found in the Android SDK."
+            exit 1
+          fi
+          shopt -s nullglob
+          apks=(build/dist/*.apk)
+          if (( ${#apks[@]} == 0 )); then
+            echo "::error::No release APKs were produced."
+            exit 1
+          fi
+          for apk in "${apks[@]}"; do
+            echo "===== Verifying ${apk} ====="
+            "${apksigner}" verify --verbose --print-certs "${apk}"
+          done
+          echo "All release APKs are signed and verified."
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v7
