@@ -74,6 +74,7 @@ android {
                 keyPassword keystoreProperties['keyPassword']
                 storeFile releaseKeystoreFile
                 storePassword keystoreProperties['storePassword']
+                storeType keystoreProperties['storeFile']?.toString()?.toLowerCase()?.endsWith('.p12') ? 'PKCS12' : 'JKS'
             }
         }
     }

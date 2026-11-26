@@ -118,12 +118,12 @@ jobs:
             exit 1
           fi
           umask 077
-          printf '%s' "${KEYSTORE_BASE64}" | base64 --decode > app/release.jks
+          printf '%s' "${KEYSTORE_BASE64}" | base64 --decode > app/release.p12
           cat > key.properties <<EOF
           storePassword=${STORE_PASSWORD}
           keyPassword=${KEY_PASSWORD}
           keyAlias=${KEY_ALIAS}
-          storeFile=release.jks
+          storeFile=release.p12
           EOF
           echo "Using the stable release keystore from repository secrets."
 
